@@ -1,0 +1,54 @@
+{
+    "name": "CatchingTheEnemy",
+    "maps": [
+        {
+            "name": "CatchingEnemy",
+            "id": "96ba360a-e7a6-473a-8e6c-dd19b209e898",
+            "actions": [
+                {
+                    "name": "Catch",
+                    "type": "Button",
+                    "id": "06c5c637-d428-4a12-92e7-701ef17a6b43",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RidingTheBird",
+                    "type": "Button",
+                    "id": "97ffa335-a06a-4162-9109-d8ac8b3184d7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "372b7927-1d63-4178-a61a-76264fa8ce21",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Catch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c47b00bd-fe02-42a4-98df-f0477f41fa56",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RidingTheBird",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
