@@ -7,10 +7,12 @@ public class UIHoverEvent : MonoBehaviour
 {
     [SerializeField] private AllPlayerAudio optionsAudio;
     public List<Button> buttonsToManage;
+
     void Awake()
     {
         optionsAudio = FindAnyObjectByType<AllPlayerAudio>();
     }
+
     private void Start()
     {
         foreach (Button btn in buttonsToManage)
@@ -22,6 +24,7 @@ public class UIHoverEvent : MonoBehaviour
             AddHoverEvents(btn);
         }
     }
+
     private void AddHoverEvents(Button button)
     {
         EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();
@@ -40,15 +43,15 @@ public class UIHoverEvent : MonoBehaviour
         entryExit.callback.AddListener((eventData) => { OnHoverExit(button); });
         trigger.triggers.Add(entryExit);
     }
+
     private void OnHoverEnter(Button button)
     {
         optionsAudio.OptionsSound();
         Debug.Log("Hovering over " + button.name);
-        button.image.color = Color.black;
     }
+
     private void OnHoverExit(Button button)
     {
         Debug.Log("Left the button " + button.name);
-        button.image.color = Color.white;
     }
 }
