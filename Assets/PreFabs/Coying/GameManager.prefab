@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7449446680665639487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2999943661335643951}
+  - component: {fileID: 8147715332719659970}
+  - component: {fileID: 2252770956311182855}
+  - component: {fileID: 2427823492939812661}
+  - component: {fileID: 1033804543267210891}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2999943661335643951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7449446680665639487}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.545366, y: -2.2373185, z: -10.114058}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8147715332719659970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7449446680665639487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 324f7313a5f821149aac292df34ef659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinsDisplay: {fileID: 0}
+--- !u!114 &2252770956311182855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7449446680665639487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d618e211c836174b8c2aa29a2f8975a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Coinss: {fileID: 0}
+  PlayerObject: {fileID: 0}
+  DeathPanel: {fileID: 0}
+  MainMenu: {fileID: 0}
+  GameUI: {fileID: 0}
+  Settings: {fileID: 0}
+  GameMap1: {fileID: 0}
+  PleaseDoNotQuit: {fileID: 0}
+  RestartButton: {fileID: 0}
+  MainMenuButton: {fileID: 0}
+  MainPlayButton: {fileID: 0}
+  MainEndlessButton: {fileID: 0}
+  MainOptionsButton: {fileID: 0}
+  MainExitButton: {fileID: 0}
+  StayButton: {fileID: 0}
+  QuitButton: {fileID: 0}
+  OptionsBackButton: {fileID: 0}
+--- !u!114 &2427823492939812661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7449446680665639487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5405c066afd5aa4eb8b041d94582f8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  optionsAudio: {fileID: 0}
+  buttonsToManage:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &1033804543267210891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7449446680665639487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3a586ea6ef0f8143ab82b2dcb111f59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: 2362172ecba3ec942af4bab3cb7d531a, type: 2}
+  resolutionDropDown: {fileID: 0}

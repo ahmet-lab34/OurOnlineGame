@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 
+
 public class PlayerScript : MonoBehaviour
 {
     private AllPlayerAudio PlayerAudio;
@@ -26,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     private float dashLength = .5f;
     private float dashCounter;
     [HideInInspector] public float dashCoolcounter;
+
 
     public bool IsFacingRight;
 
@@ -89,7 +91,7 @@ public class PlayerScript : MonoBehaviour
 
         //Actions
 
-        
+
 
     }
     private void FixedUpdate()
@@ -278,7 +280,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (IsCrouching)
         {
-            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, 1f);
+            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, normalHeight.y);
             movingStats.activeMoveSpeed = originalStats.activeMoveSpeed;
             IsCrouching = false;
             animator.SetBool("IsCrouching", false);
@@ -286,7 +288,7 @@ public class PlayerScript : MonoBehaviour
         else if (!IsCrouching && GroundCheck.Grounded)
         {
             movingStats.activeMoveSpeed *= 0.45f;
-            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, 0.7f);
+            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, transform.localScale.y * 0.9f);
             IsCrouching = true;
             animator.SetBool("IsCrouching", true);
         }

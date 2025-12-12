@@ -806,15 +806,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 909551582673569333, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.51066667
       objectReference: {fileID: 0}
     - target: {fileID: 909551582673569333, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3383192776887613878, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5362407244241466667, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: GroundCheck
@@ -824,6 +824,10 @@ PrefabInstance:
       propertyPath: playerScript
       value: 
       objectReference: {fileID: 158031233}
+    - target: {fileID: 5932937699477282112, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6151487359503498339, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -910,15 +914,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7616811117211486150, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.51066667
       objectReference: {fileID: 0}
     - target: {fileID: 7616811117211486150, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7616811117211486150, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.51066667
       objectReference: {fileID: 0}
     - target: {fileID: 8027788351767779457, guid: 33e4a7948c4534c47bef7bbd2cabe0d4, type: 3}
       propertyPath: m_Name
