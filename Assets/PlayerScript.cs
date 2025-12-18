@@ -288,7 +288,7 @@ public class PlayerScript : MonoBehaviour
         else if (!IsCrouching && GroundCheck.Grounded)
         {
             movingStats.activeMoveSpeed *= 0.45f;
-            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, transform.localScale.y * 0.9f);
+            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, normalHeight.y * 0.9f);
             IsCrouching = true;
             animator.SetBool("IsCrouching", true);
         }
