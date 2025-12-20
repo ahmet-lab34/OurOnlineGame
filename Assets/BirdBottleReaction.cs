@@ -6,42 +6,42 @@ public class BirdBottleReaction : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private string flyAwayTrigger = "FlyAway";
     [SerializeField] private string flyAwayStateName = "FlyBird";
-
-    [Header("Block other transitions")]
     [SerializeField] private string isFlyingAwayBool = "IsFlyingAway";
 
-    [Header("Stop other scripts that override animations")]
-    [SerializeField] private MonoBehaviour[] scriptsToDisable;
-
-    [Header("Fly Away Movement")]
+    [Header("Move While Flying Away")]
     [SerializeField] private bool moveWhileFlyingAway = true;
-    [SerializeField] private float flySpeedX = 2.5f;   // скорость влево/вправо
-    [SerializeField] private float flySpeedY = 3.5f;   // скорость вверх
-    [SerializeField] private bool randomLeftRight = true; // случайно влево/вправо
-    [SerializeField] private bool faceMoveDirection = true; // развернуть спрайт по направлению
+    [SerializeField] private float flySpeedX = 2.5f;
+    [SerializeField] private float flySpeedY = 3.5f;
+    [SerializeField] private bool randomLeftRight = true;
+
+    [Header("Egg Spawn")]
+    [SerializeField] private GameObject eggPrefab;
+    [SerializeField] private Vector3 eggOffset = Vector3.zero; // если надо чуть ниже/выше
 
     [Header("Destroy Settings")]
-    [SerializeField] private float destroyDelay = 0.6f;
+    [SerializeField] private float destroyDelay = 1.5f;
 
     private bool triggered;
-    private Vector3 flyVelocity; // куда летим
+    private Vector3 flyVelocity;
+
+    // ВАЖНО: место, где птица СИДЕЛА (запоминаем сразу при попадании)
+    private Vector3 nestPosition;
+
+    private void Awake()
+    {
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>(true);
+    }
 
     public void OnHitByBottle()
     {
         if (triggered) return;
         triggered = true;
 
-        // 1) Отключаем поведение птицы (стрельбу/детект/и т.п.)
-        if (scriptsToDisable != null)
-        {
-            for (int i = 0; i < scriptsToDisable.Length; i++)
-            {
-                if (scriptsToDisable[i] != null)
-                    scriptsToDisable[i].enabled = false;
-            }
-        }
+        // 1) Запоминаем позицию "гнезда" ДО того, как птица начнёт улетать
+        nestPosition = transform.position;
 
-        // 2) Отключаем коллайдеры, чтобы больше ни с чем не сталкивалась
+        // 2) Отключаем коллайдеры
         foreach (var c in GetComponentsInChildren<Collider2D>())
             c.enabled = false;
 
@@ -58,23 +58,15 @@ public class BirdBottleReaction : MonoBehaviour
                 animator.Play(flyAwayStateName, 0, 0f);
         }
 
-        // 4) Готовим направление полёта
+        // 4) Направление полёта
         float dirX = 1f;
         if (randomLeftRight)
             dirX = Random.value < 0.5f ? -1f : 1f;
 
         flyVelocity = new Vector3(dirX * flySpeedX, flySpeedY, 0f);
 
-        // Разворачиваем спрайт, если надо
-        if (faceMoveDirection)
-        {
-            var sr = GetComponentInChildren<SpriteRenderer>();
-            if (sr != null)
-                sr.flipX = flyVelocity.x < 0f;
-        }
-
-        // 5) Уничтожаем через задержку (ты ставишь в инспекторе)
-        Destroy(gameObject, destroyDelay);
+        // 5) Через destroyDelay: создать яйцо В ГНЕЗДЕ и уничтожить птицу
+        Invoke(nameof(SpawnEggAndDestroy), destroyDelay);
     }
 
     private void Update()
@@ -82,7 +74,15 @@ public class BirdBottleReaction : MonoBehaviour
         if (!triggered) return;
         if (!moveWhileFlyingAway) return;
 
-        // двигаем вверх + влево/вправо, пока "улетает"
         transform.position += flyVelocity * Time.deltaTime;
+    }
+
+    private void SpawnEggAndDestroy()
+    {
+        // Спавним яйцо именно там, где птица сидела
+        if (eggPrefab != null)
+            Instantiate(eggPrefab, nestPosition + eggOffset, Quaternion.identity);
+
+        Destroy(gameObject);
     }
 }
