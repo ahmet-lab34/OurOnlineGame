@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - shit
   - Bullet
+  - Lava
   layers:
   - Default
   - TransparentFX
