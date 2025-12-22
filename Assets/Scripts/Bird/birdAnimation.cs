@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class birdAnimations : MonoBehaviour
+public class birdAnimation : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
+    private Animator animator;
     void Awake()
     {
         animator = GetComponent<Animator>();

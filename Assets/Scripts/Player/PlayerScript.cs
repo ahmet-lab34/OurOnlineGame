@@ -310,6 +310,10 @@ public class PlayerScript : MonoBehaviour
         }
         Debug.Log("Player Got Hit !");
     }
+    public void DieFromSpikes()
+    {
+        PlayerUIScript.Die();
+    }
     
 
     private void Flip()
