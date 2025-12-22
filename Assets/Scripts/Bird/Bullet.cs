@@ -8,10 +8,11 @@ public class Bullet : MonoBehaviour
     private shitAnimation shitAnimation;
     public float speed = 5f;
     private Vector2 direction;
+
+    private GameObject owner;
     void Awake()
     {
         shitCollider = GetComponent<Collider2D>();
-        birdCollider = GameObject.Find("AngryBird").GetComponent<Collider2D>();
 
         shitAnimation = FindFirstObjectByType<shitAnimation>();
     }
@@ -20,6 +21,11 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, 10f);
         Physics2D.IgnoreCollision(birdCollider, shitCollider, true);
         shitAnimation.shitFlying();
+    }
+    public void SetOwner(GameObject bird)
+    {
+        owner = bird;
+        birdCollider = owner.GetComponent<Collider2D>();
     }
     public void SetDirection(Vector2 dir)
     {

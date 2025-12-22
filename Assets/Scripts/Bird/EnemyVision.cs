@@ -2,19 +2,14 @@ using UnityEngine;
 
 public class EnemyVision : MonoBehaviour
 {
-    [SerializeField] protected static bool IFoundThePlayer = false;
-    [SerializeField] protected birdAnimations birdAnimations;
-
-    void Awake()
-    {
-        birdAnimations = FindFirstObjectByType<birdAnimations>();
-    }
+    [SerializeField] private birdAnimation birdAnim;
+    public bool IFoundThePlayer = false;
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("The Bird found the player");
-            birdAnimations.playerDetected();
+            Debug.Log($"{gameObject.name} found the player");
+            birdAnim.playerDetected();
             IFoundThePlayer = true;
         }
     }
@@ -23,7 +18,7 @@ public class EnemyVision : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("The Bird missed the player");
-            birdAnimations.playerDetectedFalse();
+            birdAnim.playerDetectedFalse();
             IFoundThePlayer = false;
         }
     }
