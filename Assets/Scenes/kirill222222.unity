@@ -18753,7 +18753,7 @@ MonoBehaviour:
   flySpeedY: 3.5
   randomLeftRight: 1
   eggPrefab: {fileID: 339819129513052587, guid: 27ab584a87ffdf4489b304e82f5727cf, type: 3}
-  eggOffset: {x: 0, y: 0, z: 0}
+  eggOffset: {x: 0, y: 1.1, z: 0}
   destroyDelay: 1.5
 --- !u!114 &1463727481
 MonoBehaviour:
