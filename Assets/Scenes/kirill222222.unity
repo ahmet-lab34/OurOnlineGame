@@ -2034,11 +2034,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6877862996773290481, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -691.11
+      value: -691.58
       objectReference: {fileID: 0}
     - target: {fileID: 6877862996773290481, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -251.13
+      value: -251.46
       objectReference: {fileID: 0}
     - target: {fileID: 6877862996773290481, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2075,7 +2075,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2354279540517467942, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1428948547}
   m_SourcePrefab: {fileID: 100100000, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
 --- !u!1 &1061343804
 GameObject:
@@ -18724,6 +18727,34 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6877862996773290481, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
   m_PrefabInstance: {fileID: 1026559622}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1428948543 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2354279540517467942, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
+  m_PrefabInstance: {fileID: 1026559622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1428948547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428948543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba77665edff959c40a889f3edb42d4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BirdBottleReaction
+  animator: {fileID: 0}
+  flyAwayTrigger: FlyAway
+  flyAwayStateName: FlyBird
+  isFlyingAwayBool: IsFlyingAway
+  moveWhileFlyingAway: 1
+  flySpeedX: 2.5
+  flySpeedY: 3.5
+  randomLeftRight: 1
+  eggPrefab: {fileID: 339819129513052587, guid: 27ab584a87ffdf4489b304e82f5727cf, type: 3}
+  eggOffset: {x: 0, y: 0, z: 0}
+  destroyDelay: 1.5
 --- !u!114 &1463727481
 MonoBehaviour:
   m_ObjectHideFlags: 0
