@@ -5,8 +5,8 @@ public class BottleInteractable : MonoBehaviour
     public KeyCode kickKey = KeyCode.F;
 
     [Header("Player Kick Animation")]
-    public Animator playerAnimator;           // перетащи сюда Animator игрока в инспекторе (лучше вручную)
-    public string kickTriggerName = "Kick";   // должно совпадать с Trigger в Animator
+    public Animator playerAnimator;           
+    public string kickTriggerName = "Kick";   
 
     private BottleFly bottleFly;
     private bool playerInside;
@@ -14,7 +14,7 @@ public class BottleInteractable : MonoBehaviour
 
     private void Awake()
     {
-        // BottleFly висит на родителе Bottle
+       
         bottleFly = GetComponentInParent<BottleFly>();
         triggerCol = GetComponent<Collider2D>();
     }
@@ -25,7 +25,7 @@ public class BottleInteractable : MonoBehaviour
 
         playerInside = true;
 
-        // ≈сли Animator не назначен вручную Ч попробуем найти его у игрока автоматически
+        
         if (playerAnimator == null)
             playerAnimator = other.GetComponentInChildren<Animator>();
     }
@@ -43,15 +43,15 @@ public class BottleInteractable : MonoBehaviour
 
         if (Input.GetKeyDown(kickKey))
         {
-            // 1) ѕинаем “ќЋ№ ќ если есть враг р€дом
+          
             bool kicked = bottleFly.KickToNearestEnemy();
-            if (!kicked) return; // врага нет Ч бутылка остаЄтс€ лежать
+            if (!kicked) return; 
 
-            // 2) «апускаем анимацию пинка (если Animator найден/назначен)
+            
             if (playerAnimator != null)
                 playerAnimator.SetTrigger(kickTriggerName);
 
-            // 3) ”спешно пнули Ч отключаем взаимодействие
+            
             playerInside = false;
             if (triggerCol != null) triggerCol.enabled = false;
         }

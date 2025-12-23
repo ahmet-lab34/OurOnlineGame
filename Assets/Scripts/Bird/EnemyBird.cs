@@ -4,14 +4,12 @@ using System.Collections;
 public class EnemyBird : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab;
-
     [SerializeField] private birdAnimation birdAnim;
-
     [SerializeField] private EnemyVision birdVision;
+    [SerializeField] private float shootInterval = 2f;
 
     private Transform playerTransform;
-
-    [SerializeField] private float shootInterval = 2f;
+    private PlayerScript playerScript;
 
     void Awake()
     {
@@ -19,8 +17,10 @@ public class EnemyBird : MonoBehaviour
         if (player != null)
         {
             playerTransform = player.transform;
+            playerScript = player.GetComponent<PlayerScript>();
         }
     }
+
     void Start()
     {
         if (playerTransform != null)
@@ -32,21 +32,27 @@ public class EnemyBird : MonoBehaviour
     void Shoot()
     {
         if (playerTransform == null) return;
-        StartCoroutine(ShootingAnimationCoroutine());
 
-        if (!birdVision.IFoundThePlayer || playerTransform == null)
+        if (playerScript != null && playerScript.IsCrouchingPublic)
+        {
+            return;
+        }
+
+        if (!birdVision.IFoundThePlayer)
         {
             Debug.Log("Can't find the player :(");
             return;
         }
 
+        StartCoroutine(ShootingAnimationCoroutine());
+
         Vector2 direction = (playerTransform.position - transform.position).normalized;
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
 
         Bullet bulletScript = bullet.GetComponent<Bullet>();
-        bulletScript.SetOwner(gameObject);
         if (bulletScript != null)
         {
+            bulletScript.SetOwner(gameObject);
             bulletScript.SetDirection(direction);
         }
     }
@@ -65,5 +71,4 @@ public class EnemyBird : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 }

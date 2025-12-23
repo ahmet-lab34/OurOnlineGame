@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 
-
 public class PlayerScript : MonoBehaviour
 {
     private AllPlayerAudio PlayerAudio;
@@ -20,7 +19,9 @@ public class PlayerScript : MonoBehaviour
     private InputAction Sprint;
     private InputAction CrouchAction;
     private InputAction jumpAction;
+
     [SerializeField] private bool IsCrouching = false;
+    public bool IsCrouchingPublic => IsCrouching;
 
     [HideInInspector] public float Horizontal;
     [SerializeField] private bool DoubleJump = true;
@@ -28,13 +29,11 @@ public class PlayerScript : MonoBehaviour
     private float dashCounter;
     [HideInInspector] public float dashCoolcounter;
 
-
     public bool IsFacingRight;
 
     [SerializeField] private PlayerUIScript PlayerUIScript;
 
     [SerializeField] private bool isTouchingWall = false;
-    //[SerializeField] private bool isWallJumping = false;
     [SerializeField] private bool nearTheWall = false;
     [SerializeField] private int wallSide;
     private bool LongJumpRotationChecker = true;
@@ -61,12 +60,14 @@ public class PlayerScript : MonoBehaviour
         public float wallJumpYAxis;
         public float wallJumpXAxis;
     }
+
     [Serializable]
     public class Numerics
     {
         public int playerHealth = 3;
         public int BirdCount = 0;
     }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -84,48 +85,47 @@ public class PlayerScript : MonoBehaviour
 
         Time.timeScale = 1f;
     }
+
     void Start()
     {
-
         normalHeight = transform.localScale;
-
-        //Actions
-
-
-
+        originalStats.activeMoveSpeed = movingStats.activeMoveSpeed;
+        originalStats.jumpHeight = movingStats.jumpHeight;
+        originalStats.DoubleJumpHeight = movingStats.DoubleJumpHeight;
+        originalStats.dashSpeed = movingStats.dashSpeed;
+        originalStats.dashCooldown = movingStats.dashCooldown;
+        originalStats.slideSpeed = movingStats.slideSpeed;
+        originalStats.gravityScale = movingStats.gravityScale;
+        originalStats.wallJumpYAxis = movingStats.wallJumpYAxis;
+        originalStats.wallJumpXAxis = movingStats.wallJumpXAxis;
     }
+
     private void FixedUpdate()
     {
         rb.linearVelocity = new UnityEngine.Vector2(Horizontal * movingStats.activeMoveSpeed, rb.linearVelocity.y);
     }
+
     void Update()
     {
         Horizontal = Input.GetAxisRaw("Horizontal");
-        //wall slide logic
+
         if (isTouchingWall)
         {
             rb.linearVelocity = new UnityEngine.Vector2(Horizontal * movingStats.activeMoveSpeed, -movingStats.slideSpeed);
         }
-        //Sound Call
-        PlayerAudio.walkingSound();
 
-        //wall jump script
+        PlayerAudio.walkingSound();
 
         if (nearTheWall && jumpAction.triggered)
         {
-            //QUESTION MARK !!!!!!!!!
             UnityEngine.Vector2 jumpDirection = new UnityEngine.Vector2(rb.linearVelocity.x, movingStats.wallJumpYAxis);
-            //!!!!!!!!!
-
             rb.linearVelocity = jumpDirection;
             nearTheWall = !nearTheWall;
         }
-        //running animation
 
         animator.SetBool("IsRunning", Horizontal > 0 || Horizontal < 0);
         animator.SetFloat("yVelocity", rb.linearVelocity.y);
 
-        //Resetting the double jump
         if (GroundCheck.Grounded)
         {
             animator.SetBool("IsJumping", false);
@@ -135,7 +135,6 @@ public class PlayerScript : MonoBehaviour
                 DoubleJump = false;
             }
         }
-        //jump and double jump script
 
         if (jumpAction.triggered && !IsCrouching)
         {
@@ -152,23 +151,21 @@ public class PlayerScript : MonoBehaviour
                 PlayerAudio.Jumping();
             }
         }
+
         if (!GroundCheck.Grounded)
         {
             animator.SetBool("IsJumping", true);
         }
-        //long jump script
 
-        if (jumpAction.triggered && (LongJumpRotationChecker?
-        rb.linearVelocity.y > 0f : rb.linearVelocity.y < 0f))
+        if (jumpAction.triggered && (LongJumpRotationChecker ? rb.linearVelocity.y > 0f : rb.linearVelocity.y < 0f))
         {
             rb.linearVelocity = new UnityEngine.Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
-        //Flipping the character
+
         if ((IsFacingRight && Horizontal < 0f) || (!IsFacingRight && Horizontal > 0f))
         {
             Flip();
         }
-        //dash script
 
         if (Sprint.triggered && !IsCrouching)
         {
@@ -180,6 +177,7 @@ public class PlayerScript : MonoBehaviour
                 animator.SetBool("IsDashing", true);
             }
         }
+
         if (dashCounter > 0)
         {
             dashCounter -= Time.deltaTime;
@@ -190,18 +188,18 @@ public class PlayerScript : MonoBehaviour
                 animator.SetBool("IsDashing", false);
             }
         }
+
         if (dashCoolcounter > 0)
         {
             dashCoolcounter -= Time.deltaTime;
         }
-        //Crouch Script
-        CrouchAction.performed += ctx => Crouch();
-        //jumpAction.performed += ctx => StandUp();
+
         if (jumpAction.triggered && IsCrouching)
         {
             StandUp();
         }
     }
+
     public void FlipJumpValues()
     {
         movingStats.jumpHeight = -movingStats.jumpHeight;
@@ -210,6 +208,7 @@ public class PlayerScript : MonoBehaviour
         movingStats.slideSpeed = -movingStats.slideSpeed;
         LongJumpRotationChecker = !LongJumpRotationChecker;
     }
+
     private void OnDestroy()
     {
         if (!LongJumpRotationChecker)
@@ -218,6 +217,7 @@ public class PlayerScript : MonoBehaviour
             LongJumpRotationChecker = !LongJumpRotationChecker;
         }
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Wall"))
@@ -227,6 +227,7 @@ public class PlayerScript : MonoBehaviour
             Debug.Log("I'm near the wall !");
         }
     }
+
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Wall"))
@@ -236,6 +237,7 @@ public class PlayerScript : MonoBehaviour
             Debug.Log("Far from the wall !");
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
@@ -254,6 +256,7 @@ public class PlayerScript : MonoBehaviour
             }
         }
     }
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
@@ -265,15 +268,27 @@ public class PlayerScript : MonoBehaviour
             wallSide = 0;
         }
     }
-    //Crouch Script Logic
-    
+
     private void OnEnable()
     {
         jumpAction.Enable();
+        CrouchAction.Enable();
+        CrouchAction.performed += OnCrouchPerformed;
     }
+
     private void OnDisable()
     {
+        if (CrouchAction != null)
+        {
+            CrouchAction.performed -= OnCrouchPerformed;
+            CrouchAction.Disable();
+        }
         jumpAction.Disable();
+    }
+
+    private void OnCrouchPerformed(InputAction.CallbackContext ctx)
+    {
+        Crouch();
     }
 
     private void Crouch()
@@ -287,12 +302,13 @@ public class PlayerScript : MonoBehaviour
         }
         else if (!IsCrouching && GroundCheck.Grounded)
         {
-            movingStats.activeMoveSpeed *= 0.45f;
+            movingStats.activeMoveSpeed = originalStats.activeMoveSpeed * 0.45f;
             transform.localScale = new UnityEngine.Vector2(transform.localScale.x, normalHeight.y * 0.9f);
             IsCrouching = true;
             animator.SetBool("IsCrouching", true);
         }
     }
+
     private void StandUp()
     {
         transform.localScale = new UnityEngine.Vector2(transform.localScale.x, 1f);
@@ -300,6 +316,7 @@ public class PlayerScript : MonoBehaviour
         IsCrouching = false;
         animator.SetBool("IsCrouching", false);
     }
+
     public void GetHit()
     {
         playerNumbers.playerHealth -= 1;
@@ -310,11 +327,11 @@ public class PlayerScript : MonoBehaviour
         }
         Debug.Log("Player Got Hit !");
     }
+
     public void DieFromSpikes()
     {
         PlayerUIScript.Die();
     }
-    
 
     private void Flip()
     {
@@ -323,6 +340,7 @@ public class PlayerScript : MonoBehaviour
         localScale.x *= -1f;
         transform.localScale = localScale;
     }
+
     public void CarryingaBird()
     {
         movingStats.activeMoveSpeed *= 0.85f;
@@ -334,21 +352,15 @@ public class PlayerScript : MonoBehaviour
         playerNumbers.BirdCount += 1;
         Debug.Log("I have " + playerNumbers.BirdCount + " birds !");
     }
+
     public void RidingaBird()
     {
-        movingStats.activeMoveSpeed = originalStats.activeMoveSpeed;// * (1f + BirdCount * 0.15f);
-
-        movingStats.jumpHeight = originalStats.jumpHeight;// * (1f + BirdCount * 0.15f);
-
-        movingStats.dashSpeed = originalStats.dashSpeed;// * (1f + BirdCount * 0.15f);
-
-        movingStats.dashCooldown = originalStats.dashCooldown;// * (1f - BirdCount * 0.15f);
-
-        movingStats.slideSpeed = originalStats.slideSpeed;// * (1f + BirdCount * 0.2f);
-
-        movingStats.gravityScale = originalStats.gravityScale;// * (1f + BirdCount * 0.2f);
-
-
+        movingStats.activeMoveSpeed = originalStats.activeMoveSpeed;
+        movingStats.jumpHeight = originalStats.jumpHeight;
+        movingStats.dashSpeed = originalStats.dashSpeed;
+        movingStats.dashCooldown = originalStats.dashCooldown;
+        movingStats.slideSpeed = originalStats.slideSpeed;
+        movingStats.gravityScale = originalStats.gravityScale;
 
         playerNumbers.BirdCount = 0;
         Debug.Log("I Don't have any birds anymore :(");

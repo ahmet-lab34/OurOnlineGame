@@ -58,6 +58,11 @@ public class BottleFly : MonoBehaviour
 
         // Make the bottle physical only after it gets kicked
         Collider2D col = GetComponent<Collider2D>();
+
+        // IMPORTANT: ignore ONLY the branch collider(s) (BranchMarker on branch object)
+        if (col != null)
+            IgnoreBranchCollision.Apply(col);
+
         if (col != null)
             col.isTrigger = false;
 
