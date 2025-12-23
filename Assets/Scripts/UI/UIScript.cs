@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.Video;
 
 public class UIScript : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button StayButton;
     [SerializeField] private Button QuitButton;
     [SerializeField] private Button OptionsBackButton;
+    [SerializeField] private IntroCutscenePlayer IntroPlayer;
 
     void Start()
     {
@@ -80,9 +82,10 @@ public class UIScript : MonoBehaviour
         }
         if (button == MainPlayButton)
         {
-            GameMap1.SetActive(true);
-            GameUI.SetActive(true);
-            MainMenu.SetActive(false);
+            if (IntroPlayer != null)
+                IntroPlayer.TryPlayIntroOrStartGame(StartGameFromMenu);
+            else
+                StartGameFromMenu();
         }
         if (button == MainEndlessButton)
         {
@@ -112,5 +115,12 @@ public class UIScript : MonoBehaviour
         {
             Application.Quit();
         }
+    }
+    private void StartGameFromMenu()
+    {
+        GameMap1.SetActive(true);
+        GameUI.SetActive(true);
+        MainMenu.SetActive(false);
+        Time.timeScale = 1f;
     }
 }
