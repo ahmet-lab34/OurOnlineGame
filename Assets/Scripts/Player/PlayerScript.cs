@@ -328,6 +328,14 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("Player Got Hit !");
     }
 
+    public void Heal(int amount)
+    {
+        if (amount <= 0) return;
+
+        playerNumbers.playerHealth += amount;
+        Debug.Log("Player healed +" + amount + ". HP now: " + playerNumbers.playerHealth);
+    }
+
     public void DieFromSpikes()
     {
         PlayerUIScript.Die();
