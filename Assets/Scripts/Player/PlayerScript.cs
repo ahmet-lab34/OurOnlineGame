@@ -1,4 +1,3 @@
-using System.Numerics;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -45,6 +44,25 @@ public class PlayerScript : MonoBehaviour
     public Numerics playerNumbers = new Numerics();
     private float movementDashSpeedBuffer;
 
+    [SerializeField] private ParticleSystem upsideDownGroundSparks;
+    [SerializeField] private Transform sparksPivot;
+
+    private bool isUpsideDown;
+    private bool sparksPlaying;
+
+    [SerializeField] private float sparksXMin = 1.5f;
+    [SerializeField] private float sparksXMax = 3.0f;
+
+    [SerializeField] private float sparksAirSpeedMin = 1.5f;
+    [SerializeField] private float sparksAirSpeedMax = 3.0f;
+
+    [SerializeField] private float sparksBlendSpeed = 14f;
+    [SerializeField] private float movementDeadZone = 0.15f;
+
+    private Vector2 currentDir;
+    private float currentSpeedMin;
+    private float currentSpeedMax;
+
     [Serializable]
     public class PlayerStats
     {
@@ -84,6 +102,10 @@ public class PlayerScript : MonoBehaviour
         jumpAction = input.actions.FindAction("Jump");
 
         Time.timeScale = 1f;
+
+        currentSpeedMin = sparksXMin;
+        currentSpeedMax = sparksXMax;
+        currentDir = IsFacingRight ? Vector2.left : Vector2.right;
     }
 
     void Start()
@@ -198,6 +220,109 @@ public class PlayerScript : MonoBehaviour
         {
             StandUp();
         }
+
+        UpdateUpsideDownSparks();
+    }
+
+    private void UpdateUpsideDownSparks()
+    {
+        if (upsideDownGroundSparks == null || GroundCheck == null || rb == null) return;
+
+        var main = upsideDownGroundSparks.main;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+
+        var v = upsideDownGroundSparks.velocityOverLifetime;
+        v.enabled = true;
+        v.space = ParticleSystemSimulationSpace.World;
+
+        bool shouldPlay = isUpsideDown;
+
+        bool grounded = GroundCheck.Grounded;
+
+        Vector2 targetDir = currentDir;
+        float targetSpeedMin = currentSpeedMin;
+        float targetSpeedMax = currentSpeedMax;
+
+        if (grounded)
+        {
+            targetSpeedMin = sparksXMin;
+            targetSpeedMax = sparksXMax;
+            targetDir = IsFacingRight ? Vector2.left : Vector2.right;
+        }
+        else
+        {
+            targetSpeedMin = sparksAirSpeedMin;
+            targetSpeedMax = sparksAirSpeedMax;
+
+            Vector2 vel = rb.linearVelocity;
+
+            if (vel.sqrMagnitude < movementDeadZone * movementDeadZone)
+            {
+                targetDir = currentDir;
+            }
+            else
+            {
+                targetDir = (-vel).normalized;
+            }
+        }
+
+        float t = 1f - Mathf.Exp(-sparksBlendSpeed * Time.deltaTime);
+
+        currentDir = Vector2.Lerp(currentDir, targetDir, t);
+        float mag = currentDir.magnitude;
+        if (mag > 0.0001f) currentDir /= mag;
+
+        currentSpeedMin = Mathf.Lerp(currentSpeedMin, targetSpeedMin, t);
+        currentSpeedMax = Mathf.Lerp(currentSpeedMax, targetSpeedMax, t);
+
+        float minS = Mathf.Min(currentSpeedMin, currentSpeedMax);
+        float maxS = Mathf.Max(currentSpeedMin, currentSpeedMax);
+
+        v.x = new ParticleSystem.MinMaxCurve(currentDir.x * minS, currentDir.x * maxS);
+        v.y = new ParticleSystem.MinMaxCurve(currentDir.y * minS, currentDir.y * maxS);
+        v.z = new ParticleSystem.MinMaxCurve(0f, 0f);
+
+        if (shouldPlay)
+        {
+            if (!sparksPlaying)
+            {
+                upsideDownGroundSparks.Play(true);
+                sparksPlaying = true;
+            }
+        }
+        else
+        {
+            if (sparksPlaying || upsideDownGroundSparks.isPlaying)
+            {
+                upsideDownGroundSparks.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                sparksPlaying = false;
+            }
+        }
+    }
+
+    private void ApplySparksFacing()
+    {
+        if (sparksPivot == null) return;
+        sparksPivot.localRotation = Quaternion.Euler(0f, 0f, IsFacingRight ? 0f : 180f);
+    }
+
+    public void SetUpsideDown(bool value)
+    {
+        isUpsideDown = value;
+
+        if (!isUpsideDown)
+        {
+            if (upsideDownGroundSparks != null)
+                upsideDownGroundSparks.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+            sparksPlaying = false;
+        }
+    }
+
+
+    public void ToggleUpsideDown()
+    {
+        isUpsideDown = !isUpsideDown;
     }
 
     public void FlipJumpValues()
