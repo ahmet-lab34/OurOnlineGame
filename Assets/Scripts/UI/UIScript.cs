@@ -15,6 +15,9 @@ public class UIScript : MonoBehaviour
     [SerializeField] private GameObject Settings;
     [SerializeField] private GameObject GameMap1;
     [SerializeField] private GameObject PleaseDoNotQuit;
+    [SerializeField] private GameObject ESC_Menu;
+    [SerializeField] private Button ESC_Options;
+    [SerializeField] private Button ESC_Exit;
     [SerializeField] private Button RestartButton;
     [SerializeField] private Button MainMenuButton;
 
@@ -22,6 +25,7 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button MainEndlessButton;
     [SerializeField] private Button MainOptionsButton;
     [SerializeField] private Button MainExitButton;
+    [SerializeField] private Button ESC_ContinueButton;
     [SerializeField] private Button StayButton;
     [SerializeField] private Button QuitButton;
     [SerializeField] private Button OptionsBackButton;
@@ -50,6 +54,9 @@ public class UIScript : MonoBehaviour
         MainOptionsButton.onClick.AddListener(() => OnButtonPressed(MainOptionsButton));
         OptionsBackButton.onClick.AddListener(() => OnButtonPressed(OptionsBackButton));
         MainExitButton.onClick.AddListener(() => OnButtonPressed(MainExitButton));
+        ESC_ContinueButton.onClick.AddListener(() => OnButtonPressed(ESC_ContinueButton));
+        ESC_Options.onClick.AddListener(() => OnButtonPressed(ESC_Options));
+        ESC_Exit.onClick.AddListener(() => OnButtonPressed(ESC_Exit));
         Coinss.text = CoinCount.coins.ToString(); 
     }
     public void RestartScene()
@@ -75,8 +82,12 @@ public class UIScript : MonoBehaviour
         {
             Scene currentScene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(currentScene.name);
+        }
 
-
+        if (button == ESC_ContinueButton)
+        {
+            ESC_Menu.SetActive(false);
+            Time.timeScale = 1f;
         }
         if (button == MainPlayButton)
         {
@@ -88,6 +99,13 @@ public class UIScript : MonoBehaviour
         {
 
         }
+        if (button == ESC_Options)
+        {
+            Time.timeScale = 1f;
+            ESC_Menu.SetActive(false);
+            GameMap1.SetActive(false);
+            Settings.SetActive(true);
+        }
         if (button == MainOptionsButton)
         {
             Settings.SetActive(true);
@@ -97,6 +115,10 @@ public class UIScript : MonoBehaviour
         {
             MainMenu.SetActive(true);
             Settings.SetActive(false);
+        }
+        if (button == ESC_Exit)
+        {
+            Application.Quit();
         }
         if (button == MainExitButton)
         {

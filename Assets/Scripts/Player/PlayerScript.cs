@@ -11,8 +11,10 @@ using System;
 
 public class PlayerScript : MonoBehaviour
 {
+    public GameObject ESC_Menu;
     private AllPlayerAudio PlayerAudio;
     private GroundCHK GroundCheck;
+    private UIScript UIScript;
     private Rigidbody2D rb;
 
     public Animator animator;
@@ -20,6 +22,7 @@ public class PlayerScript : MonoBehaviour
     private InputAction Sprint;
     private InputAction CrouchAction;
     private InputAction jumpAction;
+    private InputAction ESC_menuAction ;
     [SerializeField] private bool IsCrouching = false;
 
     [HideInInspector] public float Horizontal;
@@ -77,10 +80,12 @@ public class PlayerScript : MonoBehaviour
         PlayerAudio = FindFirstObjectByType<AllPlayerAudio>();
         GroundCheck = FindFirstObjectByType<GroundCHK>();
         PlayerUIScript = FindFirstObjectByType<PlayerUIScript>();
+        UIScript = FindAnyObjectByType<UIScript>();
 
         Sprint = input.actions.FindAction("Sprint");
         CrouchAction = input.actions.FindAction("Crouch");
         jumpAction = input.actions.FindAction("Jump");
+        ESC_menuAction = input.actions.FindAction("ESC_Button");
 
         Time.timeScale = 1f;
     }
@@ -200,6 +205,13 @@ public class PlayerScript : MonoBehaviour
         if (jumpAction.triggered && IsCrouching)
         {
             StandUp();
+        }
+
+        //ESC Button
+        if (ESC_menuAction.triggered)
+        {
+            ESC_Menu.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
     public void FlipJumpValues()
