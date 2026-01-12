@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   birdAnim: {fileID: 4804974441442414071}
-  BirdAnimationHandler: {fileID: 2952475334441565467}
   IFoundThePlayer: 0
 --- !u!58 &5537612222905399848
 CircleCollider2D:
@@ -96,6 +95,7 @@ GameObject:
   - component: {fileID: 6844299442536051315}
   - component: {fileID: 5753125298724498603}
   - component: {fileID: 1652512288687730395}
+  - component: {fileID: 8206683079038586611}
   m_Layer: 0
   m_Name: AngryBird
   m_TagString: Enemy
@@ -247,6 +247,29 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &8206683079038586611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2354279540517467942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba77665edff959c40a889f3edb42d4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BirdBottleReaction
+  animator: {fileID: 0}
+  flyAwayTrigger: FlyAway
+  flyAwayStateName: FlyBird
+  isFlyingAwayBool: IsFlyingAway
+  moveWhileFlyingAway: 1
+  flySpeedX: 2.5
+  flySpeedY: 3.5
+  randomLeftRight: 1
+  eggPrefab: {fileID: 339819129513052587, guid: 27ab584a87ffdf4489b304e82f5727cf, type: 3}
+  eggOffset: {x: 0, y: 1.1, z: 0}
+  destroyDelay: 1.5
 --- !u!1 &2952475334441565467
 GameObject:
   m_ObjectHideFlags: 0

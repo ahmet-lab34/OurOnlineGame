@@ -25,6 +25,7 @@ public class GravitySwitcher : GravitySwitcherUpsideDown
         {
             player.FlipJumpValues();
             player.IsFacingRight = !player.IsFacingRight;
+            player.ToggleUpsideDown();
         }
     }
 }

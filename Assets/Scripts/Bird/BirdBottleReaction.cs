@@ -16,7 +16,7 @@ public class BirdBottleReaction : MonoBehaviour
 
     [Header("Egg Spawn")]
     [SerializeField] private GameObject eggPrefab;
-    [SerializeField] private Vector3 eggOffset = Vector3.zero; // если надо чуть ниже/выше
+    [SerializeField] private Vector3 eggOffset = Vector3.zero; // use this to move the egg slightly up/down if needed
 
     [Header("Destroy Settings")]
     [SerializeField] private float destroyDelay = 1.5f;
@@ -24,7 +24,7 @@ public class BirdBottleReaction : MonoBehaviour
     private bool triggered;
     private Vector3 flyVelocity;
 
-    // ВАЖНО: место, где птица СИДЕЛА (запоминаем сразу при попадании)
+    // IMPORTANT: position where the bird was sitting (saved immediately on hit)
     private Vector3 nestPosition;
 
     private void Awake()
@@ -38,14 +38,14 @@ public class BirdBottleReaction : MonoBehaviour
         if (triggered) return;
         triggered = true;
 
-        // 1) Запоминаем позицию "гнезда" ДО того, как птица начнёт улетать
+        // 1) Save the nest position BEFORE the bird starts flying away
         nestPosition = transform.position;
 
-        // 2) Отключаем коллайдеры
+        // 2) Disable all colliders so it no longer interacts with anything
         foreach (var c in GetComponentsInChildren<Collider2D>())
             c.enabled = false;
 
-        // 3) Запускаем анимацию улёта
+        // 3) Start fly-away animation
         if (animator != null)
         {
             if (!string.IsNullOrEmpty(isFlyingAwayBool))
@@ -58,14 +58,14 @@ public class BirdBottleReaction : MonoBehaviour
                 animator.Play(flyAwayStateName, 0, 0f);
         }
 
-        // 4) Направление полёта
+        // 4) Choose fly direction
         float dirX = 1f;
         if (randomLeftRight)
             dirX = Random.value < 0.5f ? -1f : 1f;
 
         flyVelocity = new Vector3(dirX * flySpeedX, flySpeedY, 0f);
 
-        // 5) Через destroyDelay: создать яйцо В ГНЕЗДЕ и уничтожить птицу
+        // 5) After destroyDelay: spawn egg at the nest position and destroy the bird
         Invoke(nameof(SpawnEggAndDestroy), destroyDelay);
     }
 
@@ -79,7 +79,7 @@ public class BirdBottleReaction : MonoBehaviour
 
     private void SpawnEggAndDestroy()
     {
-        // Спавним яйцо именно там, где птица сидела
+        // Spawn the egg exactly where the bird was sitting
         if (eggPrefab != null)
             Instantiate(eggPrefab, nestPosition + eggOffset, Quaternion.identity);
 
