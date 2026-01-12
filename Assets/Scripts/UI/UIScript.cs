@@ -93,6 +93,7 @@ public class UIScript : MonoBehaviour
         }
         if (button == MainPlayButton)
         {
+            Winning_Prize.SetActive(false);
             GameMap1.SetActive(true);
             GameUI.SetActive(true);
             MainMenu.SetActive(false);
