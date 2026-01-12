@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "PlayerInputSystem",
     "maps": [
         {
@@ -27,6 +28,15 @@
                     "name": "Crouch",
                     "type": "Button",
                     "id": "9c124bc3-b531-41aa-8199-29f0f0ba4c9a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ESC_Button",
+                    "type": "Button",
+                    "id": "7f07e4de-dc8b-445f-8d27-7b669e2bd9b5",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -64,6 +74,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8510e5e5-d902-4500-bde5-ee9e3a342aed",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ESC_Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
