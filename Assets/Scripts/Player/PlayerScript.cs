@@ -9,6 +9,7 @@ using System;
 
 public class PlayerScript : MonoBehaviour
 {
+    public GameObject ESC_Menu;
     private AllPlayerAudio PlayerAudio;
     private GroundCHK GroundCheck;
     private Rigidbody2D rb;
@@ -18,6 +19,7 @@ public class PlayerScript : MonoBehaviour
     private InputAction Sprint;
     private InputAction CrouchAction;
     private InputAction jumpAction;
+    private InputAction ESC_MenuButton;
 
     [SerializeField] private bool IsCrouching = false;
     public bool IsCrouchingPublic => IsCrouching;
@@ -100,6 +102,7 @@ public class PlayerScript : MonoBehaviour
         Sprint = input.actions.FindAction("Sprint");
         CrouchAction = input.actions.FindAction("Crouch");
         jumpAction = input.actions.FindAction("Jump");
+        ESC_MenuButton = input.actions.FindAction("ESC_Button");
 
         Time.timeScale = 1f;
 
@@ -222,6 +225,12 @@ public class PlayerScript : MonoBehaviour
         }
 
         UpdateUpsideDownSparks();
+        if (ESC_MenuButton.triggered)
+        {
+            ESC_Menu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
     }
 
     private void UpdateUpsideDownSparks()
