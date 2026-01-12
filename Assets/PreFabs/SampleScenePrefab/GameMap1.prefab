@@ -3825,8 +3825,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4361033925857274678}
   - component: {fileID: 6478234550669294148}
-  - component: {fileID: 520765858350373254}
   - component: {fileID: 3321193437949090216}
+  - component: {fileID: 6010439298534349248}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -3908,7 +3908,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &520765858350373254
+--- !u!114 &3321193437949090216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3594877438576989637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e732c347010fa8e40a27a5c7c0fd4093, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  WinningPrize: {fileID: 0}
+--- !u!61 &6010439298534349248
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3952,21 +3965,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 30.000002, y: 40}
   m_EdgeRadius: 0
---- !u!114 &3321193437949090216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3594877438576989637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e732c347010fa8e40a27a5c7c0fd4093, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  WinningPrize: {fileID: 0}
 --- !u!1 &4155973598032042128
 GameObject:
   m_ObjectHideFlags: 0

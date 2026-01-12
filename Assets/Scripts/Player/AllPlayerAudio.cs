@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class AllPlayerAudio : MonoBehaviour
 {
@@ -9,51 +11,46 @@ public class AllPlayerAudio : MonoBehaviour
     public AudioClip jumpingSFX;
     public AudioClip damagedSFX;
     public AudioClip optionsSFX;
-    private AudioSource walkingSource;
-    private AudioSource backgroundSource;
-    private AudioSource jumpingSource;
-    private AudioSource damagedSource;
-    private AudioSource optionsSource;
+    public AudioSource PigeonBackgroundS;
+    public AudioSource RunningSFXS;
+    public AudioSource JumpingSFXS;
+    public AudioSource DamagedSFXS;
+    public AudioSource OptionsSFXS;
     void Awake()
     {
-        //playerScript = FindFirstObjectByType<PlayerScript>();
-        //GroundCheck = FindFirstObjectByType<GroundCHK>();
-
-        walkingSource = gameObject.AddComponent<AudioSource>();
-        backgroundSource = gameObject.AddComponent<AudioSource>();
-        jumpingSource = gameObject.AddComponent<AudioSource>();
-        damagedSource = gameObject.AddComponent<AudioSource>();
-        optionsSource = gameObject.AddComponent<AudioSource>();
+        PigeonBackgroundS.clip = backgroundMusic;
+        PigeonBackgroundS.loop = true;
+        PigeonBackgroundS.Play();
     }
     public void Jumping()
     {
-        jumpingSource.PlayOneShot(jumpingSFX);
+        JumpingSFXS.PlayOneShot(jumpingSFX);
     }
     public void OptionsSound()
     {
-        optionsSource.PlayOneShot(optionsSFX);
+        OptionsSFXS.PlayOneShot(optionsSFX);
     }
     public void damagedSound()
     {
-        damagedSource.PlayOneShot(damagedSFX);
+        DamagedSFXS.PlayOneShot(damagedSFX);
     }
     public void walkingSound()
     {
         if (GroundCheck.Grounded && playerScript.Horizontal != 0f)
         {
-            if(!walkingSource.isPlaying)
+            if(!RunningSFXS.isPlaying)
             {
-                walkingSource.loop = true;
-                walkingSource.PlayOneShot(walkingSFX);
+                RunningSFXS.loop = true;
+                RunningSFXS.PlayOneShot(walkingSFX);
                 Debug.Log("The Audio walking script is now playing");
             }
         }
         else
         {
-            if (walkingSource.isPlaying)
+            if (RunningSFXS.isPlaying)
             {
-                walkingSource.loop = false;
-                walkingSource.Stop();
+                RunningSFXS.loop = false;
+                RunningSFXS.Stop();
             }
         }
     }

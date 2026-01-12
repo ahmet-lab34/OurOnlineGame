@@ -6,11 +6,19 @@ using TMPro;
 
 public class SettingsMenu : MonoBehaviour
 {
+    [SerializeField] private PlayerScript playerScript;
+    [SerializeField] private GroundCHK GroundCheck;
     public AudioMixer audioMixer;
+    public AudioSource BackgroundAudio;
     public TMP_Dropdown resolutionDropDown;
     Resolution[] resolutions;
     void Start()
     {
+        float val;
+        bool exists = audioMixer.GetFloat("MusicVolume", out val);
+        Debug.Log("MusicVolume exists: " + exists);
+
+        
         resolutions = Screen.resolutions;
 
         resolutionDropDown.ClearOptions();
@@ -35,9 +43,15 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropDown.RefreshShownValue();
     }
 
-    public void SetVolume(float volume)
+    public void SetVolumeMusic(float volume)
     {
-        audioMixer.SetFloat("Volume", volume);
+        volume = Mathf.Clamp(volume, 0.0001f, 1f);
+        audioMixer.SetFloat("MusicVolume", Mathf.Log10(volume) * 20f);
+    }
+    public void SetVolumeSFX(float volume)
+    {
+        volume = Mathf.Clamp(volume, 0.0001f, 1f);
+        audioMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20f);
     }
 
     public void SetQuality(int qualityIndex)
@@ -49,3 +63,4 @@ public class SettingsMenu : MonoBehaviour
         Screen.fullScreen = isFullScreen;
     }
 }
+
