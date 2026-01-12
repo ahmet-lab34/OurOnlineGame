@@ -16,6 +16,7 @@ public class UIScript : MonoBehaviour
     [SerializeField] private GameObject GameMap1;
     [SerializeField] private GameObject PleaseDoNotQuit;
     [SerializeField] private GameObject ESC_Menu;
+    [SerializeField] private GameObject Winning_Prize;
     [SerializeField] private Button ESC_Options;
     [SerializeField] private Button ESC_Exit;
     [SerializeField] private Button RestartButton;
@@ -29,7 +30,7 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button StayButton;
     [SerializeField] private Button QuitButton;
     [SerializeField] private Button OptionsBackButton;
-
+    [SerializeField] private Button Win_MainMenu;
     void Start()
     {
         if (PlayerPrefs.GetInt("SkipMainMenu", 0) == 1)
@@ -57,6 +58,7 @@ public class UIScript : MonoBehaviour
         ESC_ContinueButton.onClick.AddListener(() => OnButtonPressed(ESC_ContinueButton));
         ESC_Options.onClick.AddListener(() => OnButtonPressed(ESC_Options));
         ESC_Exit.onClick.AddListener(() => OnButtonPressed(ESC_Exit));
+        Win_MainMenu.onClick.AddListener(() => OnButtonPressed(Win_MainMenu));
         Coinss.text = CoinCount.coins.ToString(); 
     }
     public void RestartScene()
@@ -91,6 +93,7 @@ public class UIScript : MonoBehaviour
         }
         if (button == MainPlayButton)
         {
+            Winning_Prize.SetActive(false);
             GameMap1.SetActive(true);
             GameUI.SetActive(true);
             MainMenu.SetActive(false);
@@ -133,6 +136,13 @@ public class UIScript : MonoBehaviour
         if (button == QuitButton)
         {
             Application.Quit();
+        }
+        if (button == Win_MainMenu)
+        {
+            Winning_Prize.SetActive(false);
+            GameMap1.SetActive(false);
+            MainMenu.SetActive(true);
+            Time.timeScale = 1f;
         }
     }
 }
