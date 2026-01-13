@@ -65,6 +65,7 @@ public class UIScript : MonoBehaviour
     }
     void OnVideoEnd(VideoPlayer vp)
     {
+        videoPlayer.gameObject.SetActive(false);
         ActivatingSounds.SetActive(true);
         MainMenu.SetActive(true);
     }
