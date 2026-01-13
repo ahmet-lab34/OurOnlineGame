@@ -4,9 +4,11 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.Video;
 
 public class UIScript : MonoBehaviour
 {
+    public VideoPlayer videoPlayer;
     [SerializeField] private TMP_Text Coinss;
     [SerializeField] private GameObject PlayerObject;
     [SerializeField] private GameObject DeathPanel;
@@ -17,10 +19,12 @@ public class UIScript : MonoBehaviour
     [SerializeField] private GameObject PleaseDoNotQuit;
     [SerializeField] private GameObject ESC_Menu;
     [SerializeField] private GameObject Winning_Prize;
+    [SerializeField] private GameObject ActivatingSounds;
     [SerializeField] private Button ESC_Options;
     [SerializeField] private Button ESC_Exit;
     [SerializeField] private Button RestartButton;
     [SerializeField] private Button MainMenuButton;
+
 
     [SerializeField] private Button MainPlayButton;
     [SerializeField] private Button MainEndlessButton;
@@ -33,6 +37,8 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button Win_MainMenu;
     void Start()
     {
+        videoPlayer.loopPointReached += OnVideoEnd;
+
         if (PlayerPrefs.GetInt("SkipMainMenu", 0) == 1)
         {
             MainMenu.SetActive(false);
@@ -40,10 +46,6 @@ public class UIScript : MonoBehaviour
             GameUI.SetActive(true);
             Time.timeScale = 1f;
             PlayerPrefs.SetInt("SkipMainMenu", 0);
-        }
-        else
-        {
-            MainMenu.SetActive(true);
         }
         RestartButton.onClick.AddListener(() => OnButtonPressed(RestartButton));
         MainMenuButton.onClick.AddListener(() => OnButtonPressed(MainMenuButton));
@@ -60,6 +62,11 @@ public class UIScript : MonoBehaviour
         ESC_Exit.onClick.AddListener(() => OnButtonPressed(ESC_Exit));
         Win_MainMenu.onClick.AddListener(() => OnButtonPressed(Win_MainMenu));
         Coinss.text = CoinCount.coins.ToString(); 
+    }
+    void OnVideoEnd(VideoPlayer vp)
+    {
+        ActivatingSounds.SetActive(true);
+        MainMenu.SetActive(true);
     }
     public void RestartScene()
     {
