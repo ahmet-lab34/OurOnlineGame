@@ -5,6 +5,7 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.Video;
+using System.Collections.Generic;
 
 public class UIScript : MonoBehaviour
 {
@@ -35,6 +36,9 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button QuitButton;
     [SerializeField] private Button OptionsBackButton;
     [SerializeField] private Button Win_MainMenu;
+    [SerializeField] private TMP_Dropdown resolutionDropDown;
+
+    Resolution[] resolutions;
     void Start()
     {
         videoPlayer.loopPointReached += OnVideoEnd;
@@ -62,6 +66,29 @@ public class UIScript : MonoBehaviour
         ESC_Exit.onClick.AddListener(() => OnButtonPressed(ESC_Exit));
         Win_MainMenu.onClick.AddListener(() => OnButtonPressed(Win_MainMenu));
         Coinss.text = CoinCount.coins.ToString(); 
+
+        resolutionDropDown.ClearOptions();
+
+        resolutions = Screen.resolutions;
+
+        List<string> options = new List<string>();
+        int currentResolutionIndex = 0;
+
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + " x " + resolutions[i].height;
+            options.Add(option);
+
+            if (resolutions[i].width == Screen.currentResolution.width &&
+                resolutions[i].height == Screen.currentResolution.height)
+            {
+                currentResolutionIndex = i;
+            }
+        }
+
+        resolutionDropDown.AddOptions(options);
+        resolutionDropDown.value = currentResolutionIndex;
+        resolutionDropDown.RefreshShownValue();
     }
     void OnVideoEnd(VideoPlayer vp)
     {

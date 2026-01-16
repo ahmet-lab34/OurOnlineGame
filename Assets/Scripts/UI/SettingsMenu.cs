@@ -8,39 +8,14 @@ public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private PlayerScript playerScript;
     [SerializeField] private GroundCHK GroundCheck;
+    public AudioClip OptionsSFX;
+    public AudioSource OptionsSFXS;
     public AudioMixer audioMixer;
     public AudioSource BackgroundAudio;
-    public TMP_Dropdown resolutionDropDown;
-    Resolution[] resolutions;
-    void Start()
+    
+    public void optionsSFXMethod()
     {
-        float val;
-        bool exists = audioMixer.GetFloat("MusicVolume", out val);
-        Debug.Log("MusicVolume exists: " + exists);
-
-        
-        resolutions = Screen.resolutions;
-
-        resolutionDropDown.ClearOptions();
-
-        List<string> options = new List<string>();
-        int currentResolutionIndex = 0;
-
-        for (int i = 0; i < resolutions.Length; i++)
-        {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
-
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
-            {
-                currentResolutionIndex = i;
-            }
-        }
-
-        resolutionDropDown.AddOptions(options);
-        resolutionDropDown.value = currentResolutionIndex;
-        resolutionDropDown.RefreshShownValue();
+        OptionsSFXS.PlayOneShot(OptionsSFX);
     }
 
     public void SetVolumeMusic(float volume)

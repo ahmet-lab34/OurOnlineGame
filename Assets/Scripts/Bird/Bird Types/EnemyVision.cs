@@ -8,7 +8,6 @@ public class EnemyVision : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log($"{gameObject.name} found the player");
             birdAnim.playerDetected();
             IFoundThePlayer = true;
         }
@@ -17,7 +16,6 @@ public class EnemyVision : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("The Bird missed the player");
             birdAnim.playerDetectedFalse();
             IFoundThePlayer = false;
         }

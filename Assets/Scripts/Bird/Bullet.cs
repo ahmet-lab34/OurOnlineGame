@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private Animator animator;
     [SerializeField] private Collider2D birdCollider;
     [SerializeField] private Collider2D shitCollider;
 
-    private shitAnimation shitAnimation;
     public float speed = 5f;
     private Vector2 direction;
 
@@ -13,8 +13,8 @@ public class Bullet : MonoBehaviour
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         shitCollider = GetComponent<Collider2D>();
-        shitAnimation = FindFirstObjectByType<shitAnimation>();
     }
 
     private void Start()
@@ -29,8 +29,7 @@ public class Bullet : MonoBehaviour
         if (shitCollider != null)
             IgnoreBranchCollision.Apply(shitCollider);
 
-        if (shitAnimation != null)
-            shitAnimation.shitFlying();
+        animator.SetBool("shitFlying", true);
     }
 
     public void SetOwner(GameObject bird)
@@ -62,22 +61,17 @@ public class Bullet : MonoBehaviour
             PlayerScript playerScript = collision.gameObject.GetComponent<PlayerScript>();
             if (playerScript != null)
             {
-                Debug.Log("Hello");
                 playerScript.GetHit();
             }
 
-            if (shitAnimation != null)
-                shitAnimation.shitExploding();
-
+            animator.SetBool("shitExploding", true);
             Destroy(gameObject, 0.3f);
             return;
         }
 
         if (!collision.gameObject.CompareTag("Enemy"))
         {
-            if (shitAnimation != null)
-                shitAnimation.shitExploding();
-
+            animator.SetBool("shitExploding", true);
             Destroy(gameObject, 0.3f);
         }
     }

@@ -34,12 +34,9 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] private PlayerUIScript PlayerUIScript;
 
-    [SerializeField] private bool isTouchingWall = false;
-    [SerializeField] private bool nearTheWall = false;
-    [SerializeField] private int wallSide;
     private bool LongJumpRotationChecker = true;
 
-    private UnityEngine.Vector2 normalHeight;
+    private Vector2 normalHeight;
     public PlayerStats movingStats = new PlayerStats();
     private PlayerStats originalStats = new PlayerStats();
 
@@ -77,8 +74,6 @@ public class PlayerScript : MonoBehaviour
         public float slideSpeed = 3f;
         public float gravityScale = 1.7f;
 
-        public float wallJumpYAxis;
-        public float wallJumpXAxis;
     }
 
     [Serializable]
@@ -94,8 +89,8 @@ public class PlayerScript : MonoBehaviour
         input = GetComponent<PlayerInput>();
 
         animator = GetComponentInChildren<Animator>();
+        PlayerAudio = GetComponent<AllPlayerAudio>();
 
-        PlayerAudio = FindFirstObjectByType<AllPlayerAudio>();
         GroundCheck = FindFirstObjectByType<GroundCHK>();
         PlayerUIScript = FindFirstObjectByType<PlayerUIScript>();
 
@@ -121,32 +116,18 @@ public class PlayerScript : MonoBehaviour
         originalStats.dashCooldown = movingStats.dashCooldown;
         originalStats.slideSpeed = movingStats.slideSpeed;
         originalStats.gravityScale = movingStats.gravityScale;
-        originalStats.wallJumpYAxis = movingStats.wallJumpYAxis;
-        originalStats.wallJumpXAxis = movingStats.wallJumpXAxis;
     }
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = new UnityEngine.Vector2(Horizontal * movingStats.activeMoveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(Horizontal * movingStats.activeMoveSpeed, rb.linearVelocity.y);
     }
 
     void Update()
     {
         Horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (isTouchingWall)
-        {
-            rb.linearVelocity = new UnityEngine.Vector2(Horizontal * movingStats.activeMoveSpeed, -movingStats.slideSpeed);
-        }
-
         PlayerAudio.walkingSound();
-
-        if (nearTheWall && jumpAction.triggered)
-        {
-            UnityEngine.Vector2 jumpDirection = new UnityEngine.Vector2(rb.linearVelocity.x, movingStats.wallJumpYAxis);
-            rb.linearVelocity = jumpDirection;
-            nearTheWall = !nearTheWall;
-        }
 
         animator.SetBool("IsRunning", Horizontal > 0 || Horizontal < 0);
         animator.SetFloat("yVelocity", rb.linearVelocity.y);
@@ -154,7 +135,7 @@ public class PlayerScript : MonoBehaviour
         if (GroundCheck.Grounded)
         {
             animator.SetBool("IsJumping", false);
-            Debug.Log("Character is Grounded");
+            
             if (jumpAction.ReadValue<float>() == 0)
             {
                 DoubleJump = false;
@@ -165,13 +146,13 @@ public class PlayerScript : MonoBehaviour
         {
             if (DoubleJump)
             {
-                rb.AddForce(UnityEngine.Vector2.up * movingStats.DoubleJumpHeight, ForceMode2D.Impulse);
+                rb.AddForce(Vector2.up * movingStats.DoubleJumpHeight, ForceMode2D.Impulse);
                 DoubleJump = false;
                 PlayerAudio.Jumping();
             }
             if (GroundCheck.Grounded)
             {
-                rb.AddForce(UnityEngine.Vector2.up * movingStats.jumpHeight, ForceMode2D.Impulse);
+                rb.AddForce(Vector2.up * movingStats.jumpHeight, ForceMode2D.Impulse);
                 DoubleJump = true;
                 PlayerAudio.Jumping();
             }
@@ -184,7 +165,7 @@ public class PlayerScript : MonoBehaviour
 
         if (jumpAction.triggered && (LongJumpRotationChecker ? rb.linearVelocity.y > 0f : rb.linearVelocity.y < 0f))
         {
-            rb.linearVelocity = new UnityEngine.Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
 
         if ((IsFacingRight && Horizontal < 0f) || (!IsFacingRight && Horizontal > 0f))
@@ -338,7 +319,6 @@ public class PlayerScript : MonoBehaviour
     {
         movingStats.jumpHeight = -movingStats.jumpHeight;
         movingStats.DoubleJumpHeight = -movingStats.DoubleJumpHeight;
-        movingStats.wallJumpYAxis = -movingStats.wallJumpYAxis;
         movingStats.slideSpeed = -movingStats.slideSpeed;
         LongJumpRotationChecker = !LongJumpRotationChecker;
     }
@@ -356,7 +336,6 @@ public class PlayerScript : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
-            nearTheWall = true;
             DoubleJump = false;
             Debug.Log("I'm near the wall !");
         }
@@ -366,42 +345,11 @@ public class PlayerScript : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
-            nearTheWall = false;
             DoubleJump = true;
             Debug.Log("Far from the wall !");
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Wall"))
-        {
-            Debug.Log("Touching wall !");
-            isTouchingWall = true;
-            DoubleJump = false;
-            animator.SetBool("IsSliding", true);
-            if (collision.transform.position.x < transform.position.x)
-            {
-                wallSide = -1;
-            }
-            else
-            {
-                wallSide = 1;
-            }
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Wall"))
-        {
-            animator.SetBool("IsSliding", false);
-            Debug.Log("Left the wall !");
-            isTouchingWall = false;
-            DoubleJump = false;
-            wallSide = 0;
-        }
-    }
 
     private void OnEnable()
     {
@@ -429,7 +377,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (IsCrouching)
         {
-            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, normalHeight.y);
+            transform.localScale = new Vector2(transform.localScale.x, normalHeight.y);
             movingStats.activeMoveSpeed = originalStats.activeMoveSpeed;
             IsCrouching = false;
             animator.SetBool("IsCrouching", false);
@@ -437,7 +385,7 @@ public class PlayerScript : MonoBehaviour
         else if (!IsCrouching && GroundCheck.Grounded)
         {
             movingStats.activeMoveSpeed = originalStats.activeMoveSpeed * 0.45f;
-            transform.localScale = new UnityEngine.Vector2(transform.localScale.x, normalHeight.y * 0.9f);
+            transform.localScale = new Vector2(transform.localScale.x, normalHeight.y * 0.9f);
             IsCrouching = true;
             animator.SetBool("IsCrouching", true);
         }
@@ -445,7 +393,7 @@ public class PlayerScript : MonoBehaviour
 
     private void StandUp()
     {
-        transform.localScale = new UnityEngine.Vector2(transform.localScale.x, 1f);
+        transform.localScale = new Vector2(transform.localScale.x, 1f);
         movingStats.activeMoveSpeed = originalStats.activeMoveSpeed;
         IsCrouching = false;
         animator.SetBool("IsCrouching", false);
@@ -478,7 +426,7 @@ public class PlayerScript : MonoBehaviour
     private void Flip()
     {
         IsFacingRight = !IsFacingRight;
-        UnityEngine.Vector2 localScale = transform.localScale;
+        Vector2 localScale = transform.localScale;
         localScale.x *= -1f;
         transform.localScale = localScale;
     }

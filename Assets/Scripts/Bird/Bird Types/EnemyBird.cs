@@ -40,7 +40,6 @@ public class EnemyBird : MonoBehaviour
 
         if (!birdVision.IFoundThePlayer)
         {
-            Debug.Log("Can't find the player :(");
             return;
         }
 
