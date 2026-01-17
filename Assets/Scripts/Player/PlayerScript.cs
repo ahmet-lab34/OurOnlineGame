@@ -6,9 +6,13 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
-
-public class PlayerScript : MonoBehaviour
+using Mirror;
+public class PlayerScript : NetworkBehaviour
 {
+    [SyncVar] private Vector3 networkPosition;
+    [SyncVar] private bool isMoving;
+
+
     public GameObject ESC_Menu;
     private AllPlayerAudio PlayerAudio;
     private GroundCHK GroundCheck;
@@ -65,7 +69,7 @@ public class PlayerScript : MonoBehaviour
     [Serializable]
     public class PlayerStats
     {
-        public float activeMoveSpeed = 5f;
+        [SyncVar] public float activeMoveSpeed = 5f;
         public float jumpHeight = 10f;
 
         public float DoubleJumpHeight = 7f;
@@ -75,6 +79,20 @@ public class PlayerScript : MonoBehaviour
         public float gravityScale = 1.7f;
 
     }
+    //Mirror SETUP
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        Debug.Log("Local player spawned for me!");
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        Debug.Log("A player joined: " + netId);
+    }
+
+    //Mirror SETUP
 
     [Serializable]
     public class Numerics
@@ -82,7 +100,6 @@ public class PlayerScript : MonoBehaviour
         public int playerHealth = 3;
         public int BirdCount = 0;
     }
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -124,7 +141,19 @@ public class PlayerScript : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        if (isLocalPlayer)
+        {
+            HandleInput();
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(
+                transform.position,
+                networkPosition,
+                Time.deltaTime * 10f
+            );
+        }
         Horizontal = Input.GetAxisRaw("Horizontal");
 
         PlayerAudio.walkingSound();
@@ -211,8 +240,27 @@ public class PlayerScript : MonoBehaviour
             ESC_Menu.SetActive(true);
             Time.timeScale = 0f;
         }
-
     }
+    void HandleInput()
+    {
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+
+        Vector3 move = new Vector3(h, 0, v);
+
+        transform.Translate(move * movingStats.activeMoveSpeed * Time.deltaTime, Space.World);
+
+        isMoving = move.sqrMagnitude > 0.01f;
+        CmdSyncPosition(transform.position, isMoving);
+    }
+
+    [Command]
+    void CmdSyncPosition(Vector3 pos, bool moving)
+    {
+        networkPosition = pos;
+        isMoving = moving;
+    }
+    public bool IsMoving => isMoving;
 
     private void UpdateUpsideDownSparks()
     {

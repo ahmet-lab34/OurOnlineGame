@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3688932664426198959}
   - component: {fileID: 4998032529440746527}
   - component: {fileID: 7774138766690062552}
+  - component: {fileID: 3650042763969181600}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -82,6 +83,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79a3c0b2797740a4e8b445f0c708d6fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMethod: 0
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   ESC_Menu: {fileID: 0}
   animator: {fileID: 6510739270417320037}
   IsCrouching: 0
@@ -93,13 +98,11 @@ MonoBehaviour:
   movingStats:
     activeMoveSpeed: 5
     jumpHeight: 124.1
-    DoubleJumpHeight: 7
+    DoubleJumpHeight: 50
     dashSpeed: 25
     dashCooldown: 3
     slideSpeed: 3
     gravityScale: 1.7
-    wallJumpYAxis: 0
-    wallJumpXAxis: 0
   playerNumbers:
     playerHealth: 3
     BirdCount: 0
@@ -185,7 +188,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3124341922021140888}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b33b7d3490f65154884021f12236d658, type: 3}
   m_Name: 
@@ -209,7 +212,6 @@ MonoBehaviour:
   playerScript: {fileID: 7946821400442731749}
   GroundCheck: {fileID: 7996294891031218776}
   walkingSFX: {fileID: 8300000, guid: 09c8a3d059616604ebf73c61dcd75983, type: 3}
-  jumpingSFX: {fileID: 8300000, guid: bb16d8482d7aaaa47b1267d853701393, type: 3}
   damagedSFX: {fileID: 8300000, guid: f463f477a9295264abb315edc24021e3, type: 3}
   RunningSFXS: {fileID: 4998032529440746527}
   JumpingSFXS: {fileID: 7774138766690062552}
@@ -408,6 +410,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3650042763969181600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
+  sceneId: 0
+  _assetId: 3860232703
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &3263792116828733442
 GameObject:
   m_ObjectHideFlags: 0
