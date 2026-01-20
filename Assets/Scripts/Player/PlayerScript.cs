@@ -6,13 +6,9 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
-using Mirror;
+using Unity.Netcode;
 public class PlayerScript : NetworkBehaviour
 {
-    [SyncVar] private Vector3 networkPosition;
-    [SyncVar] private bool isMoving;
-
-
     public GameObject ESC_Menu;
     private AllPlayerAudio PlayerAudio;
     private GroundCHK GroundCheck;
@@ -25,11 +21,11 @@ public class PlayerScript : NetworkBehaviour
     private InputAction jumpAction;
     private InputAction ESC_MenuButton;
 
-    [SerializeField] private bool IsCrouching = false;
+    [SerializeField]private bool IsCrouching = false;
     public bool IsCrouchingPublic => IsCrouching;
 
-    [HideInInspector] public float Horizontal;
-    [SerializeField] private bool DoubleJump = true;
+    [HideInInspector]public float Horizontal;
+    [SerializeField]private bool DoubleJump = true;
     private float dashLength = .5f;
     private float dashCounter;
     [HideInInspector] public float dashCoolcounter;
@@ -69,7 +65,7 @@ public class PlayerScript : NetworkBehaviour
     [Serializable]
     public class PlayerStats
     {
-        [SyncVar] public float activeMoveSpeed = 5f;
+        public float activeMoveSpeed = 5f;
         public float jumpHeight = 10f;
 
         public float DoubleJumpHeight = 7f;
@@ -79,20 +75,6 @@ public class PlayerScript : NetworkBehaviour
         public float gravityScale = 1.7f;
 
     }
-    //Mirror SETUP
-    public override void OnStartLocalPlayer()
-    {
-        base.OnStartLocalPlayer();
-        Debug.Log("Local player spawned for me!");
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        Debug.Log("A player joined: " + netId);
-    }
-
-    //Mirror SETUP
 
     [Serializable]
     public class Numerics
@@ -108,15 +90,13 @@ public class PlayerScript : NetworkBehaviour
         animator = GetComponentInChildren<Animator>();
         PlayerAudio = GetComponent<AllPlayerAudio>();
 
-        GroundCheck = FindFirstObjectByType<GroundCHK>();
+        GroundCheck = GetComponentInChildren<GroundCHK>();
         PlayerUIScript = FindFirstObjectByType<PlayerUIScript>();
 
         Sprint = input.actions.FindAction("Sprint");
         CrouchAction = input.actions.FindAction("Crouch");
         jumpAction = input.actions.FindAction("Jump");
         ESC_MenuButton = input.actions.FindAction("ESC_Button");
-
-        Time.timeScale = 1f;
 
         currentSpeedMin = sparksXMin;
         currentSpeedMax = sparksXMax;
@@ -141,19 +121,9 @@ public class PlayerScript : NetworkBehaviour
     }
 
     void Update()
-    {   
-        if (isLocalPlayer)
-        {
-            HandleInput();
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(
-                transform.position,
-                networkPosition,
-                Time.deltaTime * 10f
-            );
-        }
+    {  
+        if (!IsOwner) return; 
+
         Horizontal = Input.GetAxisRaw("Horizontal");
 
         PlayerAudio.walkingSound();
@@ -241,26 +211,6 @@ public class PlayerScript : NetworkBehaviour
             Time.timeScale = 0f;
         }
     }
-    void HandleInput()
-    {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-
-        Vector3 move = new Vector3(h, 0, v);
-
-        transform.Translate(move * movingStats.activeMoveSpeed * Time.deltaTime, Space.World);
-
-        isMoving = move.sqrMagnitude > 0.01f;
-        CmdSyncPosition(transform.position, isMoving);
-    }
-
-    [Command]
-    void CmdSyncPosition(Vector3 pos, bool moving)
-    {
-        networkPosition = pos;
-        isMoving = moving;
-    }
-    public bool IsMoving => isMoving;
 
     private void UpdateUpsideDownSparks()
     {
@@ -380,25 +330,6 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Wall"))
-        {
-            DoubleJump = false;
-            Debug.Log("I'm near the wall !");
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Wall"))
-        {
-            DoubleJump = true;
-            Debug.Log("Far from the wall !");
-        }
-    }
-
-
     private void OnEnable()
     {
         jumpAction.Enable();
@@ -420,17 +351,17 @@ public class PlayerScript : NetworkBehaviour
     {
         Crouch();
     }
-
+    
     private void Crouch()
     {
-        if (IsCrouching)
+        if (IsCrouching && IsLocalPlayer)
         {
             transform.localScale = new Vector2(transform.localScale.x, normalHeight.y);
             movingStats.activeMoveSpeed = originalStats.activeMoveSpeed;
             IsCrouching = false;
             animator.SetBool("IsCrouching", false);
         }
-        else if (!IsCrouching && GroundCheck.Grounded)
+        else if (!IsCrouching && GroundCheck.Grounded && IsLocalPlayer)
         {
             movingStats.activeMoveSpeed = originalStats.activeMoveSpeed * 0.45f;
             transform.localScale = new Vector2(transform.localScale.x, normalHeight.y * 0.9f);
@@ -470,7 +401,6 @@ public class PlayerScript : NetworkBehaviour
     {
         PlayerUIScript.Die();
     }
-
     private void Flip()
     {
         IsFacingRight = !IsFacingRight;

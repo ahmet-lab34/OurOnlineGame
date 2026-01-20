@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8282395205827904682}
   - component: {fileID: 4782356634681185535}
+  - component: {fileID: 1145925938058530413}
   - component: {fileID: 7946821400442731749}
   - component: {fileID: 1905734901666232342}
   - component: {fileID: 7007101498988190246}
@@ -17,7 +18,9 @@ GameObject:
   - component: {fileID: 3688932664426198959}
   - component: {fileID: 4998032529440746527}
   - component: {fileID: 7774138766690062552}
-  - component: {fileID: 3650042763969181600}
+  - component: {fileID: 5152429028702390396}
+  - component: {fileID: 1498267140714897172}
+  - component: {fileID: 8352765876973403686}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -34,7 +37,7 @@ Transform:
   m_GameObject: {fileID: 3124341922021140888}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -679.28, y: -256.13, z: -3.2201762}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -56,10 +59,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2.58
+  m_Mass: 5.13
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 4.93
+  m_GravityScale: 9.1
   m_Material: {fileID: 6200000, guid: 263b9213d5deb864898b17cff68ee335, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -71,6 +74,31 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &1145925938058530413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2865029811
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &7946821400442731749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,10 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79a3c0b2797740a4e8b445f0c708d6fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMethod: 0
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
+  ShowTopMostFoldoutHeaderGroup: 1
   ESC_Menu: {fileID: 0}
   animator: {fileID: 6510739270417320037}
   IsCrouching: 0
@@ -97,8 +122,8 @@ MonoBehaviour:
   PlayerUIScript: {fileID: 476885202043368545}
   movingStats:
     activeMoveSpeed: 5
-    jumpHeight: 124.1
-    DoubleJumpHeight: 50
+    jumpHeight: 405.31
+    DoubleJumpHeight: 193.7
     dashSpeed: 25
     dashCooldown: 3
     slideSpeed: 3
@@ -410,7 +435,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3650042763969181600
+--- !u!114 &5152429028702390396
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -419,14 +444,108 @@ MonoBehaviour:
   m_GameObject: {fileID: 3124341922021140888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Script: {fileID: 11500000, guid: be8997df3c1c11c4b9a75e9a130871a8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
-  sceneId: 0
-  _assetId: 3860232703
-  serverOnly: 0
-  visibility: 0
-  hasSpawned: 0
+  m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 1
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.05
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.05
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.05
+  AuthorityMode: 1
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
+--- !u!114 &1498267140714897172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody2D
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 0
+  AutoUpdateKinematicState: 1
+  AutoSetKinematicOnDespawn: 1
+--- !u!114 &8352765876973403686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19504d4eecbcc674ca14f84796a93389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 6510739270417320037}
+  TransitionStateInfoList: []
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: IsRunning
+      NameHash: -887662580
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsJumping
+      NameHash: 1749078233
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsCrouching
+      NameHash: -1154928320
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsDashing
+      NameHash: -364528230
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsSliding
+      NameHash: -1809564513
+      Synchronize: 1
+      ParameterType: 4
+    - name: yVelocity
+      NameHash: -1736111434
+      Synchronize: 1
+      ParameterType: 1
+    - name: Kick
+      NameHash: -1092128709
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!1 &3263792116828733442
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +573,7 @@ Transform:
   m_GameObject: {fileID: 3263792116828733442}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.02, y: 0.583, z: -10.151786}
+  m_LocalPosition: {x: -0.02, y: 0.38, z: -10.151786}
   m_LocalScale: {x: 1.08, y: 1.84, z: 1.19}
   m_ConstrainProportionsScale: 0
   m_Children: []
