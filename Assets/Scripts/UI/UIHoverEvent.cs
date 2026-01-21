@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class UIHoverEvent : MonoBehaviour
 {
-    [SerializeField] private SettingsMenu optionsAudio;
+    public AudioClip OptionsSFX;
+    private AudioSource OptionsSFXS;
     public List<Button> buttonsToManage;
 
     void Awake()
     {
-        optionsAudio = FindAnyObjectByType<SettingsMenu>();
+        OptionsSFXS = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -46,7 +47,7 @@ public class UIHoverEvent : MonoBehaviour
 
     private void OnHoverEnter(Button button)
     {
-        optionsAudio.optionsSFXMethod();
+        OptionsSFXS.PlayOneShot(OptionsSFX);
         Debug.Log("Hovering over " + button.name);
     }
 

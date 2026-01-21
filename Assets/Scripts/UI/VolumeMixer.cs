@@ -4,19 +4,11 @@ using UnityEngine.Audio;
 using UnityEngine.UI;
 using TMPro;
 
-public class SettingsMenu : MonoBehaviour
+public class VolumeMixer : MonoBehaviour
 {
-    [SerializeField] private PlayerScript playerScript;
-    [SerializeField] private GroundCHK GroundCheck;
-    public AudioClip OptionsSFX;
-    public AudioSource OptionsSFXS;
+
     public AudioMixer audioMixer;
     public AudioSource BackgroundAudio;
-    
-    public void optionsSFXMethod()
-    {
-        OptionsSFXS.PlayOneShot(OptionsSFX);
-    }
 
     public void SetVolumeMusic(float volume)
     {
