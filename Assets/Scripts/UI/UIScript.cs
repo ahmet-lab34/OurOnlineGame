@@ -37,8 +37,15 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button OptionsBackButton;
     [SerializeField] private Button Win_MainMenu;
     [SerializeField] private TMP_Dropdown resolutionDropDown;
-
-    Resolution[] resolutions;
+    private readonly Vector2Int[] popularResolutions =
+    {
+        new Vector2Int(1280, 720),
+        new Vector2Int(1366, 768),
+        new Vector2Int(1600, 900),
+        new Vector2Int(1920, 1080),
+        new Vector2Int(2560, 1440),
+        new Vector2Int(3840, 2160)
+    };
     void Start()
     {
         videoPlayer.loopPointReached += OnVideoEnd;
@@ -66,29 +73,45 @@ public class UIScript : MonoBehaviour
         ESC_Exit.onClick.AddListener(() => OnButtonPressed(ESC_Exit));
         Win_MainMenu.onClick.AddListener(() => OnButtonPressed(Win_MainMenu));
         Coinss.text = CoinCount.coins.ToString(); 
-
+        Debug.Log("PopulateResolutionDropdown called");
+        PopulateResolutionDropdown();
+    }
+    public void PopulateResolutionDropdown()
+    {
         resolutionDropDown.ClearOptions();
-
-        resolutions = Screen.resolutions;
 
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
 
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < popularResolutions.Length; i++)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
+            int width = popularResolutions[i].x;
+            int height = popularResolutions[i].y;
 
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
+            if (!IsResolutionSupported(width, height))
+                continue;
+
+            options.Add(width + " x " + height);
+
+            if (width == Screen.currentResolution.width &&
+                height == Screen.currentResolution.height)
             {
-                currentResolutionIndex = i;
+                currentResolutionIndex = options.Count - 1;
             }
         }
 
         resolutionDropDown.AddOptions(options);
         resolutionDropDown.value = currentResolutionIndex;
         resolutionDropDown.RefreshShownValue();
+    }
+    private bool IsResolutionSupported(int width, int height)
+    {
+        foreach (Resolution res in Screen.resolutions)
+        {
+            if (res.width == width && res.height == height)
+                return true;
+        }
+        return false;
     }
     void OnVideoEnd(VideoPlayer vp)
     {

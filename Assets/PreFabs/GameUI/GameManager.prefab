@@ -102,14 +102,6 @@ MonoBehaviour:
   OptionsSFX: {fileID: 8300000, guid: 2fca8596ba51e124eb7420430e52b249, type: 3}
   buttonsToManage:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &1033804543267210891
 MonoBehaviour:
   m_ObjectHideFlags: 0
