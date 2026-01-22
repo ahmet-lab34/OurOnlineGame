@@ -9,115 +9,71 @@ using System.Collections.Generic;
 
 public class UIScript : MonoBehaviour
 {
-    public VideoPlayer videoPlayer;
+    //public VideoPlayer videoPlayer;
     [SerializeField] private TMP_Text Coinss;
     [SerializeField] private GameObject PlayerObject;
-    [SerializeField] private GameObject DeathPanel;
-    [SerializeField] private GameObject MainMenu;
-    [SerializeField] private GameObject GameUI;
-    [SerializeField] private GameObject Settings;
-    [SerializeField] private GameObject GameMap1;
-    [SerializeField] private GameObject PleaseDoNotQuit;
     [SerializeField] private GameObject ESC_Menu;
-    [SerializeField] private GameObject Winning_Prize;
-    [SerializeField] private GameObject ActivatingSounds;
+    [SerializeField] private GameObject deathPanel;
     [SerializeField] private Button ESC_Options;
     [SerializeField] private Button ESC_Exit;
-    [SerializeField] private Button RestartButton;
-    [SerializeField] private Button MainMenuButton;
-
-
-    [SerializeField] private Button MainPlayButton;
-    [SerializeField] private Button MainEndlessButton;
-    [SerializeField] private Button MainOptionsButton;
-    [SerializeField] private Button MainExitButton;
     [SerializeField] private Button ESC_ContinueButton;
-    [SerializeField] private Button StayButton;
+    [SerializeField] private Button RestartButton;
     [SerializeField] private Button QuitButton;
-    [SerializeField] private Button OptionsBackButton;
-    [SerializeField] private Button Win_MainMenu;
     [SerializeField] private TMP_Dropdown resolutionDropDown;
-    private readonly Vector2Int[] popularResolutions =
-    {
-        new Vector2Int(1280, 720),
-        new Vector2Int(1366, 768),
-        new Vector2Int(1600, 900),
-        new Vector2Int(1920, 1080),
-        new Vector2Int(2560, 1440),
-        new Vector2Int(3840, 2160)
-    };
+    
+    private Resolution[] resolutions;
+    private List<Resolution> filteredResolution;
+
+    private float currentRefreshRate;
+    private int currentResolutionIndex;
+
+    [Obsolete]
+
     void Start()
     {
-        videoPlayer.loopPointReached += OnVideoEnd;
-
-        if (PlayerPrefs.GetInt("SkipMainMenu", 0) == 1)
-        {
-            MainMenu.SetActive(false);
-            GameMap1.SetActive(true);
-            GameUI.SetActive(true);
-            Time.timeScale = 1f;
-            PlayerPrefs.SetInt("SkipMainMenu", 0);
-        }
-        RestartButton.onClick.AddListener(() => OnButtonPressed(RestartButton));
-        MainMenuButton.onClick.AddListener(() => OnButtonPressed(MainMenuButton));
+        //videoPlayer.loopPointReached += OnVideoEnd;
 
         QuitButton.onClick.AddListener(() => OnButtonPressed(QuitButton));
-        StayButton.onClick.AddListener(() => OnButtonPressed(StayButton));
-        MainPlayButton.onClick.AddListener(() => OnButtonPressed(MainPlayButton));
-        MainEndlessButton.onClick.AddListener(() => OnButtonPressed(MainEndlessButton));
-        MainOptionsButton.onClick.AddListener(() => OnButtonPressed(MainOptionsButton));
-        OptionsBackButton.onClick.AddListener(() => OnButtonPressed(OptionsBackButton));
-        MainExitButton.onClick.AddListener(() => OnButtonPressed(MainExitButton));
         ESC_ContinueButton.onClick.AddListener(() => OnButtonPressed(ESC_ContinueButton));
         ESC_Options.onClick.AddListener(() => OnButtonPressed(ESC_Options));
         ESC_Exit.onClick.AddListener(() => OnButtonPressed(ESC_Exit));
-        Win_MainMenu.onClick.AddListener(() => OnButtonPressed(Win_MainMenu));
         Coinss.text = CoinCount.coins.ToString(); 
-        Debug.Log("PopulateResolutionDropdown called");
-        PopulateResolutionDropdown();
-    }
-    public void PopulateResolutionDropdown()
-    {
+
+        resolutions = Screen.resolutions;
+        filteredResolution = new List<Resolution>();
         resolutionDropDown.ClearOptions();
+        currentRefreshRate = Screen.currentResolution.refreshRate;
 
-        List<string> options = new List<string>();
-        int currentResolutionIndex = 0;
-
-        for (int i = 0; i < popularResolutions.Length; i++)
+        for (int i = 0; i < resolutions.Length; i++)
         {
-            int width = popularResolutions[i].x;
-            int height = popularResolutions[i].y;
-
-            if (!IsResolutionSupported(width, height))
-                continue;
-
-            options.Add(width + " x " + height);
-
-            if (width == Screen.currentResolution.width &&
-                height == Screen.currentResolution.height)
+            if (resolutions[i].refreshRate == currentRefreshRate)
             {
-                currentResolutionIndex = options.Count - 1;
+                filteredResolution.Add(resolutions[i]);
             }
         }
-
+        List<string> options = new List<string>();
+        for (int i = 0; i < filteredResolution.Count; i++)
+        {
+            string resolutionOption = filteredResolution[i].width + "x" + filteredResolution[i].height + " " + filteredResolution[i].refreshRate + "HZ";
+            options.Add(resolutionOption);
+            if (filteredResolution[i].width == Screen.width && filteredResolution[i].height == Screen.height)
+            {
+                currentResolutionIndex = i;
+            }
+        }
         resolutionDropDown.AddOptions(options);
         resolutionDropDown.value = currentResolutionIndex;
         resolutionDropDown.RefreshShownValue();
     }
-    private bool IsResolutionSupported(int width, int height)
+    public void SetResolution(int resolutionIndex)
     {
-        foreach (Resolution res in Screen.resolutions)
-        {
-            if (res.width == width && res.height == height)
-                return true;
-        }
-        return false;
+        Resolution resolution = filteredResolution[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, true);
     }
     void OnVideoEnd(VideoPlayer vp)
     {
-        videoPlayer.gameObject.SetActive(false);
-        ActivatingSounds.SetActive(true);
-        MainMenu.SetActive(true);
+        //videoPlayer.gameObject.SetActive(false);
+        //MainMenu.SetActive(true);
     }
     public void RestartScene()
     {
@@ -126,7 +82,7 @@ public class UIScript : MonoBehaviour
     }
     public void UIDie()
     {
-        DeathPanel.SetActive(true);
+        deathPanel.SetActive(true);
         PlayerObject.SetActive(false);
         Time.timeScale = 0f;
     }
@@ -138,69 +94,14 @@ public class UIScript : MonoBehaviour
             GravitySwitcherUpsideDown.isRotated = false;
             RestartScene();
         }
-        if (button == MainMenuButton)
-        {
-            Scene currentScene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(currentScene.name);
-        }
-
         if (button == ESC_ContinueButton)
         {
             ESC_Menu.SetActive(false);
             Time.timeScale = 1f;
         }
-        if (button == MainPlayButton)
-        {
-            Winning_Prize.SetActive(false);
-            GameMap1.SetActive(true);
-            GameUI.SetActive(true);
-            MainMenu.SetActive(false);
-        }
-        if (button == MainEndlessButton)
-        {
-
-        }
-        if (button == ESC_Options)
-        {
-            Time.timeScale = 1f;
-            ESC_Menu.SetActive(false);
-            GameMap1.SetActive(false);
-            Settings.SetActive(true);
-        }
-        if (button == MainOptionsButton)
-        {
-            Settings.SetActive(true);
-            MainMenu.SetActive(false);
-        }
-        if (button == OptionsBackButton)
-        {
-            MainMenu.SetActive(true);
-            Settings.SetActive(false);
-        }
-        if (button == ESC_Exit)
-        {
-            Application.Quit();
-        }
-        if (button == MainExitButton)
-        {
-            MainMenu.SetActive(false);
-            PleaseDoNotQuit.SetActive(true);
-        }
-        if (button == StayButton)
-        {
-            Scene currentScene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(currentScene.name);
-        }
         if (button == QuitButton)
         {
             Application.Quit();
-        }
-        if (button == Win_MainMenu)
-        {
-            Winning_Prize.SetActive(false);
-            GameMap1.SetActive(false);
-            MainMenu.SetActive(true);
-            Time.timeScale = 1f;
         }
     }
 }

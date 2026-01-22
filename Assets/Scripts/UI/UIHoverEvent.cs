@@ -5,54 +5,40 @@ using UnityEngine.UI;
 
 public class UIHoverEvent : MonoBehaviour
 {
-    public AudioClip OptionsSFX;
-    private AudioSource OptionsSFXS;
-    public List<Button> buttonsToManage;
+    public List<Button> buttons;
+
+    private AudioSource audioSource;
 
     void Awake()
     {
-        OptionsSFXS = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
     }
 
-    private void Start()
+    void Start()
     {
-        foreach (Button btn in buttonsToManage)
+        foreach (var btn in buttons)
         {
-            Debug.Log("Buttons: " + btn.name);
+            if (btn == null) continue;
+
+            var listener = btn.gameObject.AddComponent<PointerEnterListener>();
+            listener.Setup(audioSource);
         }
-        foreach (Button btn in buttonsToManage)
+    }
+
+    private class PointerEnterListener : MonoBehaviour, IPointerEnterHandler
+    {
+        private AudioSource source;
+
+        public void Setup(AudioSource audioSource)
         {
-            AddHoverEvents(btn);
+            source = audioSource;
         }
-    }
 
-    private void AddHoverEvents(Button button)
-    {
-        EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();
-        if (trigger == null)
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            trigger = button.gameObject.AddComponent<EventTrigger>();
+            if (source == null) return;
+
+            source.PlayOneShot(source.clip);
         }
-
-        EventTrigger.Entry entryEnter = new EventTrigger.Entry();
-        entryEnter.eventID = EventTriggerType.PointerEnter;
-        entryEnter.callback.AddListener((eventData) => { OnHoverEnter(button); });
-        trigger.triggers.Add(entryEnter);
-
-        EventTrigger.Entry entryExit = new EventTrigger.Entry();
-        entryExit.eventID = EventTriggerType.PointerExit;
-        entryExit.callback.AddListener((eventData) => { OnHoverExit(button); });
-        trigger.triggers.Add(entryExit);
-    }
-
-    private void OnHoverEnter(Button button)
-    {
-        OptionsSFXS.PlayOneShot(OptionsSFX);
-        Debug.Log("Hovering over " + button.name);
-    }
-
-    private void OnHoverExit(Button button)
-    {
-        Debug.Log("Left the button " + button.name);
     }
 }

@@ -2316,7 +2316,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8732176108474228253}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: sceneManager, Assembly-CSharp
+        m_MethodName: LoadSceneByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: GameUI
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3246617838543489247
 GameObject:
   m_ObjectHideFlags: 0
@@ -3001,8 +3013,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIScript, Assembly-CSharp
-        m_MethodName: PopulateResolutionDropdown
-        m_Mode: 1
+        m_MethodName: SetResolution
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3848,7 +3860,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8046701635744856050}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: sceneManager, Assembly-CSharp
+        m_MethodName: LoadSceneByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: GameUI
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4952020681740655125
 GameObject:
   m_ObjectHideFlags: 0
@@ -4857,7 +4881,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2957921698199973114}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1275312612938723952}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &6250667755365980711
 GameObject:
   m_ObjectHideFlags: 0
@@ -5559,10 +5595,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 6860012646751062039}
   m_HandleRect: {fileID: 6496412032669892973}
   m_Direction: 0
-  m_MinValue: -80
-  m_MaxValue: 20
+  m_MinValue: 0
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: -80
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -6026,10 +6062,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 5665506919518836488}
   m_HandleRect: {fileID: 7319708697262635935}
   m_Direction: 0
-  m_MinValue: -80
-  m_MaxValue: 20
+  m_MinValue: 0
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: -80
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
