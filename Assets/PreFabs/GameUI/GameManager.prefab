@@ -72,6 +72,7 @@ MonoBehaviour:
   RestartButton: {fileID: 0}
   QuitButton: {fileID: 0}
   resolutionDropDown: {fileID: 0}
+  networkManager: {fileID: 0}
 --- !u!114 &2427823492939812661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,7 +95,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  audioSource: {fileID: 0}
 --- !u!114 &1033804543267210891
 MonoBehaviour:
   m_ObjectHideFlags: 0
