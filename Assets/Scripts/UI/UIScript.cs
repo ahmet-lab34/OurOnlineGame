@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.Video;
 using System.Collections.Generic;
+using Unity.Netcode;
 
 public class UIScript : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button RestartButton;
     [SerializeField] private Button QuitButton;
     [SerializeField] private TMP_Dropdown resolutionDropDown;
+    [SerializeField] private NetworkManager networkManager;
     
     private Resolution[] resolutions;
     private List<Resolution> filteredResolution;
@@ -31,6 +33,8 @@ public class UIScript : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
+
         //videoPlayer.loopPointReached += OnVideoEnd;
 
         QuitButton.onClick.AddListener(() => OnButtonPressed(QuitButton));
@@ -64,11 +68,26 @@ public class UIScript : MonoBehaviour
         resolutionDropDown.AddOptions(options);
         resolutionDropDown.value = currentResolutionIndex;
         resolutionDropDown.RefreshShownValue();
+
     }
     public void SetResolution(int resolutionIndex)
     {
         Resolution resolution = filteredResolution[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, true);
+    }
+    public void StartHost()
+    {
+        NetworkManager.Singleton.StartHost();
+    }
+
+    public void StartClient()
+    {
+        NetworkManager.Singleton.StartClient();
+    }
+
+    public void StartServer()
+    {
+        NetworkManager.Singleton.StartServer();
     }
     void OnVideoEnd(VideoPlayer vp)
     {
