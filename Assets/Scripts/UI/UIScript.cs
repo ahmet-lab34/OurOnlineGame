@@ -11,7 +11,7 @@ using Unity.Netcode;
 public class UIScript : MonoBehaviour
 {
     //public VideoPlayer videoPlayer;
-    [SerializeField] private TMP_Text Coinss;
+    public TMP_Text Coinss;
     [SerializeField] private GameObject PlayerObject;
     [SerializeField] private GameObject ESC_Menu;
     [SerializeField] private GameObject deathPanel;
@@ -122,6 +122,10 @@ public class UIScript : MonoBehaviour
         {
             Application.Quit();
         }
+    }
+    public void ToggleFullscreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
     }
 }
 

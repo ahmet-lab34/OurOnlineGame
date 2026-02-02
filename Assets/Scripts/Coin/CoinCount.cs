@@ -4,18 +4,21 @@ using TMPro;
 public class CoinCount : MonoBehaviour
 {
     public static CoinCount instance;
+    private UIScript uiScript;
     [SerializeField] public static int coins;
-    [SerializeField] private TMP_Text coinsDisplay;
+
     private void Awake()
     {
         if (!instance)
         {
             instance = this;
         }
+
+        uiScript = GetComponent<UIScript>();
     }
     private void Update()
     {
-        coinsDisplay.text = coins.ToString();
+        uiScript.Coinss.text = coins.ToString();
     }
     public void ChangeCoins(int amount)
     {
