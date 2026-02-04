@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/My Working Scene.unity
     guid: d7e3fe79fae6f364eb79da4ee87e4de0
+  - enabled: 1
+    path: Assets/Widgets/Scenes/WidgetsQuickstart.unity
+    guid: 873357b4574edbe4291a4ed242b6f94b
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

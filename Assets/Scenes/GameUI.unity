@@ -196,6 +196,7 @@ MonoBehaviour:
   sceneNames:
   - GameUI
   - My Working Scene
+  - WidgetsQuickstart
 --- !u!4 &1222769170
 Transform:
   m_ObjectHideFlags: 0
@@ -326,7 +327,7 @@ PrefabInstance:
     - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
       propertyPath: networkManager
       value: 
-      objectReference: {fileID: 2021014910}
+      objectReference: {fileID: 0}
     - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
       propertyPath: PleaseDoNotQuit
       value: 
@@ -549,6 +550,10 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1055983256275187228, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1222769169}
     - target: {fileID: 1143978917331749949, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -599,7 +604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2941269208893656395, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 2941269208893656395, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -607,11 +612,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2941269208893656395, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3166410788340533022, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3784967419427050697, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
@@ -627,7 +632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4287354663805542559, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4287354663805542559, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -635,7 +640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4906717734875478366, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4906717734875478366, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -771,7 +776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8176754139653381257, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8176754139653381257, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -779,7 +784,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8176754139653381257, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8743768991333800826, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -891,74 +896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d618e211c836174b8c2aa29a2f8975a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &2021014907
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1377.032
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 617.67413
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 832746253033564922, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6329880174230995388, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-      propertyPath: m_Name
-      value: NetworkManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e63f1423d012020468ee0957e9706f59, type: 3}
---- !u!114 &2021014910 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 960438912334005357, guid: e63f1423d012020468ee0957e9706f59, type: 3}
-  m_PrefabInstance: {fileID: 2021014907}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkManager
 --- !u!1001 &1997041209509397682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1024,4 +961,3 @@ SceneRoots:
   - {fileID: 1726544581}
   - {fileID: 1222769170}
   - {fileID: 1843034409}
-  - {fileID: 2021014907}
