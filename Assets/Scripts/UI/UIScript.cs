@@ -21,7 +21,6 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button RestartButton;
     [SerializeField] private Button QuitButton;
     [SerializeField] private TMP_Dropdown resolutionDropDown;
-    [SerializeField] private NetworkManager networkManager;
     
     private Resolution[] resolutions;
     private List<Resolution> filteredResolution;

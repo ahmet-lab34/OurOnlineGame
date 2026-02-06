@@ -18,9 +18,8 @@ GameObject:
   - component: {fileID: 3688932664426198959}
   - component: {fileID: 4998032529440746527}
   - component: {fileID: 7774138766690062552}
-  - component: {fileID: 5152429028702390396}
   - component: {fileID: 1498267140714897172}
-  - component: {fileID: 8352765876973403686}
+  - component: {fileID: 7704250051353198874}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -435,7 +434,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5152429028702390396
+--- !u!114 &1498267140714897172
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -444,22 +443,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 3124341922021140888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be8997df3c1c11c4b9a75e9a130871a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody2D
   ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 0
+  AutoUpdateKinematicState: 1
+  AutoSetKinematicOnDespawn: 1
+--- !u!114 &7704250051353198874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 0
   AutoOwnerAuthorityTickOffset: 1
   PositionInterpolationType: 0
   RotationInterpolationType: 0
   ScaleInterpolationType: 0
   PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.05
+  PositionMaxInterpolationTime: 0.1
   RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.05
+  RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
-  ScaleMaxInterpolationTime: 0.05
-  AuthorityMode: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 0
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -481,71 +497,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &1498267140714897172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3124341922021140888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody2D
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkRigidbodyBaseExpanded: 0
-  UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 1
-  AutoSetKinematicOnDespawn: 1
---- !u!114 &8352765876973403686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3124341922021140888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19504d4eecbcc674ca14f84796a93389, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkAnimatorExpanded: 0
-  AuthorityMode: 1
-  m_Animator: {fileID: 6510739270417320037}
-  TransitionStateInfoList: []
-  AnimatorParameterEntries:
-    ParameterEntries:
-    - name: IsRunning
-      NameHash: -887662580
-      Synchronize: 1
-      ParameterType: 4
-    - name: IsJumping
-      NameHash: 1749078233
-      Synchronize: 1
-      ParameterType: 4
-    - name: IsCrouching
-      NameHash: -1154928320
-      Synchronize: 1
-      ParameterType: 4
-    - name: IsDashing
-      NameHash: -364528230
-      Synchronize: 1
-      ParameterType: 4
-    - name: IsSliding
-      NameHash: -1809564513
-      Synchronize: 1
-      ParameterType: 4
-    - name: yVelocity
-      NameHash: -1736111434
-      Synchronize: 1
-      ParameterType: 1
-    - name: Kick
-      NameHash: -1092128709
-      Synchronize: 1
-      ParameterType: 9
-  AnimatorParametersExpanded: 0
 --- !u!1 &3263792116828733442
 GameObject:
   m_ObjectHideFlags: 0
