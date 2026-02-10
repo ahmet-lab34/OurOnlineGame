@@ -12,13 +12,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine.XR;
+using TMPro;
+using UnityEngine.UI;
 
 public class TestRelay : MonoBehaviour
 {
+    private LobbyUIManager lobbyUIManager;
     private async void Start()
     {
         await UnityServices.InitializeAsync();
-
 
         AuthenticationService.Instance.SignedIn += () =>
         {
@@ -29,9 +31,11 @@ public class TestRelay : MonoBehaviour
         playerName = "Ahmet" + Random.Range(10, 99);
 
         Debug.Log(playerName);
+
+        lobbyUIManager = GetComponent<LobbyUIManager>();
     }
 
-    private async void CreateRelay()
+    public async void CreateRelay()
     {
         try
         {
@@ -75,7 +79,15 @@ public class TestRelay : MonoBehaviour
     private float refreshLobbyListTimer = 5f;
     private float heartbeatTimer;
     private float lobbyUpdateTimer;
-    private string playerName;
+    private bool isPolling;
+    [SerializeField] private string playerName;
+    [SerializeField] private TMP_InputField lobbyCodeInput;
+    [SerializeField] private TMP_InputField playerNameInput;
+    [SerializeField] private InputField filterByNameInput;
+    [SerializeField] private Transform lobbyListContent;
+    [SerializeField] private GameObject lobbyListItemPrefab;
+
+    private List<GameObject> lobbyItems = new();
 
     private void Update()
     {
@@ -97,6 +109,11 @@ public class TestRelay : MonoBehaviour
             Debug.Log($"Signed in with Player ID: {AuthenticationService.Instance.PlayerId}");
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();  
+    }
+
+    public void AuthenticateButton()
+    {
+        Authenticate(playerNameInput.text);
     }
 
     private void HandleRefreshLobbyList()
@@ -127,25 +144,34 @@ public class TestRelay : MonoBehaviour
 
                 LobbyService.Instance.SendHeartbeatPingAsync(hostLobby.Id);
             }
-        }
+        } 
     }
 
     private async Task HandleLobbyPollForUpdates()
     {
-        if (joinedLobby != null)
+        if (joinedLobby == null || isPolling) return;
+        isPolling = true;
+        lobbyUpdateTimer -= Time.deltaTime;
+        if (lobbyUpdateTimer < 0f)
         {
-            lobbyUpdateTimer -= Time.deltaTime;
-            if (lobbyUpdateTimer < 0f)
+            float lobbyUpdateTimerMax = 1.1f;
+            lobbyUpdateTimer = lobbyUpdateTimerMax;
+            Lobby lobby =  await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
+            joinedLobby = lobby;
+            
+            // Update the UI when lobby data changes
+            if (hostLobby != null)
             {
-                float lobbyUpdateTimerMax = 1.1f;
-                lobbyUpdateTimer = lobbyUpdateTimerMax;
-
-                Lobby lobby =  await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
-                joinedLobby = lobby;
+                hostLobby = lobby;
+                lobbyUIManager.OnLobbyHosted(hostLobby);
+            }
+            else
+            {
+                lobbyUIManager.OnLobbyJoined(joinedLobby);
             }
         }
+        isPolling = false;
     }
-
     public async void CreateLobby()
     {
         try
@@ -171,6 +197,8 @@ public class TestRelay : MonoBehaviour
 
             PrintPlayers(hostLobby);
 
+            lobbyUIManager.OnLobbyHosted(hostLobby);
+            
         } catch (LobbyServiceException e)
         {
             Debug.LogError(e);
@@ -181,29 +209,38 @@ public class TestRelay : MonoBehaviour
     {
         try
         {
-            QueryLobbiesOptions queryLobbiesOptions = new QueryLobbiesOptions
+            //string filterName = filterByNameInput.text;
+            QueryLobbiesOptions queryOptions = new QueryLobbiesOptions
             {
                 Count = 10,
-                Filters = new List<QueryFilter>
-                {
-                    new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT),
-                    new QueryFilter(QueryFilter.FieldOptions.S1, "CaptureTheFlag", QueryFilter.OpOptions.EQ)
-                },
-                Order = new List<QueryOrder>
-                {
-                    new QueryOrder(false, QueryOrder.FieldOptions.Created)
-                }
+                Filters = new List<QueryFilter>()
             };
 
+            /*if (!string.IsNullOrEmpty(filterName))
+            {
+                queryOptions.Filters.Add(new QueryFilter(QueryFilter.FieldOptions.Name, filterName, QueryFilter.OpOptions.CONTAINS));
+            }*/
 
-            QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(queryLobbiesOptions);
+            // Query lobbies
+            QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(queryOptions);
             Debug.Log($"Found {response.Results.Count} lobbies.");
 
+            // Clear previous UI
+            foreach (GameObject item in lobbyItems)
+                Destroy(item);
+            lobbyItems.Clear();
+
+            // Populate new UI items
             foreach (Lobby lobby in response.Results)
             {
-                Debug.Log($"Lobby: {lobby.Name} - {lobby.MaxPlayers} max players {lobby.Data["GameMode"].Value}");
+                GameObject item = Instantiate(lobbyListItemPrefab, lobbyListContent);
+                item.GetComponent<LobbyListItemUI>().SetLobby(lobby, this);
+                lobbyItems.Add(item);
+
+                Debug.Log($"Lobby: {lobby.Name} - {lobby.MaxPlayers} max players - GameMode: {lobby.Data["GameMode"].Value}");
             }
-        } catch (LobbyServiceException e)
+        }
+        catch (LobbyServiceException e)
         {
             Debug.LogError(e);
         }
@@ -223,9 +260,25 @@ public class TestRelay : MonoBehaviour
 
             joinedLobby = lobby;
             PrintPlayers(joinedLobby);
+
+            lobbyUIManager.OnLobbyJoined(joinedLobby);
         } catch (LobbyServiceException e)
         {
             Debug.LogError(e);
+        }
+    }
+    public async void JoinLobbyById(string lobbyId)
+    {
+        try
+        {
+            Lobby lobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
+            Debug.Log($"Joined lobby {lobby.Name} successfully!");
+
+            lobbyUIManager.OnLobbyJoined(lobby);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError($"Failed to join lobby: {e}");
         }
     }
 
@@ -251,7 +304,7 @@ public class TestRelay : MonoBehaviour
         };
     }
 
-    private void PrintPlayers()
+    public void PrintPlayers()
     {
         PrintPlayers(joinedLobby);
     }
@@ -263,7 +316,6 @@ public class TestRelay : MonoBehaviour
             Debug.Log($"Player: {player.Id} - {player.Data["PlayerName"].Value}");
         }
     }
-    
     private async Task UpdateLobbyGameMode(string gameMode)
     {
         try {
