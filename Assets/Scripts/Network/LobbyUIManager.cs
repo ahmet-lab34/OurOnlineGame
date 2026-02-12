@@ -56,24 +56,47 @@ public class LobbyUIManager : MonoBehaviour
     }
 
 
-    // ERROR!!!!! 
     private void RefreshPlayerList(List<Player> players, Transform container, GameObject prefab)
     {
         ClearContainer(container);
+        Debug.Log($"RefreshPlayerList called with {players.Count} players");
 
         foreach (var player in players)
         {
+            Debug.Log($"Processing player: {player.Id}");
+            Debug.Log($"Player.Data is null: {player.Data == null}");
+            
             GameObject slotGO = Instantiate(prefab, container);
             
             PlayerNameSlot slotUI = slotGO.GetComponent<PlayerNameSlot>();
-            if (slotUI != null && player.Data.ContainsKey("PlayerName"))
-            {
-                slotUI.SetPlayer(player.Data["PlayerName"].Value);
-            }
-            else if (slotUI == null)
+            if (slotUI == null)
             {
                 Debug.LogError($"PlayerNameSlot component not found on prefab: {prefab.name}");
+                continue;
             }
+
+            string playerDisplayName = "Unknown Player";
+            
+            // Try to get the player name from data
+            if (player.Data != null && player.Data.ContainsKey("PlayerName"))
+            {
+                var playerNameObj = player.Data["PlayerName"];
+                if (playerNameObj != null && playerNameObj.Value != null)
+                {
+                    playerDisplayName = playerNameObj.Value;
+                    Debug.Log($"Found PlayerName for {player.Id}: {playerDisplayName}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"PlayerName data not found for player {player.Id}");
+                if (player.Data != null)
+                {
+                    Debug.Log($"Player data keys: {string.Join(", ", player.Data.Keys)}");
+                }
+            }
+            
+            slotUI.SetPlayer(playerDisplayName);
         }
     }
 

@@ -71,7 +71,6 @@ MonoBehaviour:
   RestartButton: {fileID: 0}
   QuitButton: {fileID: 0}
   resolutionDropDown: {fileID: 0}
-  networkManager: {fileID: 0}
 --- !u!114 &2427823492939812661
 MonoBehaviour:
   m_ObjectHideFlags: 0

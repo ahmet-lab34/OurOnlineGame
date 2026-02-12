@@ -14,10 +14,12 @@ using Unity.Entities.UniversalDelegates;
 using UnityEngine.XR;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TestRelay : MonoBehaviour
 {
     private LobbyUIManager lobbyUIManager;
+    [SerializeField] private GameObject playerPrefab;
     private async void Start()
     {
         await UnityServices.InitializeAsync();
@@ -46,6 +48,21 @@ public class TestRelay : MonoBehaviour
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
+            // Start the server
+            NetworkManager.Singleton.StartServer();
+
+            // Mark that host has already joined (as server, not client)
+            hasJoinedRelay = true;
+
+            // Update lobby with the relay join code so other players can join
+            if (hostLobby != null)
+            {
+                await UpdateLobbyRelayCode(joinCode);
+            }
+
+            // Spawn player for the host after a short delay to ensure network is ready
+            _ = SpawnHostPlayer();
         } 
         catch (RelayServiceException e)
         {
@@ -53,23 +70,81 @@ public class TestRelay : MonoBehaviour
         }   
     }
 
-    private async void JoinRelay(string joinCode)
+    private async Task UpdateLobbyRelayCode(string relayCode)
     {
         try
         {
-            Debug.Log("Attempting to join Relay with join code: " + joinCode);
-            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-            Debug.Log("Joined Relay successfully.");
-
-            RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
-
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-
-            NetworkManager.Singleton.StartClient();
+            hostLobby = await LobbyService.Instance.UpdateLobbyAsync(hostLobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject>
+                {
+                    { RELAY_CODE_KEY, new DataObject(DataObject.VisibilityOptions.Public, relayCode) }
+                }
+            });
         }
-        catch (RelayServiceException e)
+        catch (LobbyServiceException e)
         {
-            Debug.LogError(e);
+            Debug.LogError($"Failed to update lobby with relay code: {e}");
+        }
+    }
+
+    private async Task SpawnHostPlayer()
+    {
+        // Wait a frame to ensure the server is fully initialized
+        await Task.Delay(100);
+
+        if (playerPrefab == null)
+        {
+            Debug.LogError("Player prefab not found in Resources folder!");
+            return;
+        }
+
+        // Instantiate the player for the host
+        GameObject hostPlayerInstance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        NetworkObject networkObject = hostPlayerInstance.GetComponent<NetworkObject>();
+        
+        if (networkObject != null)
+        {
+            networkObject.Spawn();
+            Debug.Log("Host player spawned successfully!");
+        }
+        else
+        {
+            Debug.LogError("Player prefab does not have a NetworkObject component!");
+            Destroy(hostPlayerInstance);
+        }
+    }
+
+    private async void JoinRelay(string joinCode)
+    {
+        // Manual join - delegates to the shared join logic
+        _ = JoinRelayAsync(joinCode);
+    }
+
+    private async Task SpawnClientPlayer()
+    {
+        // Wait for the client to be connected and ready
+        await Task.Delay(500);
+
+        if (playerPrefab == null)
+        {
+            Debug.LogError("Player prefab not found in Resources folder!");
+            return;
+        }
+
+        // Instantiate the player for the client
+        GameObject clientPlayerInstance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        NetworkObject networkObject = clientPlayerInstance.GetComponent<NetworkObject>();
+        
+        if (networkObject != null)
+        {
+            networkObject.Spawn();
+            Debug.Log("Client player spawned successfully!");
+        }
+        else
+        {
+            Debug.LogError("Player prefab does not have a NetworkObject component!");
+            Destroy(clientPlayerInstance);
         }
     }
 
@@ -79,7 +154,8 @@ public class TestRelay : MonoBehaviour
     private float refreshLobbyListTimer = 5f;
     private float heartbeatTimer;
     private float lobbyUpdateTimer;
-    private bool isPolling;
+    private bool hasJoinedRelay = false;
+    private const string RELAY_CODE_KEY = "RelayJoinCode";
     [SerializeField] private string playerName;
     [SerializeField] private TMP_InputField lobbyCodeInput;
     [SerializeField] private TMP_InputField playerNameInput;
@@ -149,9 +225,13 @@ public class TestRelay : MonoBehaviour
 
     private async Task HandleLobbyPollForUpdates()
     {
-        if (joinedLobby == null || isPolling) return;
-        isPolling = true;
+        if (joinedLobby == null)
+        {
+            Debug.Log("[Lobby Poll] joinedLobby is NULL - no lobby joined yet");
+            return;
+        }
         lobbyUpdateTimer -= Time.deltaTime;
+        
         if (lobbyUpdateTimer < 0f)
         {
             float lobbyUpdateTimerMax = 1.1f;
@@ -168,9 +248,47 @@ public class TestRelay : MonoBehaviour
             else
             {
                 lobbyUIManager.OnLobbyJoined(joinedLobby);
+
+                // Check if host has started the relay and auto-join if not already joined
+                // This check happens for both host and clients - hasJoinedRelay flag prevents duplicate joins
+                if (!hasJoinedRelay && joinedLobby.Data != null && joinedLobby.Data.ContainsKey(RELAY_CODE_KEY))
+                {
+                    string relayCode = joinedLobby.Data[RELAY_CODE_KEY].Value;
+                    Debug.Log($"Host started relay! Joining with code: {relayCode}");
+                    hasJoinedRelay = true;
+                    _ = JoinRelayAsync(relayCode, SceneManager.GetActiveScene().name);
+                }
             }
         }
-        isPolling = false;
+    }
+
+    private async Task JoinRelayAsync(string joinCode, string sceneName = "")
+    {
+        try
+        {
+            Debug.Log("Attempting to join Relay with join code: " + joinCode);
+            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+            Debug.Log("Joined Relay successfully.");
+
+            RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
+            NetworkManager.Singleton.StartClient();
+
+            // Load the scene for the client after relay connection is established
+            if (!string.IsNullOrEmpty(sceneName))
+            {
+                SceneManager.LoadScene(sceneName);
+            }
+
+            // Spawn player for the client after a short delay to ensure network is ready
+            _ = SpawnClientPlayer();
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.LogError(e);
+        }
     }
     public async void CreateLobby()
     {
@@ -259,6 +377,8 @@ public class TestRelay : MonoBehaviour
             Debug.Log($"Joined Lobby! {lobbyCode}");
 
             joinedLobby = lobby;
+            hostLobby = null;
+
             PrintPlayers(joinedLobby);
 
             lobbyUIManager.OnLobbyJoined(joinedLobby);
@@ -271,8 +391,16 @@ public class TestRelay : MonoBehaviour
     {
         try
         {
-            Lobby lobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
+            JoinLobbyByIdOptions joinOptions = new JoinLobbyByIdOptions
+            {
+                Player = GetPlayer()
+            };
+            
+            Lobby lobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, joinOptions);
             Debug.Log($"Joined lobby {lobby.Name} successfully!");
+
+            joinedLobby = lobby;
+            hostLobby = null; 
 
             lobbyUIManager.OnLobbyJoined(lobby);
         }
