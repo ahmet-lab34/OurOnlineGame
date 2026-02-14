@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class SoapPickup : MonoBehaviour
 {
@@ -18,3 +18,4 @@ public class SoapPickup : MonoBehaviour
         Destroy(gameObject);
     }
 }
+*/

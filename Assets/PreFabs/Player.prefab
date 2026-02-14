@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2865029811
+  GlobalObjectIdHash: 1188804023
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -111,33 +111,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  ESC_Menu: {fileID: 0}
-  animator: {fileID: 6510739270417320037}
-  IsCrouching: 0
-  Horizontal: 0
-  DoubleJump: 1
-  dashCoolcounter: 0
-  IsFacingRight: 1
-  PlayerUIScript: {fileID: 476885202043368545}
-  movingStats:
-    activeMoveSpeed: 5
-    jumpHeight: 405.31
-    DoubleJumpHeight: 193.7
-    dashSpeed: 25
-    dashCooldown: 3
-    slideSpeed: 3
-    gravityScale: 1.7
-  playerNumbers:
-    playerHealth: 3
-    BirdCount: 0
-  upsideDownGroundSparks: {fileID: 0}
-  sparksPivot: {fileID: 0}
-  sparksXMin: 1.5
-  sparksXMax: 3
-  sparksAirSpeedMin: 1.5
-  sparksAirSpeedMax: 3
-  sparksBlendSpeed: 14
-  movementDeadZone: 0.15
+  moveSpeed: 5
+  jumpForce: 10
+  doubleJumpForce: 7
+  gravityScale: 1.7
+  dashSpeed: 20
+  dashDuration: 0.3
 --- !u!70 &1905734901666232342
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -217,10 +196,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b33b7d3490f65154884021f12236d658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashCooldown_Display: {fileID: 0}
+  coinsText: {fileID: 0}
+  birdCountText: {fileID: 0}
   dashCooldown_Visual: {fileID: 0}
   playerHealthCondition: {fileID: 0}
-  DeathPanelForPlayer: {fileID: 0}
+  deathPanel: {fileID: 0}
 --- !u!114 &3688932664426198959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,13 +213,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d62b50503a25d4d80923eb78658e32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AllPlayerAudio
-  playerScript: {fileID: 7946821400442731749}
-  GroundCheck: {fileID: 7996294891031218776}
+  groundCheck: {fileID: 0}
+  rb: {fileID: 0}
   walkingSFX: {fileID: 8300000, guid: 09c8a3d059616604ebf73c61dcd75983, type: 3}
   damagedSFX: {fileID: 8300000, guid: f463f477a9295264abb315edc24021e3, type: 3}
-  RunningSFXS: {fileID: 4998032529440746527}
-  JumpingSFXS: {fileID: 7774138766690062552}
-  DamagedSFXS: {fileID: 4998032529440746527}
+  runningSFXS: {fileID: 0}
+  jumpingSFXS: {fileID: 0}
+  damagedSFXS: {fileID: 0}
 --- !u!82 &4998032529440746527
 AudioSource:
   m_ObjectHideFlags: 0
@@ -874,9 +854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b843967edb37ff84c809975ee42b5edb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  TouchingTheEnemyWithTrigger: 0
-  currentEnemy: {fileID: 0}
+  playerStats: {fileID: 0}
 --- !u!114 &1627409712956990169
 MonoBehaviour:
   m_ObjectHideFlags: 0

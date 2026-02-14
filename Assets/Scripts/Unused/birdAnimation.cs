@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class birdAnimation : MonoBehaviour
 {
@@ -27,3 +27,4 @@ public class birdAnimation : MonoBehaviour
         animator.SetBool("birdShitting", false);
     }
 }
+*/

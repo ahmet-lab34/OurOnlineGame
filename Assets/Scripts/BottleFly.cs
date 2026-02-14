@@ -48,6 +48,7 @@ public class BottleFly : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     public void Kick(Vector2 direction)
     {
         if (inFlight) return;
@@ -61,7 +62,7 @@ public class BottleFly : MonoBehaviour
 
         // IMPORTANT: ignore ONLY the branch collider(s) (BranchMarker on branch object)
         if (col != null)
-            IgnoreBranchCollision.Apply(col);
+            IgnoreBulletCollision.Apply(col);
 
         if (col != null)
             col.isTrigger = false;
@@ -84,6 +85,7 @@ public class BottleFly : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
+    [System.Obsolete]
     public bool KickToNearestEnemy()
     {
         Vector2 dir = GetDirectionToNearestEnemy();

@@ -118,7 +118,7 @@ public class TestRelay : MonoBehaviour
     private async void JoinRelay(string joinCode)
     {
         // Manual join - delegates to the shared join logic
-        _ = JoinRelayAsync(joinCode);
+        await JoinRelayAsync(joinCode);
     }
 
     private async Task SpawnClientPlayer()

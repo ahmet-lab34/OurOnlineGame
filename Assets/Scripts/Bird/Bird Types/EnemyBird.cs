@@ -1,27 +1,35 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(EnemyVision))]
 public class EnemyBird : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private birdAnimation birdAnim;
-    [SerializeField] private EnemyVision birdVision;
     [SerializeField] private float shootInterval = 2f;
 
     private Transform playerTransform;
-    private PlayerScript playerScript;
+    private Rigidbody2D playerRb;
+    private PlayerScript playerController;
+    private EnemyVision birdVision;
+    
+    private Animator birdAnim;
 
-    void Awake()
+    private void Awake()
     {
+        birdVision = GetComponentInChildren<EnemyVision>();
+        birdAnim = GetComponentInChildren<Animator>();
+
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             playerTransform = player.transform;
-            playerScript = player.GetComponent<PlayerScript>();
+            playerRb = player.GetComponent<Rigidbody2D>();
+            playerController = player.GetComponent<PlayerScript>();
         }
     }
 
-    void Start()
+    private void Start()
     {
         if (playerTransform != null)
         {
@@ -29,22 +37,18 @@ public class EnemyBird : MonoBehaviour
         }
     }
 
-    void Shoot()
+    private void Shoot()
     {
         if (playerTransform == null) return;
+        if (!birdVision.IFoundThePlayer) return;
 
-        if (playerScript != null && playerScript.IsCrouchingPublic)
-        {
+        // Use public getter from PlayerScript
+        if (playerController != null && playerController.IsCrouching())
             return;
-        }
-
-        if (!birdVision.IFoundThePlayer)
-        {
-            return;
-        }
 
         StartCoroutine(ShootingAnimationCoroutine());
 
+        // Instantiate bullet
         Vector2 direction = (playerTransform.position - transform.position).normalized;
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
 
@@ -58,12 +62,12 @@ public class EnemyBird : MonoBehaviour
 
     private IEnumerator ShootingAnimationCoroutine()
     {
-        birdAnim.birdShitting();
+        birdAnim.SetBool("birdShitting", true);
         yield return new WaitForSeconds(0.8f);
-        birdAnim.birdShittingFalse();
+        birdAnim.SetBool("birdShitting", false);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {

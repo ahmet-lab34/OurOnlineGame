@@ -1,130 +1,177 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
-using UnityEngine.Video;
 using System.Collections.Generic;
 using Unity.Netcode;
 
 public class UIScript : MonoBehaviour
 {
-    //public VideoPlayer videoPlayer;
-    public TMP_Text Coinss;
-    [SerializeField] private GameObject PlayerObject;
-    [SerializeField] private GameObject ESC_Menu;
+    [Header("Player & Panels")]
+    [SerializeField] private GameObject playerObject;
+    [SerializeField] private GameObject escMenu;
     [SerializeField] private GameObject deathPanel;
-    [SerializeField] private Button ESC_Options;
-    [SerializeField] private Button ESC_Exit;
-    [SerializeField] private Button ESC_ContinueButton;
-    [SerializeField] private Button RestartButton;
-    [SerializeField] private Button QuitButton;
-    [SerializeField] private TMP_Dropdown resolutionDropDown;
-    
-    private Resolution[] resolutions;
-    private List<Resolution> filteredResolution;
 
+    [Header("Buttons")]
+    [SerializeField] private Button escOptionsButton;
+    [SerializeField] private Button escExitButton;
+    [SerializeField] private Button escContinueButton;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button quitButton;
+
+    [Header("UI Elements")]
+    [SerializeField] private TMP_Text refreshRateText;
+    [SerializeField] private TMP_Dropdown resolutionDropdown;
+
+    private Resolution[] resolutions;
+    private List<Resolution> filteredResolutions;
     private float currentRefreshRate;
     private int currentResolutionIndex;
 
-    [Obsolete]
-
-    void Start()
+    [System.Obsolete]
+    private void Start()
     {
         DontDestroyOnLoad(gameObject);
 
-        //videoPlayer.loopPointReached += OnVideoEnd;
+        // Button listeners
+        quitButton.onClick.AddListener(() => OnButtonPressed(quitButton));
+        escContinueButton.onClick.AddListener(() => OnButtonPressed(escContinueButton));
+        escOptionsButton.onClick.AddListener(() => OnButtonPressed(escOptionsButton));
+        escExitButton.onClick.AddListener(() => OnButtonPressed(escExitButton));
+        restartButton.onClick.AddListener(() => OnButtonPressed(restartButton));
 
-        QuitButton.onClick.AddListener(() => OnButtonPressed(QuitButton));
-        ESC_ContinueButton.onClick.AddListener(() => OnButtonPressed(ESC_ContinueButton));
-        ESC_Options.onClick.AddListener(() => OnButtonPressed(ESC_Options));
-        ESC_Exit.onClick.AddListener(() => OnButtonPressed(ESC_Exit));
-        Coinss.text = CoinCount.coins.ToString(); 
+        // Update refresh rate display
+        if (refreshRateText != null)
+            refreshRateText.text = $"{Screen.currentResolution.refreshRate}Hz";
 
+        // Resolution setup
+        SetupResolutions();
+    }
+
+    #region Resolution
+
+    private void SetupResolutions()
+    {
         resolutions = Screen.resolutions;
-        filteredResolution = new List<Resolution>();
-        resolutionDropDown.ClearOptions();
-        currentRefreshRate = Screen.currentResolution.refreshRate;
+        filteredResolutions = new List<Resolution>();
+        resolutionDropdown.ClearOptions();
 
-        for (int i = 0; i < resolutions.Length; i++)
+        // Just add all unique width x height resolutions
+        HashSet<string> addedResolutions = new HashSet<string>();
+        foreach (var res in resolutions)
         {
-            if (resolutions[i].refreshRate == currentRefreshRate)
+            string option = $"{res.width}x{res.height}";
+            if (!addedResolutions.Contains(option))
             {
-                filteredResolution.Add(resolutions[i]);
+                filteredResolutions.Add(res);
+                addedResolutions.Add(option);
             }
         }
+
+        // Populate dropdown
         List<string> options = new List<string>();
-        for (int i = 0; i < filteredResolution.Count; i++)
+        int currentIndex = 0;
+        for (int i = 0; i < filteredResolutions.Count; i++)
         {
-            string resolutionOption = filteredResolution[i].width + "x" + filteredResolution[i].height + " " + filteredResolution[i].refreshRate + "HZ";
-            options.Add(resolutionOption);
-            if (filteredResolution[i].width == Screen.width && filteredResolution[i].height == Screen.height)
+            string option = $"{filteredResolutions[i].width}x{filteredResolutions[i].height}";
+            options.Add(option);
+
+            // Select the current screen resolution
+            if (filteredResolutions[i].width == Screen.width &&
+                filteredResolutions[i].height == Screen.height)
             {
-                currentResolutionIndex = i;
+                currentIndex = i;
             }
         }
-        resolutionDropDown.AddOptions(options);
-        resolutionDropDown.value = currentResolutionIndex;
-        resolutionDropDown.RefreshShownValue();
 
-    }
-    public void SetResolution(int resolutionIndex)
-    {
-        Resolution resolution = filteredResolution[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, true);
-    }
-    public void StartHost()
-    {
-        NetworkManager.Singleton.StartHost();
+        resolutionDropdown.AddOptions(options);
+        resolutionDropdown.value = currentIndex;
+        resolutionDropdown.RefreshShownValue();
     }
 
-    public void StartClient()
+    public void SetResolution(int index)
     {
-        NetworkManager.Singleton.StartClient();
+        if (index < 0 || index >= filteredResolutions.Count) return;
+
+        Resolution res = filteredResolutions[index];
+        Screen.SetResolution(res.width, res.height, Screen.fullScreen);
     }
 
-    public void StartServer()
+    #endregion
+
+    #region Networking
+
+    public void StartHost() => NetworkManager.Singleton.StartHost();
+    public void StartClient() => NetworkManager.Singleton.StartClient();
+    public void StartServer() => NetworkManager.Singleton.StartServer();
+
+    #endregion
+
+    #region Scene & Game Control
+
+    private void OnButtonPressed(Button button)
     {
-        NetworkManager.Singleton.StartServer();
-    }
-    void OnVideoEnd(VideoPlayer vp)
-    {
-        //videoPlayer.gameObject.SetActive(false);
-        //MainMenu.SetActive(true);
-    }
-    public void RestartScene()
-    {
-        PlayerPrefs.SetInt("SkipMainMenu", 1);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-    public void UIDie()
-    {
-        deathPanel.SetActive(true);
-        PlayerObject.SetActive(false);
-        Time.timeScale = 0f;
-    }
-    void OnButtonPressed(Button button)
-    {
-        if (button == RestartButton)
+        if (button == restartButton)
         {
-            Debug.Log("Just the Restart Button Is Pressed !");
-            GravitySwitcherUpsideDown.isRotated = false;
+            ResetPlayerGravity();
             RestartScene();
         }
-        if (button == ESC_ContinueButton)
+        else if (button == escContinueButton)
         {
-            ESC_Menu.SetActive(false);
+            escMenu.SetActive(false);
             Time.timeScale = 1f;
         }
-        if (button == QuitButton)
+        else if (button == quitButton)
         {
             Application.Quit();
         }
     }
+
+    private void RestartScene()
+    {
+        PlayerPrefs.SetInt("SkipMainMenu", 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void UIDie()
+    {
+        deathPanel.SetActive(true);
+        if (playerObject != null) playerObject.SetActive(false);
+        Time.timeScale = 0f;
+    }
+
+    #endregion
+
+    #region Gravity
+
+    /// <summary>
+    /// Reset global 2D gravity to default downward if it was flipped
+    /// </summary>
+    private void ResetPlayerGravity()
+    {
+        if (playerObject == null) return;
+
+        Rigidbody2D rb = playerObject.GetComponent<Rigidbody2D>();
+        PlayerStats playerStats = playerObject.GetComponent<PlayerStats>();
+        if (rb != null && playerStats != null)
+        {
+            // Restore player's gravity scale
+            rb.gravityScale = playerStats.GetDefaultGravityScale();
+
+            // Make player upright
+            playerStats.SetUpsideDownState(false);
+        }
+    }
+
+
+    #endregion
+
+    #region Fullscreen
+
     public void ToggleFullscreen()
     {
         Screen.fullScreen = !Screen.fullScreen;
     }
-}
 
+    #endregion
+}

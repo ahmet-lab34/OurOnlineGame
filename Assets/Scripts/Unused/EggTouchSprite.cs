@@ -1,9 +1,9 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class EggTouchSprite : MonoBehaviour
 {
     [Header("Reward")]
-    [SerializeField] private int value = 10; // сколько денег даёт яйцо
+    [SerializeField] private int value = 10; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 
     [Header("After touch")]
     [SerializeField] private Sprite touchedSprite;
@@ -32,19 +32,19 @@ public class EggTouchSprite : MonoBehaviour
 
         touched = true;
 
-        // 1) Начисляем деньги
+        // 1) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         if (coinManager != null)
             coinManager.ChangeCoins(value);
 
-        // 2) Останавливаем анимацию свечения
+        // 2) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (anim != null)
             anim.enabled = false;
 
-        // 3) Меняем спрайт
+        // 3) пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         if (sr != null && touchedSprite != null)
             sr.sprite = touchedSprite;
 
-        // 4) Удаляем яйцо через время
+        // 4) пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         Destroy(gameObject, destroyDelay);
     }
-}
+}*/

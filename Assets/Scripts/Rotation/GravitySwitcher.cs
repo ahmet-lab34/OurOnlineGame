@@ -1,31 +1,28 @@
-using System;
 using UnityEngine;
 
-public class GravitySwitcher : GravitySwitcherUpsideDown
+public class GravitySwitcher : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    private bool hasSwitched = false;
+
+    private void OnTriggerStay2D(Collider2D other)
     {
+        if (hasSwitched) return;
+
         if (other.CompareTag("Player"))
         {
-            SwitchGravity(other);
-        }
-    }
-    private void SwitchGravity(Collider2D other)
-    {
-        if (isRotated) return;
+            PlayerStats playerStats = other.GetComponent<PlayerStats>();
+            if (playerStats != null)
+            {
+                hasSwitched = true;
 
-        isRotated = true;
+                // Flip global gravity
+                Physics2D.gravity = -Physics2D.gravity;
 
-        Physics2D.gravity = -Physics2D.gravity;
+                // Let the player handle its rotation and jump inversion
+                playerStats.ToggleUpsideDown();
 
-        other.transform.Rotate(0f, 0f, 180f);
-
-        PlayerScript player = other.GetComponent<PlayerScript>();
-        if (player != null)
-        {
-            player.FlipJumpValues();
-            player.IsFacingRight = !player.IsFacingRight;
-            player.ToggleUpsideDown();
+                Destroy(gameObject);
+            }
         }
     }
 }

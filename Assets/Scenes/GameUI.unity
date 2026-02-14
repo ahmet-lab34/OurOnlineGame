@@ -532,6 +532,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 889650502}
     - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: escMenu
+      value: 
+      objectReference: {fileID: 1214281429}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
       propertyPath: ESC_Exit
       value: 
       objectReference: {fileID: 1353412112}
@@ -548,19 +552,51 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1396646410}
     - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: quitButton
+      value: 
+      objectReference: {fileID: 868575476}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
       propertyPath: ESC_Options
       value: 
       objectReference: {fileID: 1944678550}
     - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: playerObject
+      value: 
+      objectReference: {fileID: 3124341922021140888, guid: 6c2d74319ff31bf4b9d03a548442f5c5, type: 3}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
       propertyPath: RestartButton
       value: 
       objectReference: {fileID: 1755767138}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: escExitButton
+      value: 
+      objectReference: {fileID: 1353412112}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: restartButton
+      value: 
+      objectReference: {fileID: 1755767138}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: refreshRateText
+      value: 
+      objectReference: {fileID: 1880225358}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: escOptionsButton
+      value: 
+      objectReference: {fileID: 1944678550}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: escContinueButton
+      value: 
+      objectReference: {fileID: 265822977}
     - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
       propertyPath: ESC_ContinueButton
       value: 
       objectReference: {fileID: 265822977}
     - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
       propertyPath: resolutionDropDown
+      value: 
+      objectReference: {fileID: 1452100321}
+    - target: {fileID: 2252770956311182855, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
+      propertyPath: resolutionDropdown
       value: 
       objectReference: {fileID: 1452100321}
     - target: {fileID: 2427823492939812661, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
@@ -659,7 +695,8 @@ PrefabInstance:
       propertyPath: coinsDisplay
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8147715332719659970, guid: ac91f13d1ffb8c0409088eff2fe9f2e9, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1057,7 +1094,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3741560987074240105, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00003052846
+      value: -0.00008212342
       objectReference: {fileID: 0}
     - target: {fileID: 3784967419427050697, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
@@ -1149,7 +1186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5803373501504244375, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_Value
-      value: 12.842857
+      value: 1.0000129
       objectReference: {fileID: 0}
     - target: {fileID: 5848664214114216342, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_Name
@@ -1381,7 +1418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8757924842455416007, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8813595042672256663, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
       propertyPath: m_Name
@@ -1410,6 +1447,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 915210510}
   m_SourcePrefab: {fileID: 100100000, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
+--- !u!114 &1880225358 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6830846860911237030, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}
+  m_PrefabInstance: {fileID: 1843034409}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &1944678550 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5789657041959392978, guid: 0114e3d121ba89f4e91f32305d9d3a1e, type: 3}

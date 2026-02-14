@@ -1,40 +1,43 @@
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.UI;
 
 public class AllPlayerAudio : MonoBehaviour
 {
-    [SerializeField] private PlayerScript playerScript;
-    [SerializeField] private GroundCHK GroundCheck;
+    [SerializeField] private GroundCHK groundCheck;
+    [SerializeField] private Rigidbody2D rb;
+
     public AudioClip walkingSFX;
     public AudioClip damagedSFX;
-    public AudioSource RunningSFXS;
-    public AudioSource JumpingSFXS;
-    public AudioSource DamagedSFXS;
+
+    public AudioSource runningSFXS;
+    public AudioSource jumpingSFXS;
+    public AudioSource damagedSFXS;
+
     public void Jumping()
     {
-        JumpingSFXS.Play();
+        jumpingSFXS.Play();
     }
+
     public void damagedSound()
     {
-        DamagedSFXS.PlayOneShot(damagedSFX);
+        damagedSFXS.PlayOneShot(damagedSFX);
     }
+
     public void walkingSound()
     {
-        if (GroundCheck.Grounded && playerScript.Horizontal != 0f)
+        if (groundCheck.Grounded && Mathf.Abs(rb.linearVelocity.x) > 0.1f)
         {
-            if(!RunningSFXS.isPlaying)
+            if (!runningSFXS.isPlaying)
             {
-                RunningSFXS.loop = true;
-                RunningSFXS.PlayOneShot(walkingSFX);
+                runningSFXS.loop = true;
+                runningSFXS.clip = walkingSFX;
+                runningSFXS.Play();
             }
         }
         else
         {
-            if (RunningSFXS.isPlaying)
+            if (runningSFXS.isPlaying)
             {
-                RunningSFXS.loop = false;
-                RunningSFXS.Stop();
+                runningSFXS.Stop();
             }
         }
     }
