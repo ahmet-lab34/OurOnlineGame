@@ -19,15 +19,6 @@ public class UIScript : MonoBehaviour
     [SerializeField] private Button restartButton;
     [SerializeField] private Button quitButton;
 
-    [Header("UI Elements")]
-    [SerializeField] private TMP_Text refreshRateText;
-    [SerializeField] private TMP_Dropdown resolutionDropdown;
-
-    private Resolution[] resolutions;
-    private List<Resolution> filteredResolutions;
-    private float currentRefreshRate;
-    private int currentResolutionIndex;
-
     [System.Obsolete]
     private void Start()
     {
@@ -39,65 +30,7 @@ public class UIScript : MonoBehaviour
         escOptionsButton.onClick.AddListener(() => OnButtonPressed(escOptionsButton));
         escExitButton.onClick.AddListener(() => OnButtonPressed(escExitButton));
         restartButton.onClick.AddListener(() => OnButtonPressed(restartButton));
-
-        // Update refresh rate display
-        if (refreshRateText != null)
-            refreshRateText.text = $"{Screen.currentResolution.refreshRate}Hz";
-
-        // Resolution setup
-        SetupResolutions();
     }
-
-    #region Resolution
-
-    private void SetupResolutions()
-    {
-        resolutions = Screen.resolutions;
-        filteredResolutions = new List<Resolution>();
-        resolutionDropdown.ClearOptions();
-
-        // Just add all unique width x height resolutions
-        HashSet<string> addedResolutions = new HashSet<string>();
-        foreach (var res in resolutions)
-        {
-            string option = $"{res.width}x{res.height}";
-            if (!addedResolutions.Contains(option))
-            {
-                filteredResolutions.Add(res);
-                addedResolutions.Add(option);
-            }
-        }
-
-        // Populate dropdown
-        List<string> options = new List<string>();
-        int currentIndex = 0;
-        for (int i = 0; i < filteredResolutions.Count; i++)
-        {
-            string option = $"{filteredResolutions[i].width}x{filteredResolutions[i].height}";
-            options.Add(option);
-
-            // Select the current screen resolution
-            if (filteredResolutions[i].width == Screen.width &&
-                filteredResolutions[i].height == Screen.height)
-            {
-                currentIndex = i;
-            }
-        }
-
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentIndex;
-        resolutionDropdown.RefreshShownValue();
-    }
-
-    public void SetResolution(int index)
-    {
-        if (index < 0 || index >= filteredResolutions.Count) return;
-
-        Resolution res = filteredResolutions[index];
-        Screen.SetResolution(res.width, res.height, Screen.fullScreen);
-    }
-
-    #endregion
 
     #region Networking
 
