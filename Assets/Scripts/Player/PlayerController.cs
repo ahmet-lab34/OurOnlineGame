@@ -1,4 +1,4 @@
-/*using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
 
@@ -6,6 +6,16 @@ using Unity.Netcode;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerScript : NetworkBehaviour
 {
+    #region Network Role Assignment
+
+    public NetworkVariable<ulong> legsPlayerId =
+        new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
+
+    public NetworkVariable<ulong> upperPlayerId =
+        new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
+
+    #endregion
+
     #region Components
     private Rigidbody2D rb;
     private PlayerInput playerInput;
@@ -32,13 +42,12 @@ public class PlayerScript : NetworkBehaviour
     private bool isCrouching;
     private bool canDoubleJump;
     private float dashTimer;
-    
 
     public bool IsCrouching() => isCrouching;
-
     #endregion
 
     #region Unity Callbacks
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -52,7 +61,7 @@ public class PlayerScript : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
         HandleDashTimers();
         UpdateAnimations();
@@ -61,39 +70,84 @@ public class PlayerScript : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
         if (dashTimer > 0)
             rb.linearVelocity = new Vector2(transform.localScale.x * dashSpeed, rb.linearVelocity.y);
         else
             rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
     }
-
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
-        {
-            playerInput.enabled = true;
-            Camera.main.enabled = true; // if using camera
-        }
+        // Who sees this object?
+        if (IsServer)
+            Debug.Log("[Server] Shared character spawned on server.");
         else
-        {
-            playerInput.enabled = false;
-        }
+            Debug.Log($"[Client] Shared character spawned on client. LocalClientId: {NetworkManager.Singleton.LocalClientId}");
+
+        // Enable PlayerInput only for assigned players
+        ulong localId = NetworkManager.Singleton.LocalClientId;
+
+        bool canControl = localId == legsPlayerId.Value || localId == upperPlayerId.Value;
+
+        playerInput.enabled = canControl;
+
+        if (canControl)
+            Debug.Log($"[Client] Local player ({localId}) can control this character.");
+        else
+            Debug.Log($"[Client] Local player ({localId}) cannot control this character.");
     }
+
     #endregion
 
     #region Input Callbacks
+
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!context.performed && !context.canceled) return;
 
-        moveInput = context.ReadValue<Vector2>();
+        SendMoveServerRpc(context.ReadValue<Vector2>());
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (!context.performed || !IsOwner) return;
+        if (!context.performed) return;
+
+        SendJumpServerRpc();
+    }
+
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+
+        SendDashServerRpc();
+    }
+
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+
+        SendCrouchServerRpc();
+    }
+
+    #endregion
+
+    #region Server RPCs
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendMoveServerRpc(Vector2 input, ServerRpcParams rpcParams = default)
+    {
+        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
+            return;
+
+        moveInput = input;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendJumpServerRpc(ServerRpcParams rpcParams = default)
+    {
+        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
+            return;
 
         if (isCrouching)
         {
@@ -113,27 +167,32 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    public void OnDash(InputAction.CallbackContext context)
+    [ServerRpc(RequireOwnership = false)]
+    private void SendDashServerRpc(ServerRpcParams rpcParams = default)
     {
-        if (!context.performed || !IsOwner) return;
+        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
+            return;
 
         dashTimer = dashDuration;
-        // Dash cooldown now handled in PlayerStats
         animator.SetBool("IsDashing", true);
     }
 
-    public void OnCrouch(InputAction.CallbackContext context)
+    [ServerRpc(RequireOwnership = false)]
+    private void SendCrouchServerRpc(ServerRpcParams rpcParams = default)
     {
-        if (!context.performed || !IsOwner) return;
+        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
+            return;
 
         if (isCrouching)
             StandUp();
         else if (groundCheck.Grounded)
             Crouch();
     }
+
     #endregion
 
     #region Core Mechanics
+
     private void Jump(float force)
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
@@ -185,6 +244,6 @@ public class PlayerScript : NetworkBehaviour
         animator.SetBool("IsJumping", !groundCheck.Grounded);
         animator.SetFloat("yVelocity", rb.linearVelocity.y);
     }
+
     #endregion
 }
-*/

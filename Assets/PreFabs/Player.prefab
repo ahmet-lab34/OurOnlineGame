@@ -11,15 +11,17 @@ GameObject:
   - component: {fileID: 8282395205827904682}
   - component: {fileID: 4782356634681185535}
   - component: {fileID: 1145925938058530413}
-  - component: {fileID: 7946821400442731749}
-  - component: {fileID: 1905734901666232342}
+  - component: {fileID: 3151318869004023385}
+  - component: {fileID: 1405414551643136085}
   - component: {fileID: 7007101498988190246}
+  - component: {fileID: 1905734901666232342}
   - component: {fileID: 476885202043368545}
   - component: {fileID: 3688932664426198959}
   - component: {fileID: 4998032529440746527}
   - component: {fileID: 7774138766690062552}
   - component: {fileID: 1498267140714897172}
   - component: {fileID: 7704250051353198874}
+  - component: {fileID: -2952638538559256629}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -85,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1188804023
+  GlobalObjectIdHash: 2865029811
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -98,7 +100,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &7946821400442731749
+--- !u!114 &3151318869004023385
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,16 +109,133 @@ MonoBehaviour:
   m_GameObject: {fileID: 3124341922021140888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79a3c0b2797740a4e8b445f0c708d6fa, type: 3}
+  m_Script: {fileID: 11500000, guid: f134f680cf9e3ef4e8768bebb80085c2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   ShowTopMostFoldoutHeaderGroup: 1
+  maxHealth: 3
+  coins: 0
+  dashCooldownMax: 2
+  birdCount: 0
+  isUpsideDown: 0
+  defaultGravityScale: 1.7
+--- !u!114 &1405414551643136085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18e9552733c7f3b499dfad2547889a5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
+  ShowTopMostFoldoutHeaderGroup: 1
+  legsPlayerId:
+    m_InternalValue: 0
+  upperPlayerId:
+    m_InternalValue: 0
   moveSpeed: 5
   jumpForce: 10
   doubleJumpForce: 7
   gravityScale: 1.7
   dashSpeed: 20
   dashDuration: 0.3
+--- !u!114 &7007101498988190246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: b89f723ca126bff4b840d001d11916a3, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1405414551643136085}
+        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ddf03027-b3e7-4732-bea6-a63536d3da92
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1405414551643136085}
+        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4f92fe9d-d762-4a7d-9d16-602e2913eb54
+    m_ActionName: 'Player/Sprint[/Keyboard/shift]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1405414551643136085}
+        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
+        m_MethodName: OnCrouch
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9c124bc3-b531-41aa-8199-29f0f0ba4c9a
+    m_ActionName: 'Player/Crouch[/Keyboard/ctrl]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1405414551643136085}
+        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e2988788-0660-43fc-9f69-45a07dc20721
+    m_ActionName: 'Player/Move[/Keyboard/a,/Keyboard/d]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!70 &1905734901666232342
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -154,36 +273,6 @@ CapsuleCollider2D:
   m_Offset: {x: -0.0055236816, y: 0.6359329}
   m_Size: {x: 0.993103, y: 1.9753876}
   m_Direction: 0
---- !u!114 &7007101498988190246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3124341922021140888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: b89f723ca126bff4b840d001d11916a3, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &476885202043368545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +290,7 @@ MonoBehaviour:
   dashCooldown_Visual: {fileID: 0}
   playerHealthCondition: {fileID: 0}
   deathPanel: {fileID: 0}
+  escMenu: {fileID: 6061443289549337972, guid: 22fb8c0438cdbdd4a93e85550d73b592, type: 3}
 --- !u!114 &3688932664426198959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +308,7 @@ MonoBehaviour:
   walkingSFX: {fileID: 8300000, guid: 09c8a3d059616604ebf73c61dcd75983, type: 3}
   damagedSFX: {fileID: 8300000, guid: f463f477a9295264abb315edc24021e3, type: 3}
   runningSFXS: {fileID: 0}
-  jumpingSFXS: {fileID: 0}
+  jumpingSFXS: {fileID: 7774138766690062552}
   damagedSFXS: {fileID: 0}
 --- !u!82 &4998032529440746527
 AudioSource:
@@ -450,12 +540,12 @@ MonoBehaviour:
   RotationInterpolationType: 0
   ScaleInterpolationType: 0
   PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.1
+  PositionMaxInterpolationTime: 0.05
   RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.1
+  RotationMaxInterpolationTime: 0.05
   ScaleLerpSmoothing: 1
-  ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
+  ScaleMaxInterpolationTime: 0.05
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -477,6 +567,54 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &-2952638538559256629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124341922021140888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 6510739270417320037}
+  TransitionStateInfoList: []
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: IsRunning
+      NameHash: -887662580
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsJumping
+      NameHash: 1749078233
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsCrouching
+      NameHash: -1154928320
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsDashing
+      NameHash: -364528230
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsSliding
+      NameHash: -1809564513
+      Synchronize: 1
+      ParameterType: 4
+    - name: yVelocity
+      NameHash: -1736111434
+      Synchronize: 1
+      ParameterType: 1
+    - name: Kick
+      NameHash: -1092128709
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!1 &3263792116828733442
 GameObject:
   m_ObjectHideFlags: 0

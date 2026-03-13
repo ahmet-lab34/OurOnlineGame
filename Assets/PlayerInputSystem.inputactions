@@ -34,13 +34,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ESC_Button",
-                    "type": "Button",
-                    "id": "7f07e4de-dc8b-445f-8d27-7b669e2bd9b5",
-                    "expectedControlType": "",
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "e2988788-0660-43fc-9f69-45a07dc20721",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -78,15 +78,37 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "8510e5e5-d902-4500-bde5-ee9e3a342aed",
-                    "path": "<Keyboard>/escape",
+                    "name": "2D Vector",
+                    "id": "aa03dbaa-ed07-48fd-999a-8fc8bfb1e73e",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ESC_Button",
-                    "isComposite": false,
+                    "action": "Move",
+                    "isComposite": true,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "left",
+                    "id": "4ceecccb-3f30-4e1b-b7fd-20b3a3396d2a",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "f2fe2a5d-07ef-45b9-bb26-448ff5910e20",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

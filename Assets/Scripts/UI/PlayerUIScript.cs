@@ -22,6 +22,9 @@ public class PlayerUIScript : MonoBehaviour
     [Header("Death Panel")]
     [SerializeField] private UIScript deathPanel;
 
+    [Header("ESC Menu")]
+    [SerializeField] private GameObject escMenu;
+
     private void Awake()
     {
         player = GetComponent<PlayerScript>();

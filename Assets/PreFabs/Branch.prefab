@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1629402817362447198}
   - component: {fileID: 699523751734264510}
   - component: {fileID: 3320315501420002812}
-  - component: {fileID: 8421931754208927327}
   m_Layer: 6
   m_Name: Branch
   m_TagString: Untagged
@@ -139,15 +138,3 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 13.13, y: 1.3200973}
   m_EdgeRadius: 0
---- !u!114 &8421931754208927327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875732319629886888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b871ce89a2080143b93f7877a0324e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BranchMarker

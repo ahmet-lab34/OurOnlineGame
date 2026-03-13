@@ -99,6 +99,7 @@ public class LobbyUIManager : MonoBehaviour
             slotUI.SetPlayer(playerDisplayName);
         }
     }
+    
 
     private void ClearContainer(Transform container)
     {
