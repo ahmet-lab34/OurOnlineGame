@@ -4,25 +4,20 @@ public class GravitySwitcher : MonoBehaviour
 {
     private bool hasSwitched = false;
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
+    private void OnTriggerStay2D(Collider2D other) {
         if (hasSwitched) return;
+        if (!other.CompareTag("Player")) return;
 
-        if (other.CompareTag("Player"))
-        {
-            PlayerStats playerStats = other.GetComponent<PlayerStats>();
-            if (playerStats != null)
-            {
-                hasSwitched = true;
+        PlayerStats playerStats = other.GetComponent<PlayerStats>();
 
-                // Flip global gravity
-                Physics2D.gravity = -Physics2D.gravity;
+        if (playerStats == null) return;
+        hasSwitched = true;
+        
+        Physics2D.gravity = -Physics2D.gravity;
 
-                // Let the player handle its rotation and jump inversion
-                playerStats.ToggleUpsideDown();
+        // Let the player handle its rotation and jump inversion
+        playerStats.ToggleUpsideDown();
 
-                Destroy(gameObject);
-            }
-        }
+        Destroy(gameObject);
     }
 }
