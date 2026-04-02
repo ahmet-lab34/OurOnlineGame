@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1968614834460249558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6499738583663944269}
+  - component: {fileID: 1158377266697560533}
+  - component: {fileID: 522279992866190596}
+  m_Layer: 0
+  m_Name: TestRelay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6499738583663944269
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968614834460249558}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 626.65814, y: 569.25757, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1158377266697560533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968614834460249558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dd5f0ea03601ab47b8e4057608caf2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestRelay
+  playerPrefab: {fileID: 3124341922021140888, guid: 6c2d74319ff31bf4b9d03a548442f5c5, type: 3}
+  playerName: 
+  lobbyCodeInput: {fileID: 0}
+  playerNameInput: {fileID: 0}
+  filterByNameInput: {fileID: 0}
+  lobbyListContent: {fileID: 0}
+  lobbyListItemPrefab: {fileID: 7841138802945781585, guid: 41c048cac242d204ca4940401ccbc2d6, type: 3}
+--- !u!114 &522279992866190596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968614834460249558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4babba8cf45f6742922b483c3dfaee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  LookingForLobby: {fileID: 0}
+  InsideLobby: {fileID: 0}
+  HostInsideLobby: {fileID: 0}
+  hostPlayerContainer: {fileID: 0}
+  normalPlayerContainer: {fileID: 0}
+  hostPlayerListPrefab: {fileID: 2838453309399880155, guid: 7b4489f4d9067954985ed2b7ffc5ff78, type: 3}
+  normalPlayerListPrefab: {fileID: 453641789658880505, guid: 23317718ef70e2f409fde24fe75c2f5c, type: 3}

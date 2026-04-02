@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01e17a6ef06147a4ba4b16c5b5c465ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  birdAnim: {fileID: 4804974441442414071}
   IFoundThePlayer: 0
 --- !u!58 &5537612222905399848
 CircleCollider2D:
@@ -95,6 +94,7 @@ GameObject:
   - component: {fileID: 6844299442536051315}
   - component: {fileID: 5753125298724498603}
   - component: {fileID: 8206683079038586611}
+  - component: {fileID: 4802529776014017428}
   m_Layer: 0
   m_Name: AngryBird
   m_TagString: Enemy
@@ -132,8 +132,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 80503223432769835, guid: 24298ce1cd702334897c643313228998, type: 3}
-  birdAnim: {fileID: 4804974441442414071}
-  birdVision: {fileID: 5068230434221452412}
   shootInterval: 2
 --- !u!60 &5753125298724498603
 PolygonCollider2D:
@@ -209,6 +207,19 @@ MonoBehaviour:
   eggPrefab: {fileID: 339819129513052587, guid: 27ab584a87ffdf4489b304e82f5727cf, type: 3}
   eggOffset: {x: 0, y: 1.1, z: 0}
   destroyDelay: 1.5
+--- !u!114 &4802529776014017428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2354279540517467942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e17a6ef06147a4ba4b16c5b5c465ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyVision
+  IFoundThePlayer: 0
 --- !u!1 &2952475334441565467
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +231,6 @@ GameObject:
   - component: {fileID: 3117244523863396914}
   - component: {fileID: 6684348946904449719}
   - component: {fileID: 2953603328753670583}
-  - component: {fileID: 4804974441442414071}
   m_Layer: 0
   m_Name: BirdAnimationHandler
   m_TagString: Untagged
@@ -324,15 +334,3 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &4804974441442414071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2952475334441565467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082b8b7e8ad778b46a4dc7a6f3662bdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::birdAnimation

@@ -17,6 +17,7 @@ public class Bullet : MonoBehaviour
         shitCollider = GetComponent<Collider2D>();
     }
 
+    [System.Obsolete]
     private void Start()
     {
         Destroy(gameObject, 10f);
@@ -27,7 +28,7 @@ public class Bullet : MonoBehaviour
 
         // Ignore collision with the branch(es)
         if (shitCollider != null)
-            IgnoreBranchCollision.Apply(shitCollider);
+            IgnoreBulletCollision.Apply(shitCollider);
 
         animator.SetBool("shitFlying", true);
     }
@@ -58,10 +59,10 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerScript playerScript = collision.gameObject.GetComponent<PlayerScript>();
-            if (playerScript != null)
+            PlayerStats playerHealth = collision.gameObject.GetComponent<PlayerStats>();
+            if (playerHealth != null)
             {
-                playerScript.GetHit();
+                playerHealth.GetHit();
             }
 
             animator.SetBool("shitExploding", true);
