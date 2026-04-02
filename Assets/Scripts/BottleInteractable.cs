@@ -36,6 +36,7 @@ public class BottleInteractable : MonoBehaviour
         playerInside = false;
     }
 
+    [System.Obsolete]
     private void Update()
     {
         if (!playerInside) return;

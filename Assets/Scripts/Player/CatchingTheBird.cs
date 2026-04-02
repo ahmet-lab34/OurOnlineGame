@@ -1,51 +1,63 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
 public class CatchingTheBird : MonoBehaviour
 {
-    private PlayerInput input;
-    private InputAction Catch;
-    private InputAction RidingTheBird;
-    [SerializeField] private PlayerScript player;
-    [SerializeField] private bool TouchingTheEnemyWithTrigger = false;
-    [SerializeField] private GameObject currentEnemy;
-    void Start()
+    [Header("Player Reference")]
+    [SerializeField] private PlayerStats playerStats;
+
+    private GameObject currentEnemy;
+    private bool touchingEnemy = false;
+
+    private void Awake()
     {
-        input = GetComponent<PlayerInput>();
-        player = GetComponentInParent<PlayerScript>();
-        Catch = input.actions.FindAction("Catch");
-        RidingTheBird = input.actions.FindAction("RidingTheBird");
-        Catch.Enable();
+        if (playerStats == null)
+            playerStats = GetComponentInParent<PlayerStats>();
+
+        // Register Input callbacks
+        var input = GetComponent<PlayerInput>();
+        var catchAction = input.actions["Catch"];
+        var rideAction = input.actions["RidingTheBird"];
+
+        catchAction.performed += ctx => TryCatchBird();
+        rideAction.performed += ctx => TryRideBird();
     }
-    void Update()
+
+    private void TryCatchBird()
     {
-        if (Catch.triggered && TouchingTheEnemyWithTrigger)
+        if (touchingEnemy && currentEnemy != null)
         {
             Destroy(currentEnemy);
+            playerStats.CarryBird(); // Public method in PlayerStats
+        }
+    }
 
-            player.CarryingaBird();
-        }
-        if (RidingTheBird.triggered && player.playerNumbers.BirdCount >= 1)
+    private void TryRideBird()
+    {
+        if (playerStats.GetBirdCount() > 0)
         {
-            player.RidingaBird();
+            playerStats.ReleaseBirds(); // Public method in PlayerStats
         }
     }
-    void OnTriggerEnter2D(Collider2D other)
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
         {
-            TouchingTheEnemyWithTrigger = true;
+            touchingEnemy = true;
             currentEnemy = other.gameObject;
-            Debug.Log("The Trigger is touching the enemy !");
+            Debug.Log("Touching the enemy!");
         }
     }
-    void OnTriggerExit2D(Collider2D other)
+
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
         {
-            TouchingTheEnemyWithTrigger = false;
+            touchingEnemy = false;
             currentEnemy = null;
-            Debug.Log("The Trigger Left the enemy@@@");
+            Debug.Log("Left the enemy!");
         }
     }
 }

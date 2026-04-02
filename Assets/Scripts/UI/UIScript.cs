@@ -1,126 +1,110 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
-using UnityEngine.Video;
+using System.Collections.Generic;
+using Unity.Netcode;
 
 public class UIScript : MonoBehaviour
 {
-    [SerializeField] private TMP_Text Coinss;
-    [SerializeField] private GameObject PlayerObject;
-    [SerializeField] private GameObject DeathPanel;
-    [SerializeField] private GameObject MainMenu;
-    [SerializeField] private GameObject GameUI;
-    [SerializeField] private GameObject Settings;
-    [SerializeField] private GameObject GameMap1;
-    [SerializeField] private GameObject PleaseDoNotQuit;
-    [SerializeField] private Button RestartButton;
-    [SerializeField] private Button MainMenuButton;
+    [Header("Player & Panels")]
+    [SerializeField] private GameObject playerObject;
+    [SerializeField] private GameObject escMenu;
+    [SerializeField] private GameObject deathPanel;
 
-    [SerializeField] private Button MainPlayButton;
-    [SerializeField] private Button MainEndlessButton;
-    [SerializeField] private Button MainOptionsButton;
-    [SerializeField] private Button MainExitButton;
-    [SerializeField] private Button StayButton;
-    [SerializeField] private Button QuitButton;
-    [SerializeField] private Button OptionsBackButton;
-    [SerializeField] private IntroCutscenePlayer IntroPlayer;
+    [Header("Buttons")]
+    [SerializeField] private Button escOptionsButton;
+    [SerializeField] private Button escExitButton;
+    [SerializeField] private Button escContinueButton;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button quitButton;
 
-    void Start()
+    [System.Obsolete]
+    private void Start()
     {
-        if (PlayerPrefs.GetInt("SkipMainMenu", 0) == 1)
-        {
-            MainMenu.SetActive(false);
-            GameMap1.SetActive(true);
-            GameUI.SetActive(true);
-            Time.timeScale = 1f;
-            PlayerPrefs.SetInt("SkipMainMenu", 0);
-        }
-        else
-        {
-            MainMenu.SetActive(true);
-        }
-        RestartButton.onClick.AddListener(() => OnButtonPressed(RestartButton));
-        MainMenuButton.onClick.AddListener(() => OnButtonPressed(MainMenuButton));
+        DontDestroyOnLoad(gameObject);
 
-        QuitButton.onClick.AddListener(() => OnButtonPressed(QuitButton));
-        StayButton.onClick.AddListener(() => OnButtonPressed(StayButton));
-        MainPlayButton.onClick.AddListener(() => OnButtonPressed(MainPlayButton));
-        MainEndlessButton.onClick.AddListener(() => OnButtonPressed(MainEndlessButton));
-        MainOptionsButton.onClick.AddListener(() => OnButtonPressed(MainOptionsButton));
-        OptionsBackButton.onClick.AddListener(() => OnButtonPressed(OptionsBackButton));
-        MainExitButton.onClick.AddListener(() => OnButtonPressed(MainExitButton));
-        Coinss.text = CoinCount.coins.ToString(); 
+        // Button listeners
+        quitButton.onClick.AddListener(() => OnButtonPressed(quitButton));
+        escContinueButton.onClick.AddListener(() => OnButtonPressed(escContinueButton));
+        escOptionsButton.onClick.AddListener(() => OnButtonPressed(escOptionsButton));
+        escExitButton.onClick.AddListener(() => OnButtonPressed(escExitButton));
+        restartButton.onClick.AddListener(() => OnButtonPressed(restartButton));
     }
-    public void RestartScene()
+
+    #region Networking
+
+    public void StartHost() => NetworkManager.Singleton.StartHost();
+    public void StartClient() => NetworkManager.Singleton.StartClient();
+    public void StartServer() => NetworkManager.Singleton.StartServer();
+
+    #endregion
+
+    #region Scene & Game Control
+
+    private void OnButtonPressed(Button button)
     {
-        PlayerPrefs.SetInt("SkipMainMenu", 1);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-    public void UIDie()
-    {
-        DeathPanel.SetActive(true);
-        PlayerObject.SetActive(false);
-        Time.timeScale = 0f;
-    }
-    void OnButtonPressed(Button button)
-    {
-        if (button == RestartButton)
+        if (button == restartButton)
         {
-            Debug.Log("Just the Restart Button Is Pressed !");
-            GravitySwitcherUpsideDown.isRotated = false;
+            ResetPlayerGravity();
             RestartScene();
         }
-        if (button == MainMenuButton)
+        else if (button == escContinueButton)
         {
-            Scene currentScene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(currentScene.name);
-
-
+            escMenu.SetActive(false);
+            Time.timeScale = 1f;
         }
-        if (button == MainPlayButton)
-        {
-            if (IntroPlayer != null)
-                IntroPlayer.TryPlayIntroOrStartGame(StartGameFromMenu);
-            else
-                StartGameFromMenu();
-        }
-        if (button == MainEndlessButton)
-        {
-
-        }
-        if (button == MainOptionsButton)
-        {
-            Settings.SetActive(true);
-            MainMenu.SetActive(false);
-        }
-        if (button == OptionsBackButton)
-        {
-            MainMenu.SetActive(true);
-            Settings.SetActive(false);
-        }
-        if (button == MainExitButton)
-        {
-            MainMenu.SetActive(false);
-            PleaseDoNotQuit.SetActive(true);
-        }
-        if (button == StayButton)
-        {
-            Scene currentScene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(currentScene.name);
-        }
-        if (button == QuitButton)
+        else if (button == quitButton)
         {
             Application.Quit();
         }
     }
-    private void StartGameFromMenu()
+
+    private void RestartScene()
     {
-        GameMap1.SetActive(true);
-        GameUI.SetActive(true);
-        MainMenu.SetActive(false);
-        Time.timeScale = 1f;
+        PlayerPrefs.SetInt("SkipMainMenu", 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void UIDie()
+    {
+        deathPanel.SetActive(true);
+        if (playerObject != null) playerObject.SetActive(false);
+        Time.timeScale = 0f;
+    }
+
+    #endregion
+
+    #region Gravity
+
+    /// <summary>
+    /// Reset global 2D gravity to default downward if it was flipped
+    /// </summary>
+    private void ResetPlayerGravity()
+    {
+        if (playerObject == null) return;
+
+        Rigidbody2D rb = playerObject.GetComponent<Rigidbody2D>();
+        PlayerStats playerStats = playerObject.GetComponent<PlayerStats>();
+        if (rb != null && playerStats != null)
+        {
+            // Restore player's gravity scale
+            rb.gravityScale = playerStats.GetDefaultGravityScale();
+
+            // Make player upright
+            playerStats.SetUpsideDownState(false);
+        }
+    }
+
+
+    #endregion
+
+    #region Fullscreen
+
+    public void ToggleFullscreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+    }
+
+    #endregion
 }

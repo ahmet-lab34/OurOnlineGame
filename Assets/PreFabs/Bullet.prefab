@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3997852265017721437}
   - component: {fileID: 7919466250983586621}
   - component: {fileID: 8604525694941572812}
-  - component: {fileID: 5717599283538393923}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: shit
@@ -86,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -855298285791758126, guid: 4a837731918d5794197b3b9de3b09986, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -108,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45719751da551744d8bc2b0d8c536e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 8604525694941572812}
   birdCollider: {fileID: 0}
   shitCollider: {fileID: 3997852265017721437}
   speed: 5
@@ -196,16 +196,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5717599283538393923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 80503223432769835}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17c1387cbadc0c043a138578eade45b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 8604525694941572812}
