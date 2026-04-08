@@ -80,6 +80,9 @@ public class UIScript : MonoBehaviour
     /// <summary>
     /// Reset global 2D gravity to default downward if it was flipped
     /// </summary>
+    /// 
+    /// 
+    /// RESET PLAYER GRAVITY: SHOULD BE REMOVED!!!
     private void ResetPlayerGravity()
     {
         if (playerObject == null) return;
