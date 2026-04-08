@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour
 
         // Ignore collision with the branch(es)
         if (shitCollider != null)
-            IgnoreBulletCollision.Apply(shitCollider);
+            //IgnoreBulletCollision.Apply(shitCollider);
 
         animator.SetBool("shitFlying", true);
     }

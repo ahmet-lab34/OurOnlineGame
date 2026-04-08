@@ -62,7 +62,7 @@ public class BottleFly : MonoBehaviour
 
         // IMPORTANT: ignore ONLY the branch collider(s) (BranchMarker on branch object)
         if (col != null)
-            IgnoreBulletCollision.Apply(col);
+            //IgnoreBulletCollision.Apply(col);
 
         if (col != null)
             col.isTrigger = false;
