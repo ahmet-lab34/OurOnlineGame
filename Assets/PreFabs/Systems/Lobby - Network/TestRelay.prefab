@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd5f0ea03601ab47b8e4057608caf2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestRelay
-  playerPrefab: {fileID: 3124341922021140888, guid: 6c2d74319ff31bf4b9d03a548442f5c5, type: 3}
+  playerPrefab: {fileID: 6505466013090099667, guid: 7b14be30aa94e4349a4e82b18304d6bc, type: 3}
   playerName: 
   lobbyCodeInput: {fileID: 0}
   playerNameInput: {fileID: 0}

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6828074225074516319}
   - component: {fileID: 5895077624388730511}
   m_Layer: 0
-  m_Name: DecidePlayer
+  m_Name: PlayerDecide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fef55bd4a6acea408920dca0e1f22a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDecide
-  sharedCharacterPrefab: {fileID: 3124341922021140888, guid: 6c2d74319ff31bf4b9d03a548442f5c5, type: 3}
+  sharedCharacterPrefab: {fileID: 6505466013090099667, guid: 7b14be30aa94e4349a4e82b18304d6bc, type: 3}
 --- !u!114 &5895077624388730511
 MonoBehaviour:
   m_ObjectHideFlags: 0
