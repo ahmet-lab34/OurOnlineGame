@@ -231,14 +231,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33bd05aa2378e64479c5d424b8169d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  rb: {fileID: 5178813496215597337}
-  jumpForce: 4500
-  playerSpeed: 10
-  positionRadius: 3
+  ShowTopMostFoldoutHeaderGroup: 1
+  rb: {fileID: -1151725630555559540}
+  ragdollParts:
+  - {fileID: 5178813496215597337}
+  - {fileID: 2565594971878652507}
+  - {fileID: 928374475372077969}
+  - {fileID: 4591014572803181778}
+  - {fileID: 877881562285583219}
+  - {fileID: 2262483007270357307}
+  - {fileID: 7282068570934288866}
+  - {fileID: 1530209824766851625}
+  - {fileID: 4972641325844823508}
+  - {fileID: 2690104816282113149}
+  playerPos: {fileID: 2828109556246140543}
   ground:
     serializedVersion: 2
     m_Bits: 64
-  playerPos: {fileID: 2828109556246140543}
+  positionRadius: 3
+  jumpForce: 100
+  playerSpeed: 10
+  NetworkedPosition:
+    m_InternalValue: {x: 0, y: 0}
 --- !u!1 &3526851404817031438
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,7 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoldingArms
   bodyColliders: []
-  keyCode: 324
+  climbAction: {fileID: 0}
 --- !u!1 &4735223321979283037
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,6 +882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f0e7161aa1a764685e4b156b025ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arms
+  ShowTopMostFoldoutHeaderGroup: 1
   cam: {fileID: 0}
   hingeJoint2D: {fileID: 4632870404955760332}
   maxSpeed: 600
@@ -875,8 +890,9 @@ MonoBehaviour:
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10
-  activationButton: 323
+  aimAction: {fileID: 369491571689601881, guid: af797ee7601b838459365d5c8c79a139, type: 3}
   audioClip: {fileID: 8300000, guid: f8e1f6f6d4b3fde4e871bf615dff96ef, type: 3}
+  sharedData: {fileID: 3606284484440795804}
 --- !u!82 &5374559612315902565
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1218,7 +1234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoldingArms
   bodyColliders: []
-  keyCode: 323
+  climbAction: {fileID: 0}
 --- !u!1 &6505466013090099667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,7 +1286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2745388395
+  GlobalObjectIdHash: 3658552441
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1307,7 +1323,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 1
+  AuthorityMode: 0
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -1385,6 +1401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0436b700d4b0a5c439d564e90c7efd73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   legsPlayerId:
     m_InternalValue: 0
   upperPlayerId:
@@ -2008,6 +2025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f0e7161aa1a764685e4b156b025ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arms
+  ShowTopMostFoldoutHeaderGroup: 1
   cam: {fileID: 0}
   hingeJoint2D: {fileID: 7838748123656287120}
   maxSpeed: 600
@@ -2015,8 +2033,9 @@ MonoBehaviour:
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10
-  activationButton: 324
+  aimAction: {fileID: 6244916900965274963, guid: af797ee7601b838459365d5c8c79a139, type: 3}
   audioClip: {fileID: 8300000, guid: f8e1f6f6d4b3fde4e871bf615dff96ef, type: 3}
+  sharedData: {fileID: 3606284484440795804}
 --- !u!82 &1697523683387336665
 AudioSource:
   m_ObjectHideFlags: 0

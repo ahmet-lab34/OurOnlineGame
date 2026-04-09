@@ -40,7 +40,7 @@ public class PlayerDecide : MonoBehaviour
 
             SpawnSharedCharacter(playerA, playerB);
         }
-        else {SpawnCharacterForSinglePlayer(clientId);}
+        // else {SpawnCharacterForSinglePlayer(clientId);}
     }
 
     private void SpawnSharedCharacter(ulong legsId, ulong upperId)
@@ -75,7 +75,7 @@ public class PlayerDecide : MonoBehaviour
         Debug.Log($"[Server] Spawned shared character. Legs: {legsId}, Upper: {upperId}");
     }
 
-    public void SpawnCharacterForSinglePlayer(ulong playerId)
+    /*public void SpawnCharacterForSinglePlayer(ulong playerId)
     {
         if (sharedCharacterPrefab == null)
         {
@@ -105,5 +105,5 @@ public class PlayerDecide : MonoBehaviour
         script.upperPlayerId.Value = playerId;
 
         Debug.Log($"[Server] Spawned single-player character for player {playerId}");
-    }
+    }*/
 }

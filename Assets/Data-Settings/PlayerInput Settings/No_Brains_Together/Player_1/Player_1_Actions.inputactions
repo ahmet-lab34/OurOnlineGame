@@ -1,6 +1,95 @@
 {
-    "version": 0,
+    "version": 1,
     "name": "Player_1_Actions",
-    "maps": [],
+    "maps": [
+        {
+            "name": "Upper",
+            "id": "22f42bc1-3339-4fc1-bafd-ba0007771ad7",
+            "actions": [
+                {
+                    "name": "Move_LeftArm",
+                    "type": "Button",
+                    "id": "acd645e8-13de-4fd6-af91-a5b2c8cb06f2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Move_RightArm",
+                    "type": "Button",
+                    "id": "a541c716-de48-422d-a816-a93947b90125",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Hold_LeftArm",
+                    "type": "Button",
+                    "id": "c3f1ac8e-d5d2-4860-8c02-feeb8bbec2ff",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Hold_RightArm",
+                    "type": "Button",
+                    "id": "8e0369e2-3f24-4da6-a180-607e3d7383c6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e8ce8a3b-8743-4293-a8ae-f7f1f558b80d",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move_LeftArm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "16ed3c24-c08d-436f-90f6-e29883d8f7bb",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move_RightArm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "abc07c79-546b-4856-84dd-85493428b120",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hold_LeftArm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "07536ff0-c6af-409b-97d4-1f4cb5932644",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hold_RightArm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
     "controlSchemes": []
 }

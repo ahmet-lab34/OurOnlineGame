@@ -64,12 +64,6 @@ public class TestRelay : MonoBehaviour
         Debug.Log(playerName);
 
         lobbyUIManager = GetComponent<LobbyUIManager>();
-
-        LateStart();
-    }
-    private void LateStart()
-    {
-        CreateRelay();
     }
 
     private void Update()
