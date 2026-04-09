@@ -1,119 +1,78 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Unity.Netcode;
 
+[RequireComponent(typeof(HingeJoint2D))]
 public class Arms : NetworkBehaviour
 {
-    #region Inspector Variables
     [Header("References")]
-    [SerializeField] private Camera cam;
-    [SerializeField] private HingeJoint2D hingeJoint2D;
+    public HingeJoint2D hingeJoint2D;
 
     [Header("Motor Settings")]
-    [SerializeField] private float maxSpeed = 600f;
-    [SerializeField] private float torque = 2000f;
+    public float maxSpeed = 600f;
+    public float torque = 2000f;
 
     [Header("Soft Limit Settings")]
-    [SerializeField] private float softZone = 50f;
-    [SerializeField] private float limitReturnStrength = 800f;
+    public float softZone = 50f;
+    public float limitReturnStrength = 800f;
 
     [Header("Break Settings")]
-    [SerializeField] private float breakDuration = 10f;
+    public float breakDuration = 10f;
     private bool isBroken = false;
-    private bool JustRecovered = false;
     private float breakTimer = 0f;
 
-    [Header("Input")]
-    [SerializeField] private InputActionReference aimAction;
-
     [Header("Audio")]
-    [SerializeField] private AudioClip audioClip;
-    private AudioSource audioSource;
+    public AudioSource audioSource;
+    public AudioClip breakSound;
 
-    [SerializeField] private SharedPlayerCS sharedData;
-    #endregion
+    private Vector2 targetAim; // <-- externally set target
 
     void Awake()
     {
-        if (cam == null)
-            cam = Camera.main;
-
-        audioSource = GetComponent<AudioSource>();
+        if (hingeJoint2D == null)
+            hingeJoint2D = GetComponent<HingeJoint2D>();
     }
 
-    public override void OnNetworkSpawn()
+    void FixedUpdate()
     {
-        // Only enable input for the upper player
-        if (NetworkManager.Singleton.LocalClientId == sharedData.upperPlayerId.Value)
+        if (!enabled) return; // Only server controls arms
+
+        if (isBroken)
         {
-            if (aimAction != null)
-                aimAction.action.Enable();
-        }
-        else
-        {
-            if (aimAction != null)
-                aimAction.action.Disable();
-        }
-    }
-
-    void Update()
-    {
-        // Only upper player should control the arm
-        if (!IsOwner) return;
-        if (NetworkManager.Singleton.LocalClientId != sharedData.upperPlayerId.Value) return;
-
-        bool isAiming = aimAction != null && aimAction.action.IsPressed();
-
-        if (isAiming && !isBroken)
-        {
-            hingeJoint2D.useMotor = true;
-            hingeJoint2D.useLimits = false;
-            Aim();
-        }
-        else if (!isBroken)
-        {
-            if (JustRecovered)
-                FastRecoverToZero();
-            else
-            {
-                hingeJoint2D.useMotor = false;
-                hingeJoint2D.useLimits = true;
-            }
-        }
-        else
-        {
-            BrokenArmUpdate();
-            hingeJoint2D.useMotor = false;
-            hingeJoint2D.useLimits = false;
-        }
-    }
-
-    #region Arm Movement
-    void Aim()
-    {
-        // Convert mouse to world
-        Vector3 mouseWorld = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        mouseWorld.z = 0f;
-
-        Vector2 pivot = hingeJoint2D.transform.TransformPoint(hingeJoint2D.anchor);
-        Vector2 direction = (Vector2)mouseWorld - pivot;
-
-        if (direction.sqrMagnitude < 0.0001f)
+            UpdateBrokenArm();
             return;
+        }
 
-        float worldAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        float currentWorldAngle = transform.eulerAngles.z;
-        float delta = Mathf.DeltaAngle(currentWorldAngle, worldAngle);
+        ApplyAim(targetAim);
+    }
 
-        // PD controller
+    /// <summary>
+    /// Public API to set target aim (world coordinates)
+    /// </summary>
+    public void SetAim(Vector2 worldPos)
+    {
+        targetAim = worldPos;
+    }
+
+    void ApplyAim(Vector2 worldTarget)
+    {
+        Vector2 pivot = hingeJoint2D.transform.TransformPoint(hingeJoint2D.anchor);
+        Vector2 dir = worldTarget - pivot;
+
+        if (dir.sqrMagnitude < 0.0001f) return;
+
+        float worldAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        float currentAngle = hingeJoint2D.transform.eulerAngles.z;
+        float delta = Mathf.DeltaAngle(currentAngle, worldAngle);
+
+        // PD Controller
         float stiffness = 15f;
         float damping = 0.1f;
         float angularVelocity = hingeJoint2D.attachedRigidbody.angularVelocity;
 
         float desiredSpeed = (-delta * stiffness) - (angularVelocity * damping);
 
-        ApplyArmModes(ref desiredSpeed);
+        // Apply soft limits
+        ApplyLimits(ref desiredSpeed);
 
         desiredSpeed = Mathf.Clamp(desiredSpeed, -maxSpeed, maxSpeed);
 
@@ -121,21 +80,22 @@ public class Arms : NetworkBehaviour
         motor.motorSpeed = desiredSpeed;
         motor.maxMotorTorque = torque;
         hingeJoint2D.motor = motor;
+        hingeJoint2D.useMotor = true;
     }
 
-    void ApplyArmModes(ref float desiredSpeed)
+    void ApplyLimits(ref float desiredSpeed)
     {
         float angle = hingeJoint2D.jointAngle;
         float min = hingeJoint2D.limits.min;
         float max = hingeJoint2D.limits.max;
 
-        if (angle >= min && angle <= max)
-            return;
+        if (angle >= min && angle <= max) return;
 
         float overSoft = 0f;
-        int pushDirection = 0;
-        if (angle > max) { overSoft = angle - max; pushDirection = -1; }
-        else if (angle < min) { overSoft = min - angle; pushDirection = 1; }
+        int pushDir = 0;
+
+        if (angle > max) { overSoft = angle - max; pushDir = -1; }
+        else if (angle < min) { overSoft = min - angle; pushDir = 1; }
 
         if (overSoft >= softZone)
         {
@@ -143,45 +103,22 @@ public class Arms : NetworkBehaviour
             breakTimer = breakDuration;
             desiredSpeed = 0f;
 
-            if (audioSource && audioClip && !audioSource.isPlaying)
-                audioSource.PlayOneShot(audioClip);
-
-            return;
-        }
-
-        float t = Mathf.Clamp01(overSoft / softZone);
-        float boundaryDelta = t * limitReturnStrength;
-
-        desiredSpeed += pushDirection * boundaryDelta;
-    }
-
-    private void BrokenArmUpdate()
-    {
-        breakTimer -= Time.deltaTime;
-        if (breakTimer <= 0f)
-        {
-            isBroken = false;
-            JustRecovered = true;
-        }
-    }
-
-    void FastRecoverToZero()
-    {
-        if (Mathf.Abs(hingeJoint2D.jointAngle) > 0.5f)
-        {
-            hingeJoint2D.useMotor = true;
-
-            JointMotor2D motor = hingeJoint2D.motor;
-            motor.motorSpeed = hingeJoint2D.jointAngle < 0 ? 360f : -360f;
-            motor.maxMotorTorque = 100f;
-
-            hingeJoint2D.motor = motor;
-            hingeJoint2D.useLimits = false;
+            if (audioSource && breakSound)
+                audioSource.PlayOneShot(breakSound);
         }
         else
         {
-            JustRecovered = false;
+            float t = Mathf.Clamp01(overSoft / softZone);
+            desiredSpeed += pushDir * t * limitReturnStrength;
         }
     }
-    #endregion
+
+    void UpdateBrokenArm()
+    {
+        breakTimer -= Time.fixedDeltaTime;
+        if (breakTimer <= 0f)
+        {
+            isBroken = false;
+        }
+    }
 }

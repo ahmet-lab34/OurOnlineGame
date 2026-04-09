@@ -119,7 +119,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!58 &7880630780295414682
 CircleCollider2D:
@@ -232,27 +232,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
-  rb: {fileID: -1151725630555559540}
-  ragdollParts:
-  - {fileID: 5178813496215597337}
-  - {fileID: 2565594971878652507}
-  - {fileID: 928374475372077969}
-  - {fileID: 4591014572803181778}
-  - {fileID: 877881562285583219}
-  - {fileID: 2262483007270357307}
-  - {fileID: 7282068570934288866}
-  - {fileID: 1530209824766851625}
-  - {fileID: 4972641325844823508}
-  - {fileID: 2690104816282113149}
-  playerPos: {fileID: 2828109556246140543}
-  ground:
-    serializedVersion: 2
-    m_Bits: 64
-  positionRadius: 3
-  jumpForce: 100
-  playerSpeed: 10
-  NetworkedPosition:
-    m_InternalValue: {x: 0, y: 0}
+  isLowerBody: 0
+  isUpperBody: 0
 --- !u!1 &3526851404817031438
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +532,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &2437134864484531042
 BoxCollider2D:
@@ -673,8 +654,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6956b26538219374586c46ab3a5cb0d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoldingArms
-  bodyColliders: []
-  climbAction: {fileID: 0}
+  ShowTopMostFoldoutHeaderGroup: 1
+  climbAction: {fileID: 4681008611142582011, guid: af797ee7601b838459365d5c8c79a139, type: 3}
+  sharedData: {fileID: 3606284484440795804}
 --- !u!1 &4735223321979283037
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,7 +778,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &3563305679371361061
 BoxCollider2D:
@@ -883,16 +865,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arms
   ShowTopMostFoldoutHeaderGroup: 1
-  cam: {fileID: 0}
   hingeJoint2D: {fileID: 4632870404955760332}
   maxSpeed: 600
   torque: 2000
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10
-  aimAction: {fileID: 369491571689601881, guid: af797ee7601b838459365d5c8c79a139, type: 3}
-  audioClip: {fileID: 8300000, guid: f8e1f6f6d4b3fde4e871bf615dff96ef, type: 3}
-  sharedData: {fileID: 3606284484440795804}
+  audioSource: {fileID: 0}
+  breakSound: {fileID: 0}
 --- !u!82 &5374559612315902565
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1111,7 +1091,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &2146095517358485761
 BoxCollider2D:
@@ -1233,8 +1213,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6956b26538219374586c46ab3a5cb0d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoldingArms
-  bodyColliders: []
-  climbAction: {fileID: 0}
+  ShowTopMostFoldoutHeaderGroup: 1
+  climbAction: {fileID: 8760038114483093987, guid: af797ee7601b838459365d5c8c79a139, type: 3}
+  sharedData: {fileID: 3606284484440795804}
 --- !u!1 &6505466013090099667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,6 +1401,7 @@ GameObject:
   - component: {fileID: 7387910809597547088}
   - component: {fileID: 2690104816282113149}
   - component: {fileID: 3900990218296053930}
+  - component: {fileID: 3843348273812281537}
   m_Layer: 7
   m_Name: Pelvis
   m_TagString: Untagged
@@ -1587,7 +1569,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!233 &3900990218296053930
 HingeJoint2D:
@@ -1615,6 +1597,45 @@ HingeJoint2D:
   m_AngleLimits:
     m_LowerAngle: -70
     m_UpperAngle: 70
+--- !u!114 &3843348273812281537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7097258221635296776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70b5122a9d1b3234397d0fcb55b13ffd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  pelvis: {fileID: 2690104816282113149}
+  groundCheck: {fileID: 2828109556246140543}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  moveSpeed: 5
+  jumpForce: 10
+  groundRadius: 0.2
+  balanceController: {fileID: 7387910809597547088}
+  leftArm: {fileID: 4835164279736942337}
+  rightArm: {fileID: 8290387094780525338}
+  ragdollParts:
+  - {fileID: 4591014572803181778}
+  - {fileID: 877881562285583219}
+  - {fileID: 2262483007270357307}
+  - {fileID: 7282068570934288866}
+  - {fileID: 1530209824766851625}
+  - {fileID: 4972641325844823508}
+  - {fileID: 2690104816282113149}
+  - {fileID: 5178813496215597337}
+  netPelvisPos:
+    m_InternalValue: {x: 0, y: 0}
+  netLeftArmAim:
+    m_InternalValue: {x: 0, y: 0}
+  netRightArmAim:
+    m_InternalValue: {x: 0, y: 0}
 --- !u!1 &7386948080012923150
 GameObject:
   m_ObjectHideFlags: 0
@@ -1770,7 +1791,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &4645267096789111969
 BoxCollider2D:
@@ -1939,7 +1960,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &2708154536563805118
 BoxCollider2D:
@@ -2026,16 +2047,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arms
   ShowTopMostFoldoutHeaderGroup: 1
-  cam: {fileID: 0}
   hingeJoint2D: {fileID: 7838748123656287120}
   maxSpeed: 600
   torque: 2000
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10
-  aimAction: {fileID: 6244916900965274963, guid: af797ee7601b838459365d5c8c79a139, type: 3}
-  audioClip: {fileID: 8300000, guid: f8e1f6f6d4b3fde4e871bf615dff96ef, type: 3}
-  sharedData: {fileID: 3606284484440795804}
+  audioSource: {fileID: 1697523683387336665}
+  breakSound: {fileID: 8300000, guid: f8e1f6f6d4b3fde4e871bf615dff96ef, type: 3}
 --- !u!82 &1697523683387336665
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2399,7 +2418,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &7934924374062762347
 BoxCollider2D:

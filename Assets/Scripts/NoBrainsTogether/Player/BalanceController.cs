@@ -18,27 +18,29 @@ public class BalanceController2D : MonoBehaviour
     public bool isGrounded = true;
 
     [Header("Recovery Assist")]
-    [Tooltip("Joint angle (degrees) at which corrective support begins.")]
-    public float smallSupportAngle = 10f;  // When assist starts (set in inspector)
-    [Tooltip("Joint angle (degrees) at which full support strength is reached.")]
-    public float strongSupportAngle = 30f; // When assist is at max (>= smallSupportAngle)
+    public float smallSupportAngle = 10f;
+    public float strongSupportAngle = 30f;
     public float recoveryStrength = 150f;
-    public float recoveryDamping = 10f; 
+    public float recoveryDamping = 10f;
 
     [Header("Connected Joints")]
     public HingeJoint2D jointA;
     public HingeJoint2D jointB;
 
+    // 🔴 INPUT COMES FROM SERVER CONTROLLER
+    private float input;
 
-    float input;
-
-    void Update()
+    // ✅ Called by RagdollController (SERVER ONLY)
+    public void SetInput(float newInput)
     {
-        input = Input.GetAxis("Horizontal");
+        input = newInput;
     }
 
     void FixedUpdate()
     {
+        // ⚠️ IMPORTANT: Only run if physics is active (server)
+        if (!pelvis.simulated) return;
+
         if (!isGrounded) return;
 
         BalanceUpright();
@@ -56,8 +58,6 @@ public class BalanceController2D : MonoBehaviour
         float derivative = -pelvis.angularVelocity * uprightDamping;
 
         float torque = proportional + derivative;
-
-        // Clamp torque to prevent physics explosion
         torque = Mathf.Clamp(torque, -1000f, 1000f);
 
         pelvis.AddTorque(torque * Time.fixedDeltaTime);
@@ -80,45 +80,36 @@ public class BalanceController2D : MonoBehaviour
         if (angle > fallAngle)
         {
             Debug.Log("Fallen!");
-            // Optional: disable balance here
         }
     }
+
     void SupportJoint(HingeJoint2D joint)
     {
         if (joint == null) return;
-        // jointAngle gives the rotation of the attached body relative to the connected body
+
         float jointAngle = joint.jointAngle;
         float absAngle = Mathf.Abs(jointAngle);
 
         if (absAngle > smallSupportAngle)
         {
-            float t;
-            if (Mathf.Approximately(smallSupportAngle, strongSupportAngle))
-            {
-                // avoid divide-by-zero; if thresholds are identical treat as full strength
-                t = 1f;
-            }
-            else
-            {
-                t = Mathf.InverseLerp(smallSupportAngle, strongSupportAngle, absAngle);
-            }
+            float t = Mathf.Approximately(smallSupportAngle, strongSupportAngle)
+                ? 1f
+                : Mathf.InverseLerp(smallSupportAngle, strongSupportAngle, absAngle);
 
             float assistStrength = recoveryStrength * t;
 
-            // apply supporting torque to the pelvis instead of the limb so both joints
-            // contribute to pushing the body back toward upright
             float proportional = -jointAngle * assistStrength;
             float derivative = -pelvis.angularVelocity * recoveryDamping;
+
             float torque = proportional + derivative;
-            // clamp to avoid blowing up when multiple joints fire at once
             torque = Mathf.Clamp(torque, -1000f, 1000f);
+
             pelvis.AddTorque(torque * Time.fixedDeltaTime);
         }
     }
 
     void OnValidate()
     {
-        // make sure support thresholds are sensible in the inspector
         if (strongSupportAngle < smallSupportAngle)
         {
             strongSupportAngle = smallSupportAngle;
