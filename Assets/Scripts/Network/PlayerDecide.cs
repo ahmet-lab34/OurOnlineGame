@@ -40,20 +40,70 @@ public class PlayerDecide : MonoBehaviour
 
             SpawnSharedCharacter(playerA, playerB);
         }
+        // else {SpawnCharacterForSinglePlayer(clientId);}
     }
 
     private void SpawnSharedCharacter(ulong legsId, ulong upperId)
     {
+        if (sharedCharacterPrefab == null)
+        {
+            Debug.LogError("[Server] sharedCharacterPrefab is not assigned!");
+            return;
+        }
+
         // Instantiate the prefab
         var obj = Instantiate(sharedCharacterPrefab);
         var netObj = obj.GetComponent<NetworkObject>();
+        if (netObj == null)
+        {
+            Debug.LogError("[Server] sharedCharacterPrefab does not have NetworkObject component!");
+            Destroy(obj);
+            return;
+        }
         netObj.Spawn(); // This replicates to all clients automatically
 
         // Assign controlling client IDs
-        var script = obj.GetComponent<PlayerScript>();
+        var script = obj.GetComponent<SharedPlayerCS>();
+        if (script == null)
+        {
+            Debug.LogError("[Server] sharedCharacterPrefab does not have PlayerController component!");
+            return;
+        }
         script.legsPlayerId.Value = legsId;
         script.upperPlayerId.Value = upperId;
 
         Debug.Log($"[Server] Spawned shared character. Legs: {legsId}, Upper: {upperId}");
     }
+
+    /*public void SpawnCharacterForSinglePlayer(ulong playerId)
+    {
+        if (sharedCharacterPrefab == null)
+        {
+            Debug.LogError("[Server] sharedCharacterPrefab is not assigned!");
+            return;
+        }
+
+        // Instantiate the prefab
+        var obj = Instantiate(sharedCharacterPrefab);
+        var netObj = obj.GetComponent<NetworkObject>();
+        if (netObj == null)
+        {
+            Debug.LogError("[Server] sharedCharacterPrefab does not have NetworkObject component!");
+            Destroy(obj);
+            return;
+        }
+        netObj.Spawn(); // This replicates to all clients automatically
+
+        // Assign both controls to the single player
+        var script = obj.GetComponent<SharedPlayerCS>();
+        if (script == null)
+        {
+            Debug.LogError("[Server] sharedCharacterPrefab does not have PlayerController component!");
+            return;
+        }
+        script.legsPlayerId.Value = playerId;
+        script.upperPlayerId.Value = playerId;
+
+        Debug.Log($"[Server] Spawned single-player character for player {playerId}");
+    }*/
 }

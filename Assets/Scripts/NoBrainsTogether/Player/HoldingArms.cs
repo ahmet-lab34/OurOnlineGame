@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class HoldingArms : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class HoldingArms : MonoBehaviour
     private Collider2D handCollider;
     private bool touchingClimable;
     [SerializeField] private Collider2D[] bodyColliders;
-    [SerializeField] private KeyCode keyCode;
+    [SerializeField] private InputActionReference climbAction;
     void Awake(){
         handCollider = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
@@ -16,10 +17,15 @@ public class HoldingArms : MonoBehaviour
             Physics2D.IgnoreCollision(handCollider, col);
             Debug.Log("Ignoring collision between " + handCollider.name + " and " + col.name);
         }
+        
+        if (climbAction != null)
+            climbAction.action.Enable();
     }
 
     void FixedUpdate(){
-        if (touchingClimable && Input.GetKey(keyCode)) {
+        bool isClimbing = climbAction != null && climbAction.action.IsPressed();
+        
+        if (touchingClimable && isClimbing) {
             rb.constraints = RigidbodyConstraints2D.FreezePositionX |
                             RigidbodyConstraints2D.FreezePositionY;
         }

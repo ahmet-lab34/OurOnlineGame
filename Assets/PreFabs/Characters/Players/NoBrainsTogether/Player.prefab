@@ -231,14 +231,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33bd05aa2378e64479c5d424b8169d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  rb: {fileID: 5178813496215597337}
-  jumpForce: 4500
-  playerSpeed: 10
-  positionRadius: 3
+  ShowTopMostFoldoutHeaderGroup: 1
+  rb: {fileID: -1151725630555559540}
+  ragdollParts:
+  - {fileID: 5178813496215597337}
+  - {fileID: 2565594971878652507}
+  - {fileID: 928374475372077969}
+  - {fileID: 4591014572803181778}
+  - {fileID: 877881562285583219}
+  - {fileID: 2262483007270357307}
+  - {fileID: 7282068570934288866}
+  - {fileID: 1530209824766851625}
+  - {fileID: 4972641325844823508}
+  - {fileID: 2690104816282113149}
+  playerPos: {fileID: 2828109556246140543}
   ground:
     serializedVersion: 2
     m_Bits: 64
-  playerPos: {fileID: 2828109556246140543}
+  positionRadius: 3
+  jumpForce: 100
+  playerSpeed: 10
+  NetworkedPosition:
+    m_InternalValue: {x: 0, y: 0}
 --- !u!1 &3526851404817031438
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,7 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoldingArms
   bodyColliders: []
-  keyCode: 324
+  climbAction: {fileID: 0}
 --- !u!1 &4735223321979283037
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,6 +882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f0e7161aa1a764685e4b156b025ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arms
+  ShowTopMostFoldoutHeaderGroup: 1
   cam: {fileID: 0}
   hingeJoint2D: {fileID: 4632870404955760332}
   maxSpeed: 600
@@ -875,8 +890,9 @@ MonoBehaviour:
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10
-  activationButton: 323
+  aimAction: {fileID: 369491571689601881, guid: af797ee7601b838459365d5c8c79a139, type: 3}
   audioClip: {fileID: 8300000, guid: f8e1f6f6d4b3fde4e871bf615dff96ef, type: 3}
+  sharedData: {fileID: 3606284484440795804}
 --- !u!82 &5374559612315902565
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1218,7 +1234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoldingArms
   bodyColliders: []
-  keyCode: 323
+  climbAction: {fileID: 0}
 --- !u!1 &6505466013090099667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1244,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2927807928488915337}
+  - component: {fileID: 4003221917110373067}
+  - component: {fileID: -8098933648964114293}
+  - component: {fileID: -1151725630555559540}
+  - component: {fileID: -8447563379070847508}
+  - component: {fileID: 3606284484440795804}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1253,6 +1274,138 @@ Transform:
   - {fileID: 5101811971808829074}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4003221917110373067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505466013090099667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3658552441
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &-8098933648964114293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505466013090099667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 0
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.1
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.1
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 0
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
+--- !u!50 &-1151725630555559540
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505466013090099667}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &-8447563379070847508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505466013090099667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody2D
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 0
+  AutoUpdateKinematicState: 1
+  AutoSetKinematicOnDespawn: 1
+--- !u!114 &3606284484440795804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505466013090099667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0436b700d4b0a5c439d564e90c7efd73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+  legsPlayerId:
+    m_InternalValue: 0
+  upperPlayerId:
+    m_InternalValue: 0
 --- !u!1 &7097258221635296776
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,7 +1549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d066d68c026114045898b7f66e50d2c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalanceController2D
-  pelvis: {fileID: 0}
+  pelvis: {fileID: 2690104816282113149}
   uprightStrength: 250
   uprightDamping: 15
   leanTorque: 200
@@ -1417,7 +1570,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7097258221635296776}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1600,7 +1753,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7713586266084343679}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1872,6 +2025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f0e7161aa1a764685e4b156b025ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arms
+  ShowTopMostFoldoutHeaderGroup: 1
   cam: {fileID: 0}
   hingeJoint2D: {fileID: 7838748123656287120}
   maxSpeed: 600
@@ -1879,8 +2033,9 @@ MonoBehaviour:
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10
-  activationButton: 324
+  aimAction: {fileID: 6244916900965274963, guid: af797ee7601b838459365d5c8c79a139, type: 3}
   audioClip: {fileID: 8300000, guid: f8e1f6f6d4b3fde4e871bf615dff96ef, type: 3}
+  sharedData: {fileID: 3606284484440795804}
 --- !u!82 &1697523683387336665
 AudioSource:
   m_ObjectHideFlags: 0

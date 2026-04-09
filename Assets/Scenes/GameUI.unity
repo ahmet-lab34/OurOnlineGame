@@ -552,7 +552,7 @@ PrefabInstance:
     - target: {fileID: 960438912334005357, guid: e63f1423d012020468ee0957e9706f59, type: 3}
       propertyPath: 'NetworkConfig.Prefabs.NetworkPrefabsLists.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: bea80a75740c35647b17418a22a41836, type: 2}
+      objectReference: {fileID: 11400000, guid: fd358c990575cc04bafa8396805c722d, type: 2}
     - target: {fileID: 6329880174230995388, guid: e63f1423d012020468ee0957e9706f59, type: 3}
       propertyPath: m_Name
       value: NetworkManager
