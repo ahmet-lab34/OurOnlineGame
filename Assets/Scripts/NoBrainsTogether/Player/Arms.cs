@@ -25,24 +25,36 @@ public class Arms : NetworkBehaviour
     public AudioClip breakSound;
 
     private Vector2 targetAim; // <-- externally set target
+    private Vector2 currentAim; // <-- smoothed aim
 
     void Awake()
     {
         if (hingeJoint2D == null)
+        {
             hingeJoint2D = GetComponent<HingeJoint2D>();
+            Debug.Log("[Arms] HingeJoint2D auto-assigned in Awake.");
+        }
     }
 
     void FixedUpdate()
     {
-        if (!enabled) return; // Only server controls arms
+        if (!IsServer)
+        {
+            return;
+        }
 
         if (isBroken)
         {
+            Debug.Log("[Arms] Arm is broken — running UpdateBrokenArm.");
             UpdateBrokenArm();
             return;
         }
 
-        ApplyAim(targetAim);
+        // Smooth Aim
+        currentAim = Vector2.Lerp(currentAim, targetAim, 0.5f);
+        Debug.Log($"[Arms] Current Aim: {currentAim}, Target Aim: {targetAim}");
+
+        ApplyAim(currentAim);
     }
 
     /// <summary>
@@ -51,27 +63,44 @@ public class Arms : NetworkBehaviour
     public void SetAim(Vector2 worldPos)
     {
         targetAim = worldPos;
+        Debug.Log($"[Arms] SetAim called. New Target: {worldPos}");
     }
 
     void ApplyAim(Vector2 worldTarget)
     {
+        Rigidbody2D rb = hingeJoint2D.attachedRigidbody;
+        if (rb == null)
+        {
+            Debug.LogWarning("[Arms] No attached Rigidbody2D found!");
+            return;
+        }
+
         Vector2 pivot = hingeJoint2D.transform.TransformPoint(hingeJoint2D.anchor);
         Vector2 dir = worldTarget - pivot;
 
-        if (dir.sqrMagnitude < 0.0001f) return;
+        if (dir.sqrMagnitude < 0.0001f)
+        {
+            Debug.Log("[Arms] Direction too small, skipping ApplyAim.");
+            return;
+        }
 
-        float worldAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        float currentAngle = hingeJoint2D.transform.eulerAngles.z;
-        float delta = Mathf.DeltaAngle(currentAngle, worldAngle);
+        float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        // PD Controller
-        float stiffness = 15f;
-        float damping = 0.1f;
-        float angularVelocity = hingeJoint2D.attachedRigidbody.angularVelocity;
+        // Compute current angle in the SAME space 
+        Vector2 currentDir = hingeJoint2D.transform.right;
+        float currentAngle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
 
-        float desiredSpeed = (-delta * stiffness) - (angularVelocity * damping);
+        float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
 
-        // Apply soft limits
+        float stiffness = 6f; // Adjusted stiffness for better feel
+        float damping = 1.5f; // Adjusted damping for better feel
+
+        float angularVelocity = rb.angularVelocity;
+
+        float desiredSpeed = (delta * stiffness) - (angularVelocity * damping);
+
+        Debug.Log($"[Arms] targetAngle={targetAngle}, currentAngle={currentAngle}, delta={delta}, desiredSpeed(before limits)={desiredSpeed}");
+
         ApplyLimits(ref desiredSpeed);
 
         desiredSpeed = Mathf.Clamp(desiredSpeed, -maxSpeed, maxSpeed);
@@ -79,8 +108,14 @@ public class Arms : NetworkBehaviour
         JointMotor2D motor = hingeJoint2D.motor;
         motor.motorSpeed = desiredSpeed;
         motor.maxMotorTorque = torque;
+
         hingeJoint2D.motor = motor;
-        hingeJoint2D.useMotor = true;
+
+        if (!hingeJoint2D.useMotor)
+        {
+            hingeJoint2D.useMotor = true;
+            Debug.Log("[Arms] Motor enabled.");
+        }
     }
 
     void ApplyLimits(ref float desiredSpeed)
@@ -89,13 +124,26 @@ public class Arms : NetworkBehaviour
         float min = hingeJoint2D.limits.min;
         float max = hingeJoint2D.limits.max;
 
-        if (angle >= min && angle <= max) return;
+        if (angle >= min && angle <= max)
+        {
+            return;
+        }
 
         float overSoft = 0f;
         int pushDir = 0;
 
-        if (angle > max) { overSoft = angle - max; pushDir = -1; }
-        else if (angle < min) { overSoft = min - angle; pushDir = 1; }
+        if (angle > max)
+        {
+            overSoft = angle - max;
+            pushDir = -1;
+        }
+        else if (angle < min)
+        {
+            overSoft = min - angle;
+            pushDir = 1;
+        }
+
+        Debug.Log($"[Arms] Out of bounds! angle={angle}, min={min}, max={max}, overSoft={overSoft}");
 
         if (overSoft >= softZone)
         {
@@ -103,22 +151,33 @@ public class Arms : NetworkBehaviour
             breakTimer = breakDuration;
             desiredSpeed = 0f;
 
+            Debug.LogWarning("[Arms] ARM BROKEN — exceeded soft zone!");
+
             if (audioSource && breakSound)
+            {
                 audioSource.PlayOneShot(breakSound);
+                Debug.Log("[Arms] Break sound played.");
+            }
         }
         else
         {
             float t = Mathf.Clamp01(overSoft / softZone);
             desiredSpeed += pushDir * t * limitReturnStrength;
+
+            Debug.Log($"[Arms] Soft limit applied. t={t}, adjustedSpeed={desiredSpeed}");
         }
     }
 
     void UpdateBrokenArm()
     {
         breakTimer -= Time.fixedDeltaTime;
+
+        Debug.Log($"[Arms] Broken timer: {breakTimer}");
+
         if (breakTimer <= 0f)
         {
             isBroken = false;
+            Debug.Log("[Arms] Arm recovered from broken state.");
         }
     }
 }

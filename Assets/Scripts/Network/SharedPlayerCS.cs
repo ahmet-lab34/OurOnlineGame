@@ -3,28 +3,30 @@ using UnityEngine;
 
 public class SharedPlayerCS : NetworkBehaviour
 {
-    #region Network Role Assignment
-
     public NetworkVariable<ulong> legsPlayerId =
         new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
 
     public NetworkVariable<ulong> upperPlayerId =
         new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
 
-    #endregion
-
+    private PlayerController playerController;
     public override void OnNetworkSpawn()
     {
-        if (IsClient)
-        {
-            legsPlayerId.OnValueChanged += OnRolesChanged;
-            upperPlayerId.OnValueChanged += OnRolesChanged;
+        if (!IsClient) return;
 
-            OnRolesChanged(0, 0); // Force initial check
-        }
+        legsPlayerId.OnValueChanged += (_, __) => RefreshRoleState();
+        upperPlayerId.OnValueChanged += (_, __) => RefreshRoleState();
+
+        RefreshRoleState(); // correct initial sync
     }
 
-    private void OnRolesChanged(ulong oldValue, ulong newValue)
+    public override void OnNetworkDespawn()
+    {
+        legsPlayerId.OnValueChanged -= (_, __) => RefreshRoleState();
+        upperPlayerId.OnValueChanged -= (_, __) => RefreshRoleState();
+    }
+
+    private void RefreshRoleState()
     {
         ulong localId = NetworkManager.Singleton.LocalClientId;
 
@@ -42,22 +44,21 @@ public class SharedPlayerCS : NetworkBehaviour
         }
     }
 
-    // ✅ Helper functions (used by other scripts)
+    public bool IsLegsPlayer(ulong clientId) =>
+        clientId == legsPlayerId.Value;
 
-    public bool IsLegsPlayer(ulong clientId)
-    {
-        return clientId == legsPlayerId.Value;
-    }
+    public bool IsUpperPlayer(ulong clientId) =>
+        clientId == upperPlayerId.Value;
 
-    public bool IsUpperPlayer(ulong clientId)
-    {
-        return clientId == upperPlayerId.Value;
-    }
-
-    // ✅ Server assigns roles
     public void AssignRolesServer(ulong legsClientId, ulong upperClientId)
     {
         if (!IsServer) return;
+
+        if (legsClientId == upperClientId)
+        {
+            Debug.LogError("Cannot assign same client to both roles.");
+            return;
+        }
 
         legsPlayerId.Value = legsClientId;
         upperPlayerId.Value = upperClientId;

@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerDecide : MonoBehaviour
+public class PlayerDecide : NetworkBehaviour
 {
     [SerializeField] private GameObject sharedCharacterPrefab;
 
     private List<ulong> waitingPlayers = new();
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         Debug.Log("PlayerDecide started, waiting for players to connect...");
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
@@ -29,21 +29,21 @@ public class PlayerDecide : MonoBehaviour
         Debug.Log($"[Server] Player {clientId} connected. Total waiting players: {waitingPlayers.Count}");
 
         // Spawn a shared character for every 2 players
-        if (waitingPlayers.Count >= 2)
+        if (waitingPlayers.Count >= 1)
         {
             Debug.Log("[Server] Two players connected, spawning shared character.");
 
             ulong playerA = waitingPlayers[0];
-            ulong playerB = waitingPlayers[1];
+            //ulong playerB = waitingPlayers[1];
 
-            waitingPlayers.RemoveRange(0, 2);
+            //waitingPlayers.RemoveRange(0, 2);
 
-            SpawnSharedCharacter(playerA, playerB);
+            SpawnSharedCharacter(playerA/*, playerB*/);
         }
         // else {SpawnCharacterForSinglePlayer(clientId);}
     }
 
-    private void SpawnSharedCharacter(ulong legsId, ulong upperId)
+    private void SpawnSharedCharacter(/*ulong legsId, */ulong upperId)
     {
         if (sharedCharacterPrefab == null)
         {
@@ -69,10 +69,10 @@ public class PlayerDecide : MonoBehaviour
             Debug.LogError("[Server] sharedCharacterPrefab does not have PlayerController component!");
             return;
         }
-        script.legsPlayerId.Value = legsId;
+        //script.legsPlayerId.Value = legsId;
         script.upperPlayerId.Value = upperId;
 
-        Debug.Log($"[Server] Spawned shared character. Legs: {legsId}, Upper: {upperId}");
+        Debug.Log($"[Server] Spawned shared character. Legs: legsId, Upper: {upperId}");
     }
 
     /*public void SpawnCharacterForSinglePlayer(ulong playerId)

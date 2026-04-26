@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class BalanceController2D : MonoBehaviour
@@ -39,15 +40,15 @@ public class BalanceController2D : MonoBehaviour
     void FixedUpdate()
     {
         // ⚠️ IMPORTANT: Only run if physics is active (server)
-        if (!pelvis.simulated) return;
+        if (!Application.isPlaying) return;
+
+        if (!NetworkManager.Singleton.IsServer) return;
 
         if (!isGrounded) return;
 
         BalanceUpright();
         PlayerLean();
         CheckFall();
-        SupportJoint(jointA);
-        SupportJoint(jointB);
     }
 
     void BalanceUpright()
@@ -60,7 +61,7 @@ public class BalanceController2D : MonoBehaviour
         float torque = proportional + derivative;
         torque = Mathf.Clamp(torque, -1000f, 1000f);
 
-        pelvis.AddTorque(torque * Time.fixedDeltaTime);
+        pelvis.AddTorque(torque);
     }
 
     void PlayerLean()
@@ -83,7 +84,7 @@ public class BalanceController2D : MonoBehaviour
         }
     }
 
-    void SupportJoint(HingeJoint2D joint)
+    /*void SupportJoint(HingeJoint2D joint)
     {
         if (joint == null) return;
 
@@ -104,9 +105,9 @@ public class BalanceController2D : MonoBehaviour
             float torque = proportional + derivative;
             torque = Mathf.Clamp(torque, -1000f, 1000f);
 
-            pelvis.AddTorque(torque * Time.fixedDeltaTime);
+            pelvis.AddTorque(torque);
         }
-    }
+    }*/
 
     void OnValidate()
     {
@@ -116,7 +117,7 @@ public class BalanceController2D : MonoBehaviour
         }
     }
 
-    float GetNormalizedAngle(float angle)
+    public float GetNormalizedAngle(float angle)
     {
         angle %= 360f;
 
