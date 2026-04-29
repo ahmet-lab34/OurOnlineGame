@@ -1,5 +1,10 @@
 using UnityEngine;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using System;
+using Unity.Transforms;
+using UnityEngine.SocialPlatforms;
+
 
 [RequireComponent(typeof(HingeJoint2D))]
 public class Arms : NetworkBehaviour
@@ -24,84 +29,66 @@ public class Arms : NetworkBehaviour
     public AudioSource audioSource;
     public AudioClip breakSound;
 
-    private Vector2 targetAim; // <-- externally set target
-    private Vector2 currentAim; // <-- smoothed aim
+    private Vector2 targetAim;
+    private Vector2 currentAim;
+    private bool aimInitialized = false;
 
-    void Awake()
-    {
-        if (hingeJoint2D == null)
-        {
-            hingeJoint2D = GetComponent<HingeJoint2D>();
-            Debug.Log("[Arms] HingeJoint2D auto-assigned in Awake.");
-        }
-    }
 
-    void FixedUpdate()
-    {
-        if (!IsServer)
-        {
-            return;
-        }
 
-        if (isBroken)
-        {
-            Debug.Log("[Arms] Arm is broken — running UpdateBrokenArm.");
+    void FixedUpdate() {
+        if (!IsServer) return;
+
+        if (isBroken) {
             UpdateBrokenArm();
             return;
         }
 
-        // Smooth Aim
-        currentAim = Vector2.Lerp(currentAim, targetAim, 0.5f);
-        Debug.Log($"[Arms] Current Aim: {currentAim}, Target Aim: {targetAim}");
-
-        ApplyAim(currentAim);
-    }
-
-    /// <summary>
-    /// Public API to set target aim (world coordinates)
-    /// </summary>
-    public void SetAim(Vector2 worldPos)
-    {
-        targetAim = worldPos;
-        Debug.Log($"[Arms] SetAim called. New Target: {worldPos}");
-    }
-
-    void ApplyAim(Vector2 worldTarget)
-    {
-        Rigidbody2D rb = hingeJoint2D.attachedRigidbody;
-        if (rb == null)
-        {
-            Debug.LogWarning("[Arms] No attached Rigidbody2D found!");
-            return;
+        // Initialize aim on first frame to prevent snapping
+        if (!aimInitialized) {
+            currentAim = targetAim;
+            aimInitialized = true;
         }
 
-        Vector2 pivot = hingeJoint2D.transform.TransformPoint(hingeJoint2D.anchor);
-        Vector2 dir = worldTarget - pivot;
+        // Time-based smoothing (stable across framerates)
+        currentAim = Vector2.Lerp(currentAim, targetAim, 1f * Time.fixedDeltaTime);
 
-        if (dir.sqrMagnitude < 0.0001f)
-        {
-            Debug.Log("[Arms] Direction too small, skipping ApplyAim.");
+        ApplyAim(targetAim);
+    }
+
+    public void SetAim(Vector2 worldPos) {
+        targetAim = worldPos;
+    }
+
+    void ApplyAim(Vector2 input) {
+        Rigidbody2D rb = hingeJoint2D.attachedRigidbody;
+
+        if (rb == null) return;
+
+        Vector2 worldAnchor = hingeJoint2D.transform.TransformPoint(new Vector2(0.8f, 0f));
+
+        Vector2 worldTarget = worldAnchor + input * 1f;
+
+        Debug.DrawLine(worldAnchor, worldTarget, Color.red);
+
+        Vector2 dir = worldTarget - worldAnchor;
+
+        if (dir.sqrMagnitude < 0.0001f) {
+            hingeJoint2D.useMotor = false;
             return;
         }
 
         float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        float currentWorldAngle = transform.eulerAngles.z;
 
-        // Compute current angle in the SAME space 
-        Vector2 currentDir = hingeJoint2D.transform.right;
-        float currentAngle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
+        float delta = Mathf.DeltaAngle(currentWorldAngle, targetAngle);
 
-        float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
+        float stiffness = 8f;
+        float damping = 0.1f;
 
-        float stiffness = 6f; // Adjusted stiffness for better feel
-        float damping = 1.5f; // Adjusted damping for better feel
 
-        float angularVelocity = rb.angularVelocity;
+        float desiredSpeed = (-delta * stiffness) - (rb.angularVelocity * damping);
 
-        float desiredSpeed = (delta * stiffness) - (angularVelocity * damping);
-
-        Debug.Log($"[Arms] targetAngle={targetAngle}, currentAngle={currentAngle}, delta={delta}, desiredSpeed(before limits)={desiredSpeed}");
-
-        ApplyLimits(ref desiredSpeed);
+        //ApplyLimits(ref desiredSpeed);
 
         desiredSpeed = Mathf.Clamp(desiredSpeed, -maxSpeed, maxSpeed);
 
@@ -110,74 +97,72 @@ public class Arms : NetworkBehaviour
         motor.maxMotorTorque = torque;
 
         hingeJoint2D.motor = motor;
-
-        if (!hingeJoint2D.useMotor)
-        {
-            hingeJoint2D.useMotor = true;
-            Debug.Log("[Arms] Motor enabled.");
-        }
+        hingeJoint2D.useMotor = true;
     }
 
     void ApplyLimits(ref float desiredSpeed)
     {
+        // Current arm direction in world space
+        Vector2 currentDir = transform.right;
+        float currentAngle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
+
         float angle = hingeJoint2D.jointAngle;
         float min = hingeJoint2D.limits.min;
         float max = hingeJoint2D.limits.max;
 
-        if (angle >= min && angle <= max)
-        {
-            return;
-        }
+        Debug.DrawLine(transform.position, transform.position + (Quaternion.Euler(0, 0, min) * Vector2.right), Color.green);
+        Debug.DrawLine(transform.position, transform.position + (Quaternion.Euler(0, 0, max) * Vector2.right), Color.blue);
+        Debug.DrawLine(transform.position, transform.position + (Quaternion.Euler(0, 0, angle) * Vector2.right), Color.red);
+
+        if (angle >= min && angle <= max) return;
 
         float overSoft = 0f;
         int pushDir = 0;
 
-        if (angle > max)
-        {
+        if (angle > max) {
             overSoft = angle - max;
             pushDir = -1;
         }
-        else if (angle < min)
-        {
+        else if (angle < min) {
             overSoft = min - angle;
             pushDir = 1;
         }
 
-        Debug.Log($"[Arms] Out of bounds! angle={angle}, min={min}, max={max}, overSoft={overSoft}");
-
-        if (overSoft >= softZone)
-        {
+        if (overSoft >= softZone) {
             isBroken = true;
             breakTimer = breakDuration;
             desiredSpeed = 0f;
 
-            Debug.LogWarning("[Arms] ARM BROKEN — exceeded soft zone!");
+            // Disable motor for real "limp" behavior
+            hingeJoint2D.useMotor = false;
 
             if (audioSource && breakSound)
             {
                 audioSource.PlayOneShot(breakSound);
-                Debug.Log("[Arms] Break sound played.");
             }
         }
-        else
-        {
+        else {
             float t = Mathf.Clamp01(overSoft / softZone);
-            desiredSpeed += pushDir * t * limitReturnStrength;
 
-            Debug.Log($"[Arms] Soft limit applied. t={t}, adjustedSpeed={desiredSpeed}");
+            // Override speed instead of adding (prevents jitter)
+            desiredSpeed = pushDir * t * limitReturnStrength;
         }
     }
 
-    void UpdateBrokenArm()
-    {
+    void UpdateBrokenArm() {
         breakTimer -= Time.fixedDeltaTime;
 
-        Debug.Log($"[Arms] Broken timer: {breakTimer}");
-
-        if (breakTimer <= 0f)
-        {
+        if (breakTimer <= 0f) {
             isBroken = false;
-            Debug.Log("[Arms] Arm recovered from broken state.");
+
+            // Re-enable motor after recovery
+            hingeJoint2D.useMotor = true;
         }
+    }
+    private float Normalize(float currentAngle) {
+        float angle = currentAngle % 360f;
+        if (angle < -180f) angle += 360f;
+        if (angle > 180f) angle -= 360f;
+        return angle;
     }
 }

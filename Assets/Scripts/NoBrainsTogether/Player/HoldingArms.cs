@@ -60,6 +60,8 @@ public class HoldingArms : NetworkBehaviour
         {
             rb.constraints = RigidbodyConstraints2D.FreezePositionX |
                              RigidbodyConstraints2D.FreezePositionY;
+
+            Debug.DrawLine(transform.position, transform.position + Vector3.up, Color.yellow);
         }
         else
         {

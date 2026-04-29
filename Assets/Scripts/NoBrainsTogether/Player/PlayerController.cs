@@ -92,13 +92,11 @@ public class PlayerController : NetworkBehaviour
             if (ragdoll.leftArm != null)
             {
                 ragdoll.SendLeftArmInputServerRpc(aimLeftInput, clientId);
-                Debug.Log($"Sent Left Arm Input: {aimLeftInput}");
             }
 
             if (ragdoll.rightArm != null)
             {
                 ragdoll.SendRightArmInputServerRpc(aimRightInput, clientId);
-                Debug.Log($"Sent Right Arm Input: {aimRightInput}");
             }
         }
     }

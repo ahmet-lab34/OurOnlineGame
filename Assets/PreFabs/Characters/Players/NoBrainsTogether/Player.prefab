@@ -1043,7 +1043,7 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
     m_LowerAngle: -100
     m_UpperAngle: 115
@@ -1061,8 +1061,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Arms
   ShowTopMostFoldoutHeaderGroup: 1
   hingeJoint2D: {fileID: 4632870404955760332}
-  maxSpeed: 300
-  torque: 3000
+  maxSpeed: 500
+  torque: 1000
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10
@@ -2386,7 +2386,7 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
     m_LowerAngle: -115
     m_UpperAngle: 100
@@ -2404,8 +2404,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Arms
   ShowTopMostFoldoutHeaderGroup: 1
   hingeJoint2D: {fileID: 7838748123656287120}
-  maxSpeed: 300
-  torque: 3000
+  maxSpeed: 500
+  torque: 1000
   softZone: 50
   limitReturnStrength: 800
   breakDuration: 10

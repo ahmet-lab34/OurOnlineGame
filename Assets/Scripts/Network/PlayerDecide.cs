@@ -29,21 +29,21 @@ public class PlayerDecide : NetworkBehaviour
         Debug.Log($"[Server] Player {clientId} connected. Total waiting players: {waitingPlayers.Count}");
 
         // Spawn a shared character for every 2 players
-        if (waitingPlayers.Count >= 1)
+        if (waitingPlayers.Count >= 2)
         {
             Debug.Log("[Server] Two players connected, spawning shared character.");
 
             ulong playerA = waitingPlayers[0];
-            //ulong playerB = waitingPlayers[1];
+            ulong playerB = waitingPlayers[1];
 
-            //waitingPlayers.RemoveRange(0, 2);
+            waitingPlayers.RemoveRange(0, 2);
 
-            SpawnSharedCharacter(playerA/*, playerB*/);
+            SpawnSharedCharacter(playerA, playerB);
         }
         // else {SpawnCharacterForSinglePlayer(clientId);}
     }
 
-    private void SpawnSharedCharacter(/*ulong legsId, */ulong upperId)
+    private void SpawnSharedCharacter(ulong legsId, ulong upperId)
     {
         if (sharedCharacterPrefab == null)
         {
@@ -72,10 +72,10 @@ public class PlayerDecide : NetworkBehaviour
         //script.legsPlayerId.Value = legsId;
         script.upperPlayerId.Value = upperId;
 
-        Debug.Log($"[Server] Spawned shared character. Legs: legsId, Upper: {upperId}");
+        Debug.Log($"[Server] Spawned shared character. Legs: {legsId}, Upper: {upperId}");
     }
 
-    /*public void SpawnCharacterForSinglePlayer(ulong playerId)
+    public void SpawnCharacterForSinglePlayer(ulong playerId)
     {
         if (sharedCharacterPrefab == null)
         {
@@ -105,5 +105,5 @@ public class PlayerDecide : NetworkBehaviour
         script.upperPlayerId.Value = playerId;
 
         Debug.Log($"[Server] Spawned single-player character for player {playerId}");
-    }*/
+    }
 }
