@@ -21,6 +21,8 @@ public class RagdollController : NetworkBehaviour
     [Header("Arms")]
     public Arms leftArm;
     public Arms rightArm;
+    public HoldingArms leftHoldingArm;
+    public HoldingArms rightHoldingArm;
 
     [Header("Ragdoll Parts")]
     public List<Rigidbody2D> ragdollParts = new List<Rigidbody2D>();
@@ -30,6 +32,8 @@ public class RagdollController : NetworkBehaviour
     private bool jumpInput;
     private Vector2 leftAimInput;
     private Vector2 rightAimInput;
+    private bool leftHoldInput;
+    private bool rightHoldInput;
 
     private SharedPlayerCS sharedData;
 
@@ -54,6 +58,8 @@ public class RagdollController : NetworkBehaviour
         if (pelvis != null) pelvis.simulated = IsServer;
         if (leftArm != null) leftArm.enabled = IsServer;
         if (rightArm != null) rightArm.enabled = IsServer;
+        if (leftHoldingArm != null) leftHoldingArm.enabled = IsServer;
+        if (rightHoldingArm != null) rightHoldingArm.enabled = IsServer;
 
         for (int i = 0; i < ragdollParts.Count; i++)
         {
@@ -104,35 +110,48 @@ public class RagdollController : NetworkBehaviour
     {
         if (leftArm != null) leftArm.SetAim(leftAimInput);
         if (rightArm != null) rightArm.SetAim(rightAimInput);
+        if (leftHoldingArm != null) leftHoldingArm.SetClimb(leftHoldInput);
+        if (rightHoldingArm != null) rightHoldingArm.SetClimb(rightHoldInput);
     }
 
     [Rpc(SendTo.Server)]
-    public void SendLegsInputServerRpc(Vector2 move, bool jump, ulong clientId)
+    public void SendLegsInputServerRpc(Vector2 move, bool jump, RpcParams rpcParams = default)
     {
-        if (clientId != sharedData.legsPlayerId.Value) return;
+        if (rpcParams.Receive.SenderClientId != sharedData.legsPlayerId.Value)
+            return;
         moveInput = move;
         if (jump) jumpInput = true;
     }
 
     [Rpc(SendTo.Server)]
-    public void SendLeftArmInputServerRpc(Vector2 aim, ulong clientId)
+    public void SendLeftArmInputServerRpc(Vector2 aim, RpcParams rpcParams = default)
     {
-        if (clientId != sharedData.upperPlayerId.Value) return;
+        if (rpcParams.Receive.SenderClientId != sharedData.upperPlayerId.Value)
+            return;
         leftAimInput = aim;
     }
 
     [Rpc(SendTo.Server)]
-    public void SendRightArmInputServerRpc(Vector2 aim, ulong clientId)
+    public void SendRightArmInputServerRpc(Vector2 aim, RpcParams rpcParams = default)
     {
-        if (clientId != sharedData.upperPlayerId.Value) return;
+        if (rpcParams.Receive.SenderClientId != sharedData.upperPlayerId.Value)
+            return;
         rightAimInput = aim;
     }
-
-    void Update()
+    
+    [Rpc(SendTo.Server)]
+    public void SendLeftArmHoldServerRpc(bool hold, RpcParams rpcParams = default)
     {
-        if (IsServer) return;
+        if (rpcParams.Receive.SenderClientId != sharedData.upperPlayerId.Value)
+            return;
+        leftHoldInput = hold;
+    }
 
-        // Skip interpolation for local host
-        if (IsOwner) return;
+    [Rpc(SendTo.Server)]
+    public void SendRightArmHoldServerRpc(bool hold, RpcParams rpcParams = default)
+    {
+        if (rpcParams.Receive.SenderClientId != sharedData.upperPlayerId.Value)
+            return;
+        rightHoldInput = hold;
     }
 }

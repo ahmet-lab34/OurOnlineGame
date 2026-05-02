@@ -14,7 +14,7 @@ public class PlayerDecide : NetworkBehaviour
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         if (NetworkManager.Singleton != null)
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;

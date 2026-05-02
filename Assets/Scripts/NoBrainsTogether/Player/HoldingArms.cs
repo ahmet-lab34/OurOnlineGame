@@ -8,7 +8,7 @@ public class HoldingArms : NetworkBehaviour
     private Collider2D handCollider;
 
     private bool touchingClimbable;
-    private bool climbInput;
+    public bool climbInput { get; private set; }
 
     /*[SerializeField] private Collider2D[] bodyColliders;*/
     [SerializeField] private InputActionReference climbAction;
@@ -27,28 +27,12 @@ public class HoldingArms : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        // Only upper player can control arms
-        if (NetworkManager.Singleton.LocalClientId == sharedData.upperPlayerId.Value)
-        {
-            climbAction?.action.Enable();
-        }
-        else
-        {
-            climbAction?.action.Disable();
-        }
+        // Input is now handled externally
     }
 
-    void Update()
+    public void SetClimb(bool isClimbing)
     {
-        // Only upper player sends input
-        if (NetworkManager.Singleton.LocalClientId != sharedData.upperPlayerId.Value)
-            return;
-
-        if (climbAction == null) return;
-
-        bool isClimbing = climbAction.action.IsPressed();
-
-        SendClimbInputServerRpc(isClimbing);
+        climbInput = isClimbing;
     }
 
     void FixedUpdate()
@@ -67,19 +51,6 @@ public class HoldingArms : NetworkBehaviour
         {
             rb.constraints = RigidbodyConstraints2D.None;
         }
-    }
-
-    // =========================================================
-    // 🔵 INPUT → SERVER
-    // =========================================================
-
-    [ServerRpc(RequireOwnership = false)]
-    void SendClimbInputServerRpc(bool isClimbing, ServerRpcParams rpcParams = default)
-    {
-        if (rpcParams.Receive.SenderClientId != sharedData.upperPlayerId.Value)
-            return;
-
-        climbInput = isClimbing;
     }
 
     // =========================================================

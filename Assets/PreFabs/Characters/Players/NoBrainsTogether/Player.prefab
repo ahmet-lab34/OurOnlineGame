@@ -1588,7 +1588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3658552441
+  GlobalObjectIdHash: 2745388395
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1642,6 +1642,8 @@ MonoBehaviour:
   balanceController: {fileID: 7387910809597547088}
   leftArm: {fileID: 4835164279736942337}
   rightArm: {fileID: 8290387094780525338}
+  leftHoldingArm: {fileID: 1362840908744684926}
+  rightHoldingArm: {fileID: 8470428574910700713}
   ragdollParts:
   - {fileID: 4591014572803181778}
   - {fileID: 877881562285583219}

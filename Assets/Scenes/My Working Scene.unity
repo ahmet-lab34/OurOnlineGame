@@ -266,7 +266,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114063213}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114063213}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
@@ -349,7 +349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2354279540517467942, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6877862996773290481, guid: a1573af705f2a1d4197d35ca49188bdd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -928,7 +928,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 875732319629886888, guid: 125a98c169d67824d8cd1f930df4fe0a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1629402817362447198, guid: 125a98c169d67824d8cd1f930df4fe0a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1045,6 +1045,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1830772743935469194, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830772743935469194, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3918181759
       objectReference: {fileID: 0}
@@ -1053,12 +1057,20 @@ PrefabInstance:
       value: 1656721960
       objectReference: {fileID: 0}
     - target: {fileID: 6552618441187910732, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 8.889238
+      objectReference: {fileID: 0}
+    - target: {fileID: 6552618441187910732, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 16.516113
+      objectReference: {fileID: 0}
+    - target: {fileID: 6552618441187910732, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.261953
+      value: -12.6948
       objectReference: {fileID: 0}
     - target: {fileID: 6552618441187910732, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.23907
+      value: -4.8856
       objectReference: {fileID: 0}
     - target: {fileID: 6552618441187910732, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1095,6 +1107,22 @@ PrefabInstance:
     - target: {fileID: 7483664655858604627, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
       propertyPath: m_Name
       value: Climable Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 8809388739940117243, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
+      propertyPath: m_Color.b
+      value: 0.63576895
+      objectReference: {fileID: 0}
+    - target: {fileID: 8809388739940117243, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
+      propertyPath: m_Color.g
+      value: 0.63576895
+      objectReference: {fileID: 0}
+    - target: {fileID: 8809388739940117243, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8584906
+      objectReference: {fileID: 0}
+    - target: {fileID: 8809388739940117243, guid: e4fa7a3bcee58ac4293fb2a4275e2936, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -134,21 +134,15 @@ public class PlayerScript : NetworkBehaviour
 
     #region Server RPCs
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SendMoveServerRpc(Vector2 input, ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SendMoveServerRpc(Vector2 input)
     {
-        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
-            return;
-
         moveInput = input;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SendJumpServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SendJumpServerRpc()
     {
-        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
-            return;
-
         if (isCrouching)
         {
             StandUp();
@@ -167,22 +161,16 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SendDashServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SendDashServerRpc()
     {
-        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
-            return;
-
         dashTimer = dashDuration;
         animator.SetBool("IsDashing", true);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SendCrouchServerRpc(ServerRpcParams rpcParams = default)
+    [Rpc(SendTo.Server)]
+    private void SendCrouchServerRpc()
     {
-        if (rpcParams.Receive.SenderClientId != legsPlayerId.Value)
-            return;
-
         if (isCrouching)
             StandUp();
         else if (groundCheck.Grounded)
