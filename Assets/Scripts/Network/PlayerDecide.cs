@@ -2,19 +2,19 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerDecide : MonoBehaviour
+public class PlayerDecide : NetworkBehaviour
 {
     [SerializeField] private GameObject sharedCharacterPrefab;
 
     private List<ulong> waitingPlayers = new();
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         Debug.Log("PlayerDecide started, waiting for players to connect...");
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         if (NetworkManager.Singleton != null)
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
@@ -69,13 +69,13 @@ public class PlayerDecide : MonoBehaviour
             Debug.LogError("[Server] sharedCharacterPrefab does not have PlayerController component!");
             return;
         }
-        script.legsPlayerId.Value = legsId;
+        //script.legsPlayerId.Value = legsId;
         script.upperPlayerId.Value = upperId;
 
         Debug.Log($"[Server] Spawned shared character. Legs: {legsId}, Upper: {upperId}");
     }
 
-    /*public void SpawnCharacterForSinglePlayer(ulong playerId)
+    public void SpawnCharacterForSinglePlayer(ulong playerId)
     {
         if (sharedCharacterPrefab == null)
         {
@@ -105,5 +105,5 @@ public class PlayerDecide : MonoBehaviour
         script.upperPlayerId.Value = playerId;
 
         Debug.Log($"[Server] Spawned single-player character for player {playerId}");
-    }*/
+    }
 }

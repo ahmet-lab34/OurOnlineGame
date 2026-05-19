@@ -3,81 +3,62 @@ using UnityEngine;
 
 public class SharedPlayerCS : NetworkBehaviour
 {
-    #region Network Role Assignment
-
-    // Server-authoritative player IDs
     public NetworkVariable<ulong> legsPlayerId =
         new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
 
     public NetworkVariable<ulong> upperPlayerId =
         new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
 
-    #endregion
-
-    private Player_1_Actions player1Actions;
-    private Player_2_Actions player2Actions;
-
+    private PlayerController playerController;
     public override void OnNetworkSpawn()
     {
-        // Only run this on clients
         if (!IsClient) return;
 
-        // Initialize input actions
-        player1Actions = new Player_1_Actions();
-        player2Actions = new Player_2_Actions();
+        legsPlayerId.OnValueChanged += (_, __) => RefreshRoleState();
+        upperPlayerId.OnValueChanged += (_, __) => RefreshRoleState();
 
-        // Subscribe to NetworkVariable changes to safely assign roles once synced
-        legsPlayerId.OnValueChanged += OnLegsPlayerIdChanged;
-        upperPlayerId.OnValueChanged += OnUpperPlayerIdChanged;
-
-        // Also check current values in case they were already synced
-        HandleRoles(NetworkManager.Singleton.LocalClientId);
+        RefreshRoleState(); // correct initial sync
     }
 
-    private void OnLegsPlayerIdChanged(ulong oldValue, ulong newValue)
+    public override void OnNetworkDespawn()
     {
-        HandleRoles(NetworkManager.Singleton.LocalClientId);
+        legsPlayerId.OnValueChanged -= (_, __) => RefreshRoleState();
+        upperPlayerId.OnValueChanged -= (_, __) => RefreshRoleState();
     }
 
-    private void OnUpperPlayerIdChanged(ulong oldValue, ulong newValue)
+    private void RefreshRoleState()
     {
-        HandleRoles(NetworkManager.Singleton.LocalClientId);
-    }
+        ulong localId = NetworkManager.Singleton.LocalClientId;
 
-    /// <summary>
-    /// Assigns input control based on the local client ID
-    /// </summary>
-    private void HandleRoles(ulong localClientId)
-    {
-        // Only assign once
-        if (player1Actions == null || player2Actions == null) return;
-
-        if (localClientId == legsPlayerId.Value)
+        if (localId == legsPlayerId.Value)
         {
-            Debug.Log("This client controls the legs.");
-            player1Actions.Upper.Disable();
-            player2Actions.Lower.Enable();
+            Debug.Log("This client controls the LEGS.");
         }
-        else if (localClientId == upperPlayerId.Value)
+        else if (localId == upperPlayerId.Value)
         {
-            Debug.Log("This client controls the upper body.");
-            player1Actions.Upper.Enable();
-            player2Actions.Lower.Disable();
+            Debug.Log("This client controls the UPPER BODY.");
         }
         else
         {
-            Debug.LogWarning("This client does not control any part of the character.");
-            player1Actions.Upper.Disable();
-            player2Actions.Lower.Disable();
+            Debug.Log("This client is a spectator.");
         }
     }
 
-    /// <summary>
-    /// Server-only helper to assign roles before spawning
-    /// </summary>
+    public bool IsLegsPlayer(ulong clientId) =>
+        clientId == legsPlayerId.Value;
+
+    public bool IsUpperPlayer(ulong clientId) =>
+        clientId == upperPlayerId.Value;
+
     public void AssignRolesServer(ulong legsClientId, ulong upperClientId)
     {
         if (!IsServer) return;
+
+        if (legsClientId == upperClientId)
+        {
+            Debug.LogError("Cannot assign same client to both roles.");
+            return;
+        }
 
         legsPlayerId.Value = legsClientId;
         upperPlayerId.Value = upperClientId;

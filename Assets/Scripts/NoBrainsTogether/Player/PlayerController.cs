@@ -1,106 +1,127 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
-    [Header("Ragdoll & Physics")]
-    public Rigidbody2D rb;                // Root Rigidbody
-    public Rigidbody2D[] ragdollParts;    // All child rigidbodies including root
-    public Transform playerPos;
-    public LayerMask ground;
-    public float positionRadius;
-
-    [Header("Movement Settings")]
-    public float jumpForce = 10f;
-    public float playerSpeed = 5f;
-
-    private bool isOnGround;
-
-    private Player_2_Actions playerActions;
+    private Player_Actions actions;
     private SharedPlayerCS sharedData;
+    private RagdollController ragdoll;
 
-    // -----------------------------------
-    // Networked position for syncing client
-    public NetworkVariable<Vector2> NetworkedPosition = new NetworkVariable<Vector2>(
-        writePerm: NetworkVariableWritePermission.Server);
+    private ulong clientId;
 
-    // -----------------------------------
+    // cached inputs (event-driven)
+    private Vector2 moveInput;
+    private bool jumpInput;
+    private Vector2 aimLeftInput;
+    private Vector2 aimRightInput;
+    private bool holdLeftInput;
+    private bool holdRightInput;
+    
+
+    // RPC throttling
+    private float sendRate = 0.05f; // 20 times per second
+    private float timer;
+
     public override void OnNetworkSpawn()
     {
+        Debug.Log("PlayerController spawned on client " + NetworkManager.Singleton.LocalClientId);
+
         sharedData = GetComponentInParent<SharedPlayerCS>();
+        ragdoll = GetComponentInParent<RagdollController>();
 
-        // Only the legs player reads input
-        if (IsOwner)
-        {
-            playerActions = new Player_2_Actions();
-            playerActions.Lower.Enable();
-        }
+        clientId = NetworkManager.Singleton.LocalClientId;
 
-        // Server simulates physics, clients just render
-        foreach (var part in ragdollParts)
-        {
-            part.simulated = IsServer; // True on server, false on clients
-        }
+        // Input setup
+        actions = new Player_Actions();
+        actions.Enable();
 
-        rb.simulated = IsServer; // Dynamic on server, kinematic on client
+        // Assign Move and Jump inputs for legs player
+        actions.Bottom.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        actions.Bottom.Move.canceled += ctx => moveInput = Vector2.zero;
+
+        actions.Bottom.Jump.performed += ctx => jumpInput = true;
+        actions.Bottom.Jump.canceled += ctx => jumpInput = false;
+
+        // Assign aim inputs for arms
+        actions.Upper.Move_LeftArm.performed += ctx => aimLeftInput = ctx.ReadValue<Vector2>();
+        actions.Upper.Move_LeftArm.canceled += ctx => aimLeftInput = Vector2.zero;
+
+        actions.Upper.Move_RightArm.performed += ctx => aimRightInput = ctx.ReadValue<Vector2>();
+        actions.Upper.Move_RightArm.canceled += ctx => aimRightInput = Vector2.zero;
+        
+        // Assign hold inputs for climbing
+        actions.Upper.Hold_LeftArm.performed += ctx => holdLeftInput = true;
+        actions.Upper.Hold_LeftArm.canceled += ctx => holdLeftInput = false;
+
+        actions.Upper.Hold_RightArm.performed += ctx => holdRightInput = true;
+        actions.Upper.Hold_RightArm.canceled += ctx => holdRightInput = false;
+
+        StartCoroutine(WaitForRoles());
     }
 
-    // -----------------------------------
+    public override void OnNetworkDespawn()
+    {
+        if (actions != null)
+        {
+            actions.Disable();
+            actions = null;
+        }
+    }
+
+    private IEnumerator WaitForRoles()
+    {
+        while (sharedData.legsPlayerId.Value == 0 || sharedData.upperPlayerId.Value == 0)
+        {
+            yield return null;
+        }
+
+        Debug.Log("Roles assigned: Legs - " + sharedData.legsPlayerId.Value +
+                  ", Upper - " + sharedData.upperPlayerId.Value);
+    }
+
     void Update()
     {
-        if (!IsOwner || playerActions == null) return;
+        if (ragdoll == null || sharedData == null) return;
 
-        // Read input
-        Vector2 moveInput = playerActions.Lower.Move.ReadValue<Vector2>();
-        bool jumpPressed = playerActions.Lower.Jump.triggered;
+        timer += Time.deltaTime;
+        if (timer < sendRate) return;
+        timer = 0f;
 
-        // Send input to server
-        SendInputServerRpc(moveInput, jumpPressed);
-
-        // -------------------------------
-        // Client-side interpolation
-        if (!IsServer)
+        // --- Legs player ---
+        if (sharedData.IsLegsPlayer(clientId))
         {
-            // Smoothly move the client kinematic Rigidbody toward the server position
-            rb.position = Vector2.Lerp(rb.position, NetworkedPosition.Value, 0.15f);
-        }
-    }
-
-    // -----------------------------------
-    [ServerRpc]
-    void SendInputServerRpc(Vector2 moveInput, bool jumpPressed, ServerRpcParams rpcParams = default)
-    {
-        if (rb == null) return;
-
-        // Horizontal movement
-        rb.linearVelocity = new Vector2(moveInput.x * playerSpeed, rb.linearVelocity.y);
-
-        // Ground check
-        isOnGround = Physics2D.OverlapCircle(playerPos.position, positionRadius, ground);
-
-        // Jump
-        if (jumpPressed && isOnGround)
-        {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            if (ragdoll.moveSpeed != 0 || jumpInput) // only send if there's input to reduce unnecessary RPCs
+            {
+                ragdoll.SendLegsInputServerRpc(moveInput, jumpInput);
+                Debug.Log($"Sent Legs Input: {moveInput}, Jump: {jumpInput}");
+            }
+            /*// reset one-frame jump so it doesn't spam
+            jumpInput = false;*/
         }
 
-        // Update networked position for clients
-        NetworkedPosition.Value = rb.position;
-    }
-
-    // -----------------------------------
-    void LateUpdate()
-    {
-        if (IsServer) return; // Only interpolate on clients
-
-        foreach (var part in ragdollParts)
+        // --- Upper player ---
+        if (sharedData.IsUpperPlayer(clientId))
         {
-            if (part == rb) continue;
+            // Aim inputs
+            if (ragdoll.leftArm != null)
+            {
+                ragdoll.SendLeftArmInputServerRpc(aimLeftInput);
+            }
+            if (ragdoll.rightArm != null)
+            {
+                ragdoll.SendRightArmInputServerRpc(aimRightInput);
+            }
 
-            // Smooth follow: lerp toward the transform of the server (via synced NetworkTransform or NetworkVariable)
-            part.transform.position = Vector3.Lerp(part.transform.position, part.transform.position, 0.2f);
-            part.transform.rotation = Quaternion.Lerp(part.transform.rotation, part.transform.rotation, 0.2f);
+            // Holding inputs
+            if (ragdoll.leftHoldingArm != null)
+            {
+                ragdoll.SendLeftArmHoldServerRpc(holdLeftInput);
+            }
+            if (ragdoll.rightHoldingArm != null)
+            {
+                ragdoll.SendRightArmHoldServerRpc(holdRightInput);
+            }
         }
     }
 }
