@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class BossHitbox : MonoBehaviour
+[RequireComponent(typeof(Health))]
+public class Hitbox : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private BossHealth health;
+    [SerializeField] private Health health;
     [SerializeField] private BossWeakPointComponent weakPoints;
 
     [Header("Damage Settings")]
@@ -28,12 +29,12 @@ public class BossHitbox : MonoBehaviour
     // ---------------------------
     // WEAK POINT DAMAGE ROUTING
     // ---------------------------
-    public void HitWeakPoint(weakPoint weakPoint, int playerID)
+    public void HitWeakPoint(weakPoint weakPoint)
     {
         if (weakPoint == null)
             return;
 
-        weakPoint.Hit(playerID);
+        weakPoint.Hit();
     }
 
     // ---------------------------

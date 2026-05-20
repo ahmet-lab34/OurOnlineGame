@@ -4,7 +4,7 @@ public class Down2State : BaseBossState
 {
     private float timer = 5f;
 
-    public Down2State(BossBrain brain) : base(brain)
+    public Down2State(charBrain brain) : base(brain)
     {
 
     }

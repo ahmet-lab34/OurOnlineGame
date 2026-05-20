@@ -10,6 +10,7 @@ TagManager:
   - Bullet
   - Lava
   - Climable
+  - PlayerProjectile
   layers:
   - Default
   - TransparentFX

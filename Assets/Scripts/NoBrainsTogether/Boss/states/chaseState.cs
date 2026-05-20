@@ -5,7 +5,7 @@ public class ChaseState : BaseBossState
 {
     private Transform targetPlayer;
 
-    public ChaseState(BossBrain brain) : base(brain)
+    public ChaseState(charBrain brain) : base(brain)
     {
 
     }
