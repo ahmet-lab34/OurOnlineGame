@@ -4,7 +4,7 @@ public class SlamState : BaseBossState
 {
     private float slamTimer = 2f;
 
-    public SlamState(BossBrain brain) : base(brain)
+    public SlamState(charBrain brain) : base(brain)
     {
 
     }

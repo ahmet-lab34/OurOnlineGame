@@ -1,12 +1,12 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveState : BaseBossState
+public class bossMoveState : BaseBossState
 {
     private float waitTimer;
 
 
-    public MoveState(BossBrain brain) : base(brain)
+    public bossMoveState(charBrain brain) : base(brain)
     {
 
     }
