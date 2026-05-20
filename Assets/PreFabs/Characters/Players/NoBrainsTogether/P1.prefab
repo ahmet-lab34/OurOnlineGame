@@ -106,7 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   projectilePrefab: {fileID: 6473585116926393796, guid: 8bc709ae22afa4b4799131830757230d, type: 3}
   fireOrigin: {fileID: 5327543013674052921}
-  projectileSpeed: 12
+  projectile: {fileID: 0}
   fireCooldown: 0.25
   stickDeadzone: 0.15
 --- !u!1 &6921710002729541699
