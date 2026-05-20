@@ -1,10 +1,10 @@
-public abstract class BaseBossState : IBossState
+public abstract class BaseBossState : IState
 {
-    protected BossBrain brain;
+    protected charBrain brain;
 
-    protected BossMovement movement;
+    protected Movement movement;
 
-    protected BossHealth health;
+    protected Health health;
 
     protected BossWeakPointComponent weakPoints;
 
@@ -12,7 +12,7 @@ public abstract class BaseBossState : IBossState
 
     protected UnityEngine.Transform player2;
 
-    public BaseBossState(BossBrain brain)
+    public BaseBossState(charBrain brain)
     {
         this.brain = brain;
 

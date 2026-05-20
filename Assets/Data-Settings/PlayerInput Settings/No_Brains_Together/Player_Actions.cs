@@ -210,6 +210,120 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""UpperSplit"",
+            ""id"": ""5375a8ad-c69b-4f97-a9e8-dc6ce411ddc1"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""3430d192-473e-44d0-a6ce-044445b64b50"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""845153aa-cc5a-4feb-8ae5-4a43b029d335"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d8fa5d3e-7552-4119-82f3-9d3ff1293079"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""f5b42f06-4473-49e8-942b-29a1e3e09d98"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""1393b89c-e9ef-49dc-b93f-0e87a35d9a3d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""e5e99866-cf62-491d-8be0-b7bebd7c8412"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""46f60470-0a5e-4d55-8794-3d6a8519b811"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c86fc11b-3434-4b29-82c3-9b2640ef7fbe"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c562bf0b-c525-4eec-8bb5-04f2977e141a"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99a94ca7-8488-44b9-85ee-cc3615dfef1f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Bottom"",
             ""id"": ""2cf7f79c-61bf-4c50-89f8-09f9e953e589"",
             ""actions"": [
@@ -278,6 +392,34 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""BottomSplit"",
+            ""id"": ""7b4a56bc-cac3-41d7-9f67-fb555b0b2ca5"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""647adb53-9160-47d2-9914-c0858abe6c11"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e544a3fa-94c8-4c2e-9f05-0bd1c0df782c"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -288,16 +430,25 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         m_Upper_Move_RightArm = m_Upper.FindAction("Move_RightArm", throwIfNotFound: true);
         m_Upper_Hold_LeftArm = m_Upper.FindAction("Hold_LeftArm", throwIfNotFound: true);
         m_Upper_Hold_RightArm = m_Upper.FindAction("Hold_RightArm", throwIfNotFound: true);
+        // UpperSplit
+        m_UpperSplit = asset.FindActionMap("UpperSplit", throwIfNotFound: true);
+        m_UpperSplit_Move = m_UpperSplit.FindAction("Move", throwIfNotFound: true);
+        m_UpperSplit_Fire = m_UpperSplit.FindAction("Fire", throwIfNotFound: true);
         // Bottom
         m_Bottom = asset.FindActionMap("Bottom", throwIfNotFound: true);
         m_Bottom_Jump = m_Bottom.FindAction("Jump", throwIfNotFound: true);
         m_Bottom_Move = m_Bottom.FindAction("Move", throwIfNotFound: true);
+        // BottomSplit
+        m_BottomSplit = asset.FindActionMap("BottomSplit", throwIfNotFound: true);
+        m_BottomSplit_Newaction = m_BottomSplit.FindAction("New action", throwIfNotFound: true);
     }
 
     ~@Player_Actions()
     {
         UnityEngine.Debug.Assert(!m_Upper.enabled, "This will cause a leak and performance issues, Player_Actions.Upper.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_UpperSplit.enabled, "This will cause a leak and performance issues, Player_Actions.UpperSplit.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Bottom.enabled, "This will cause a leak and performance issues, Player_Actions.Bottom.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_BottomSplit.enabled, "This will cause a leak and performance issues, Player_Actions.BottomSplit.Disable() has not been called.");
     }
 
     /// <summary>
@@ -499,6 +650,113 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
     /// </summary>
     public UpperActions @Upper => new UpperActions(this);
 
+    // UpperSplit
+    private readonly InputActionMap m_UpperSplit;
+    private List<IUpperSplitActions> m_UpperSplitActionsCallbackInterfaces = new List<IUpperSplitActions>();
+    private readonly InputAction m_UpperSplit_Move;
+    private readonly InputAction m_UpperSplit_Fire;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "UpperSplit".
+    /// </summary>
+    public struct UpperSplitActions
+    {
+        private @Player_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public UpperSplitActions(@Player_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "UpperSplit/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_UpperSplit_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "UpperSplit/Fire".
+        /// </summary>
+        public InputAction @Fire => m_Wrapper.m_UpperSplit_Fire;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_UpperSplit; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="UpperSplitActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(UpperSplitActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="UpperSplitActions" />
+        public void AddCallbacks(IUpperSplitActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UpperSplitActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UpperSplitActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="UpperSplitActions" />
+        private void UnregisterCallbacks(IUpperSplitActions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UpperSplitActions.UnregisterCallbacks(IUpperSplitActions)" />.
+        /// </summary>
+        /// <seealso cref="UpperSplitActions.UnregisterCallbacks(IUpperSplitActions)" />
+        public void RemoveCallbacks(IUpperSplitActions instance)
+        {
+            if (m_Wrapper.m_UpperSplitActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="UpperSplitActions.AddCallbacks(IUpperSplitActions)" />
+        /// <seealso cref="UpperSplitActions.RemoveCallbacks(IUpperSplitActions)" />
+        /// <seealso cref="UpperSplitActions.UnregisterCallbacks(IUpperSplitActions)" />
+        public void SetCallbacks(IUpperSplitActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UpperSplitActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UpperSplitActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="UpperSplitActions" /> instance referencing this action map.
+    /// </summary>
+    public UpperSplitActions @UpperSplit => new UpperSplitActions(this);
+
     // Bottom
     private readonly InputActionMap m_Bottom;
     private List<IBottomActions> m_BottomActionsCallbackInterfaces = new List<IBottomActions>();
@@ -605,6 +863,102 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="BottomActions" /> instance referencing this action map.
     /// </summary>
     public BottomActions @Bottom => new BottomActions(this);
+
+    // BottomSplit
+    private readonly InputActionMap m_BottomSplit;
+    private List<IBottomSplitActions> m_BottomSplitActionsCallbackInterfaces = new List<IBottomSplitActions>();
+    private readonly InputAction m_BottomSplit_Newaction;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "BottomSplit".
+    /// </summary>
+    public struct BottomSplitActions
+    {
+        private @Player_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public BottomSplitActions(@Player_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "BottomSplit/Newaction".
+        /// </summary>
+        public InputAction @Newaction => m_Wrapper.m_BottomSplit_Newaction;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_BottomSplit; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="BottomSplitActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(BottomSplitActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="BottomSplitActions" />
+        public void AddCallbacks(IBottomSplitActions instance)
+        {
+            if (instance == null || m_Wrapper.m_BottomSplitActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_BottomSplitActionsCallbackInterfaces.Add(instance);
+            @Newaction.started += instance.OnNewaction;
+            @Newaction.performed += instance.OnNewaction;
+            @Newaction.canceled += instance.OnNewaction;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="BottomSplitActions" />
+        private void UnregisterCallbacks(IBottomSplitActions instance)
+        {
+            @Newaction.started -= instance.OnNewaction;
+            @Newaction.performed -= instance.OnNewaction;
+            @Newaction.canceled -= instance.OnNewaction;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="BottomSplitActions.UnregisterCallbacks(IBottomSplitActions)" />.
+        /// </summary>
+        /// <seealso cref="BottomSplitActions.UnregisterCallbacks(IBottomSplitActions)" />
+        public void RemoveCallbacks(IBottomSplitActions instance)
+        {
+            if (m_Wrapper.m_BottomSplitActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="BottomSplitActions.AddCallbacks(IBottomSplitActions)" />
+        /// <seealso cref="BottomSplitActions.RemoveCallbacks(IBottomSplitActions)" />
+        /// <seealso cref="BottomSplitActions.UnregisterCallbacks(IBottomSplitActions)" />
+        public void SetCallbacks(IBottomSplitActions instance)
+        {
+            foreach (var item in m_Wrapper.m_BottomSplitActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_BottomSplitActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="BottomSplitActions" /> instance referencing this action map.
+    /// </summary>
+    public BottomSplitActions @BottomSplit => new BottomSplitActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Upper" which allows adding and removing callbacks.
     /// </summary>
@@ -642,6 +996,28 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         void OnHold_RightArm(InputAction.CallbackContext context);
     }
     /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UpperSplit" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="UpperSplitActions.AddCallbacks(IUpperSplitActions)" />
+    /// <seealso cref="UpperSplitActions.RemoveCallbacks(IUpperSplitActions)" />
+    public interface IUpperSplitActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Fire" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFire(InputAction.CallbackContext context);
+    }
+    /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Bottom" which allows adding and removing callbacks.
     /// </summary>
     /// <seealso cref="BottomActions.AddCallbacks(IBottomActions)" />
@@ -662,5 +1038,20 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BottomSplit" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="BottomSplitActions.AddCallbacks(IBottomSplitActions)" />
+    /// <seealso cref="BottomSplitActions.RemoveCallbacks(IBottomSplitActions)" />
+    public interface IBottomSplitActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "New action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNewaction(InputAction.CallbackContext context);
     }
 }

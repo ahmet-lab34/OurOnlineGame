@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class ShootState : BaseBossState
+public class bossShootState : BaseBossState
 {
     BossAttackSystem attackSystem;
     private float attackDuration = 3f;
 
-    public ShootState(BossBrain brain) : base(brain)
+    public bossShootState(charBrain brain) : base(brain)
     {
         
     }

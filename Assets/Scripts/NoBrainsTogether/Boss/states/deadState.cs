@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DeadState : BaseBossState
 {
-    public DeadState(BossBrain brain) : base(brain)
+    public DeadState(charBrain brain) : base(brain)
     {
 
     }

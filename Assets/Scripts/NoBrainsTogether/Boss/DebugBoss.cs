@@ -3,9 +3,9 @@ using UnityEngine;
 public class BossDebug : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private BossBrain brain;
-    [SerializeField] private BossHealth health;
-    [SerializeField] private BossMovement movement;
+    [SerializeField] private charBrain brain;
+    [SerializeField] private Health health;
+    [SerializeField] private Movement movement;
     [SerializeField] private BossAttackSystem attackSystem;
     [SerializeField] private BossWeakPointComponent weakPoints;
     [SerializeField] private BossHitbox hitbox;

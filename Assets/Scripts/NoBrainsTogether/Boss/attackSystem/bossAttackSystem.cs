@@ -3,7 +3,7 @@ using UnityEngine;
 public class BossAttackSystem : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private BossMovement movement;
+    [SerializeField] private Movement movement;
     [SerializeField] private BossWeakPointComponent weakPoints;
     [SerializeField] private Transform[] firePoints;
 
