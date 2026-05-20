@@ -83,8 +83,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.3962264, g: 0.016820924, b: 0.016820924, a: 1}
+  m_Sprite: {fileID: 8166710274925509176, guid: 8708cb3e26dc7184c999a060173b0bfc, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -105,7 +105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58276cb43087f2a4c88513d94742e9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::weakPoint
-  brain: {fileID: 0}
   weakPointType: 0
   hitsRequired: 4
 --- !u!61 &951547519778313245
@@ -146,7 +145,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 3.69, y: 3.61}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
