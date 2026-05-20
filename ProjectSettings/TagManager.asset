@@ -9,6 +9,7 @@ TagManager:
   - shit
   - Bullet
   - Lava
+  - Climable
   layers:
   - Default
   - TransparentFX

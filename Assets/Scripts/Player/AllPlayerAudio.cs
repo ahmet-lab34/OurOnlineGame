@@ -2,58 +2,42 @@ using UnityEngine;
 
 public class AllPlayerAudio : MonoBehaviour
 {
-    [SerializeField] private PlayerScript playerScript;
-    [SerializeField] private GroundCHK GroundCheck;
-    public AudioClip walkingSFX;
-    public AudioClip backgroundMusic;
-    public AudioClip jumpingSFX;
-    public AudioClip damagedSFX;
-    public AudioClip optionsSFX;
-    private AudioSource walkingSource;
-    private AudioSource backgroundSource;
-    private AudioSource jumpingSource;
-    private AudioSource damagedSource;
-    private AudioSource optionsSource;
-    void Awake()
-    {
-        //playerScript = FindFirstObjectByType<PlayerScript>();
-        //GroundCheck = FindFirstObjectByType<GroundCHK>();
+    [SerializeField] private GroundCHK groundCheck;
+    [SerializeField] private Rigidbody2D rb;
 
-        walkingSource = gameObject.AddComponent<AudioSource>();
-        backgroundSource = gameObject.AddComponent<AudioSource>();
-        jumpingSource = gameObject.AddComponent<AudioSource>();
-        damagedSource = gameObject.AddComponent<AudioSource>();
-        optionsSource = gameObject.AddComponent<AudioSource>();
-    }
+    public AudioClip walkingSFX;
+    public AudioClip damagedSFX;
+
+    public AudioSource runningSFXS;
+    public AudioSource jumpingSFXS;
+    public AudioSource damagedSFXS;
+
     public void Jumping()
     {
-        jumpingSource.PlayOneShot(jumpingSFX);
+        jumpingSFXS.Play();
     }
-    public void OptionsSound()
-    {
-        optionsSource.PlayOneShot(optionsSFX);
-    }
+
     public void damagedSound()
     {
-        damagedSource.PlayOneShot(damagedSFX);
+        damagedSFXS.PlayOneShot(damagedSFX);
     }
+
     public void walkingSound()
     {
-        if (GroundCheck.Grounded && playerScript.Horizontal != 0f)
+        if (groundCheck.Grounded && Mathf.Abs(rb.linearVelocity.x) > 0.1f)
         {
-            if(!walkingSource.isPlaying)
+            if (!runningSFXS.isPlaying)
             {
-                walkingSource.loop = true;
-                walkingSource.PlayOneShot(walkingSFX);
-                Debug.Log("The Audio walking script is now playing");
+                runningSFXS.loop = true;
+                runningSFXS.clip = walkingSFX;
+                runningSFXS.Play();
             }
         }
         else
         {
-            if (walkingSource.isPlaying)
+            if (runningSFXS.isPlaying)
             {
-                walkingSource.loop = false;
-                walkingSource.Stop();
+                runningSFXS.Stop();
             }
         }
     }
