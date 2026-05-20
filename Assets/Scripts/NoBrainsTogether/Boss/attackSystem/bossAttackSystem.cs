@@ -7,6 +7,10 @@ public class BossAttackSystem : MonoBehaviour
     [SerializeField] private BossWeakPointComponent weakPoints;
     [SerializeField] private Transform[] firePoints;
 
+    [Header("Players")]
+    [SerializeField] private Transform player1;
+    [SerializeField] private Transform player2;
+
     [Header("Projectiles")]
     [SerializeField] private GameObject bulletPrefab;
 
@@ -46,12 +50,42 @@ public class BossAttackSystem : MonoBehaviour
     {
         if (shootTimer > 0) return;
 
-        Transform chosenPoint = firePoints[Random.Range(0, firePoints.Length)];
+        if (firePoints == null || firePoints.Length == 0)
+        {
+            Debug.LogWarning("BossAttackSystem: No fire points assigned!");
+            return;
+        }
 
-        GameObject bullet = Instantiate(bulletPrefab, movement.transform.position, movement.transform.rotation);
+        if (bulletPrefab == null)
+        {
+            Debug.LogWarning("BossAttackSystem: No bullet prefab assigned!");
+            return;
+        }
 
-        Vector2 direction = (chosenPoint.position - movement.transform.position).normalized;
-        bullet.GetComponent<Rigidbody2D>().linearVelocity = direction * bulletSpeed;
+        Transform target = GetClosestPlayer();
+
+        if (target == null)
+        {
+            Debug.LogWarning("BossAttackSystem: No player target assigned!");
+            return;
+        }
+
+        Transform firePoint = firePoints[Random.Range(0, firePoints.Length)];
+
+        GameObject bullet = Instantiate(
+            bulletPrefab,
+            firePoint.position,
+            firePoint.rotation
+        );
+
+        Vector2 direction = ((Vector2)target.position - (Vector2)firePoint.position).normalized;
+
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * bulletSpeed;
+        }
 
         Destroy(bullet, 5f);
 
@@ -63,9 +97,26 @@ public class BossAttackSystem : MonoBehaviour
         isAttacking = false;
     }
 
+    private Transform GetClosestPlayer()
+    {
+        if (player1 == null) return player2;
+        if (player2 == null) return player1;
+
+        float distanceToPlayer1 = Vector2.Distance(transform.position, player1.position);
+        float distanceToPlayer2 = Vector2.Distance(transform.position, player2.position);
+
+        if (distanceToPlayer1 <= distanceToPlayer2)
+        {
+            return player1;
+        }
+
+        return player2;
+    }
+
     // ---------------------------
     // SLAM ATTACK
     // ---------------------------
+
     public void StartSlam(Vector2 wallPosition)
     {
         isAttacking = true;
@@ -92,6 +143,7 @@ public class BossAttackSystem : MonoBehaviour
     // ---------------------------
     // CHASE ATTACK
     // ---------------------------
+
     public void StartChase(Transform target)
     {
         isAttacking = true;
@@ -118,6 +170,7 @@ public class BossAttackSystem : MonoBehaviour
     // ---------------------------
     // GLOBAL STOP
     // ---------------------------
+
     public void StopAllAttacks()
     {
         isAttacking = false;

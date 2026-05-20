@@ -14,6 +14,7 @@ public class charBrain : MonoBehaviour
     public Movement Movement;
     public Health Health;
     public BossWeakPointComponent WeakPoints;
+    public BossAttackSystem AttackSystem;
 
     [Header("Players")]
     public Transform Player1;
@@ -21,6 +22,8 @@ public class charBrain : MonoBehaviour
 
     // Current State
     private IState currentState;
+
+    private bool bossDead;
 
     // States
     public bossMoveState MoveState { get; private set; }
@@ -41,6 +44,11 @@ public class charBrain : MonoBehaviour
 
     private void Awake()
     {
+        if (AttackSystem == null)
+        {
+            AttackSystem = GetComponent<BossAttackSystem>();
+        }
+
         InitializeStates();
     }
 
@@ -48,16 +56,25 @@ public class charBrain : MonoBehaviour
     {
         StartingState();
 
-        Health.OnDeath += HandleDeath;
+        if (Health != null)
+        {
+            Health.OnDeath += HandleDeath;
+        }
     }
 
     private void Update()
     {
+        if (bossDead) return;
+
         currentState?.Update();
     }
 
     public void ChangeState(IState newState)
     {
+        if (bossDead) return;
+
+        if (newState == null) return;
+
         currentState?.Exit();
 
         currentState = newState;
@@ -83,6 +100,7 @@ public class charBrain : MonoBehaviour
                 break;
         }
     }
+
     private void StartingState()
     {
         switch (characterType)
@@ -95,6 +113,35 @@ public class charBrain : MonoBehaviour
 
     private void HandleDeath()
     {
-        ChangeState(DeadState);
+        if (bossDead) return;
+
+        bossDead = true;
+
+        Debug.Log("charBrain: Boss is dead. State machine stopped.");
+
+        currentState = null;
+
+        if (Movement != null)
+        {
+            Movement.StopMoving();
+        }
+
+        if (AttackSystem != null)
+        {
+            AttackSystem.StopAllAttacks();
+        }
+
+        if (WeakPoints != null)
+        {
+            WeakPoints.ClearWeakPoints();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Health != null)
+        {
+            Health.OnDeath -= HandleDeath;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+
 public class Health : MonoBehaviour
 {
     [Header("Health")]
@@ -17,16 +18,16 @@ public class Health : MonoBehaviour
     public Action OnDeath;
     public Action OnHealthChanged;
 
+    private bool deathEventCalled;
+
     private void Awake()
     {
         CurrentHealth = maxHealth;
+        deathEventCalled = false;
     }
 
     public void TakeDamage(int amount)
     {
-        if (invulnerable)
-            return;
-
         if (IsDead)
             return;
 
@@ -62,10 +63,17 @@ public class Health : MonoBehaviour
     public void SetInvulnerable(bool value)
     {
         invulnerable = value;
+
+        Debug.Log("Invulnerable changed to: " + invulnerable);
     }
 
     private void Die()
     {
+        if (deathEventCalled)
+            return;
+
+        deathEventCalled = true;
+
         Debug.Log("Boss Died");
 
         OnDeath?.Invoke();
@@ -74,6 +82,7 @@ public class Health : MonoBehaviour
     public void ResetHealth()
     {
         CurrentHealth = maxHealth;
+        deathEventCalled = false;
 
         OnHealthChanged?.Invoke();
     }

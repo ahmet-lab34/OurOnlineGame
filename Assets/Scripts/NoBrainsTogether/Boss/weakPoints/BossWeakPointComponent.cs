@@ -19,16 +19,34 @@ public class BossWeakPointComponent : MonoBehaviour
     {
         ClearWeakPoints();
 
-        SpawnType(redWeakPointPrefab, redCount);
-        SpawnType(greenWeakPointPrefab, greenCount);
+        List<int> usedIndexes = new();
+
+        SpawnType(redWeakPointPrefab, redCount, usedIndexes);
+        SpawnType(greenWeakPointPrefab, greenCount, usedIndexes);
     }
 
-    private void SpawnType(weakPoint prefab, int count)
+    private void SpawnType(weakPoint prefab, int count, List<int> usedIndexes)
     {
-        List<int> usedIndexes = new();
+        if (prefab == null)
+        {
+            Debug.LogWarning("Weak point prefab is missing!");
+            return;
+        }
+
+        if (spawnPoints == null || spawnPoints.Length == 0)
+        {
+            Debug.LogWarning("No weak point spawn points assigned!");
+            return;
+        }
 
         for (int i = 0; i < count; i++)
         {
+            if (usedIndexes.Count >= spawnPoints.Length)
+            {
+                Debug.LogWarning("Not enough spawn points for all weak points!");
+                return;
+            }
+
             int randomIndex;
 
             do
@@ -39,16 +57,23 @@ public class BossWeakPointComponent : MonoBehaviour
 
             usedIndexes.Add(randomIndex);
 
-            weakPoint weakPoint = Instantiate(
+            weakPoint newWeakPoint = Instantiate(
                 prefab,
                 spawnPoints[randomIndex].position,
                 Quaternion.identity,
                 transform
             );
 
-            weakPoint.OnDestroyed += HandleWeakPointDestroyed;
+            Debug.Log(
+                "Spawned weak point: " +
+                newWeakPoint.weakPointType +
+                " at " +
+                spawnPoints[randomIndex].name
+            );
 
-            activeWeakPoints.Add(weakPoint);
+            newWeakPoint.OnDestroyed += HandleWeakPointDestroyed;
+
+            activeWeakPoints.Add(newWeakPoint);
         }
     }
 
@@ -56,7 +81,7 @@ public class BossWeakPointComponent : MonoBehaviour
     {
         activeWeakPoints.Remove(weakPoint);
 
-        Debug.Log("Weak point destroyed");
+        Debug.Log("Weak point destroyed: " + weakPoint.weakPointType);
 
         if (AllWeakPointsDestroyed)
         {

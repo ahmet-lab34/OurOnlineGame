@@ -28,6 +28,6 @@ public class Down3State : BaseBossState
 
     public override void Exit()
     {
-        health.SetInvulnerable(true);
+        health.SetInvulnerable(false);
     }
 }
