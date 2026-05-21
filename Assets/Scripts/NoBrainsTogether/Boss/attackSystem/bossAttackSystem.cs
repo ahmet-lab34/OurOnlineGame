@@ -20,10 +20,22 @@ public class BossAttackSystem : MonoBehaviour
     [SerializeField] private float slamSpeed = 15f;
     [SerializeField] private float chaseSpeed = 6f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip fireballShootSound;
+
     private float shootTimer;
 
     private Transform chaseTarget;
     private bool isAttacking;
+
+    private void Awake()
+    {
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+    }
 
     private void Update()
     {
@@ -85,6 +97,11 @@ public class BossAttackSystem : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = direction * bulletSpeed;
+        }
+
+        if (audioSource != null && fireballShootSound != null)
+        {
+            audioSource.PlayOneShot(fireballShootSound);
         }
 
         Destroy(bullet, 5f);

@@ -12,6 +12,10 @@ public class P1Attack : MonoBehaviour
     [SerializeField] private float fireCooldown = 0.25f;
     [SerializeField] private float stickDeadzone = 0.15f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip shootSound;
+
     private Player_Actions actions;
     private Camera mainCamera;
     private Vector2 aimInput;
@@ -25,6 +29,11 @@ public class P1Attack : MonoBehaviour
         if (fireOrigin == null)
         {
             fireOrigin = transform;
+        }
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
         }
 
         actions = new Player_Actions();
@@ -95,14 +104,20 @@ public class P1Attack : MonoBehaviour
         return false;
     }
 
-    private void FireProjectile(Vector2 direction) {
-
+    private void FireProjectile(Vector2 direction)
+    {
         GameObject projectileInstance = Instantiate(projectilePrefab, fireOrigin.position, Quaternion.identity);
 
         projectileInstance.GetComponent<Projectile>().Launch(direction);
+
+        if (audioSource != null && shootSound != null)
+        {
+            audioSource.PlayOneShot(shootSound);
+        }
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         actions.UpperSplit.Disable();
     }
 }
